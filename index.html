@@ -227,6 +227,29 @@
       }
     }
 
+    /* 星星閃爍特效 */
+    @keyframes twinkleStar {
+      0%, 100% { opacity: 0.3; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+    .star-anim { animation: twinkleStar 3.2s ease-in-out infinite; }
+    .delay-1 { animation-delay: 0.3s; }
+    .delay-2 { animation-delay: 1.1s; }
+    .delay-3 { animation-delay: 1.9s; }
+    .delay-4 { animation-delay: 2.7s; }
+
+    /* 導覽列滑出特效與隱藏 */
+    @keyframes headerSlideDown {
+      0% { transform: translateY(-100%); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .header-enter {
+      animation: headerSlideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    .header-hidden {
+      display: none !important;
+    }
+
     .anim-float {
       animation: floatSlow 4s ease-in-out infinite;
     }
@@ -313,7 +336,7 @@
   <!-- =========================================================
        1. 頂端固定導覽選單 (App 雙層導航列)
        ========================================================= -->
-  <header class="main-header sticky top-0 z-50 bg-washi border-b-[3px] border-[#3E3A39] flex flex-col justify-between">
+  <header id="main-header" class="main-header sticky top-0 z-50 bg-washi border-b-[3px] border-[#3E3A39] flex flex-col justify-between header-hidden">
     <!-- 上層：標題與功能鍵 -->
     <div class="flex items-center justify-between px-3 py-2 border-b-[2px] border-dashed border-[#3E3A39]/30">
       <div class="flex items-center gap-1.5 shrink-0 font-bold text-[#3E3A39]">
@@ -326,9 +349,8 @@
       </div>
     </div>
     
-    <!-- 下層：5 大主分頁切換列 -->
+    <!-- 下層：4 大主分頁切換列 (取消首頁按鈕) -->
     <nav aria-label="主要分頁導覽" class="flex overflow-x-auto no-scrollbar px-2 py-2 gap-1.5 sm:gap-3">
-      <button id="nav-btn-home" onclick="switchMainTab('home')" class="nav-tab-btn ehon-pill bg-palesky px-3 py-1.5 text-xs sm:text-sm font-bold min-w-max">🗺️ 地圖首頁</button>
       <button id="nav-btn-weather" onclick="switchMainTab('weather')" class="nav-tab-btn ehon-pill bg-cream px-3 py-1.5 text-xs sm:text-sm font-bold min-w-max">⛅ 時間天氣</button>
       <button id="nav-btn-flights" onclick="switchMainTab('flights')" class="nav-tab-btn ehon-pill bg-cream px-3 py-1.5 text-xs sm:text-sm font-bold min-w-max">✈️ 航班</button>
       <button id="nav-btn-itinerary" onclick="switchMainTab('itinerary')" class="nav-tab-btn ehon-pill bg-cream px-3 py-1.5 text-xs sm:text-sm font-bold min-w-max">📅 每日行程</button>
@@ -342,7 +364,7 @@
     <!-- =========================================================
          分頁一：首頁 (Home - 白川鄉展望台點燈・油畫風大封面)
          ========================================================= -->
-    <section id="tab-home" class="tab-pane block bounce-enter min-h-[calc(100dvh-115px)] flex flex-col">
+    <section id="tab-home" class="tab-pane block bounce-enter min-h-[calc(100dvh-50px)] flex flex-col relative">
       <!-- 滿版油畫風繪本封面外框 -->
       <div class="flex-1 ehon-box bg-[#1B2838] rounded-[26px] sm:rounded-[34px] p-2.5 sm:p-4 flex flex-col justify-between relative overflow-hidden">
 
@@ -367,16 +389,26 @@
               <path d="M15 145 Q130 125 245 148" stroke="#3D5575" stroke-width="12" stroke-linecap="round" fill="none" />
             </g>
 
-            <!-- 夜空星點與飄雪油畫點綴 -->
-            <g class="anim-glow">
-              <circle cx="58" cy="52" r="4.5" fill="#FEECA6" opacity="0.35" />
-              <circle cx="58" cy="52" r="2" fill="#FFFDF9" />
-              <circle cx="348" cy="44" r="5" fill="#FAD77B" opacity="0.35" />
-              <circle cx="348" cy="44" r="2.2" fill="#FFFDF9" />
-              <circle cx="215" cy="36" r="4" fill="#FEECA6" opacity="0.3" />
-              <circle cx="215" cy="36" r="1.8" fill="#FFFDF9" />
-              <circle cx="132" cy="82" r="1.8" fill="#FFFDF9" />
-              <circle cx="288" cy="88" r="2" fill="#FEECA6" />
+            <!-- 夜空星點與飄雪油畫點綴 (加入閃爍特效) -->
+            <g>
+              <g class="star-anim delay-1" style="transform-origin: 58px 52px;">
+                <circle cx="58" cy="52" r="4.5" fill="#FEECA6" opacity="0.35" />
+                <circle cx="58" cy="52" r="2" fill="#FFFDF9" />
+              </g>
+              <g class="star-anim delay-2" style="transform-origin: 348px 44px;">
+                <circle cx="348" cy="44" r="5" fill="#FAD77B" opacity="0.35" />
+                <circle cx="348" cy="44" r="2.2" fill="#FFFDF9" />
+              </g>
+              <g class="star-anim delay-3" style="transform-origin: 215px 36px;">
+                <circle cx="215" cy="36" r="4" fill="#FEECA6" opacity="0.3" />
+                <circle cx="215" cy="36" r="1.8" fill="#FFFDF9" />
+              </g>
+              <g class="star-anim delay-4" style="transform-origin: 132px 82px;">
+                <circle cx="132" cy="82" r="1.8" fill="#FFFDF9" />
+              </g>
+              <g class="star-anim delay-1" style="transform-origin: 288px 88px;">
+                <circle cx="288" cy="88" r="2" fill="#FEECA6" />
+              </g>
             </g>
 
             <!-- 2. 遠景飛驒連峰與白山山脈（厚塗雪山稜線） -->
@@ -521,96 +553,35 @@
               </g>
 
               <!-- 展望台戴珊瑚粉圍巾的小雪人與雪兔俯瞰夜景 -->
-              <g transform="translate(328, 515)" class="anim-float">
-                <circle cx="26" cy="48" r="20" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" />
-                <circle cx="26" cy="22" r="14" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" />
-                <!-- 紅色小木桶帽 -->
-                <rect x="16" y="3" width="20" height="10" rx="2" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5" />
-                <!-- 珊瑚粉圍巾 -->
-                <rect x="12" y="31" width="28" height="8" rx="4" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5" />
-                <rect x="30" y="35" width="7" height="14" rx="3" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.2" />
-                <circle cx="21" cy="20" r="2" fill="#3E3A39" />
-                <circle cx="31" cy="20" r="2" fill="#3E3A39" />
-                <!-- 小雪兔 -->
-                <ellipse cx="-12" cy="58" rx="11" ry="8" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5" />
-                <path d="M-14 51 Q-6 45 -3 51" fill="#C2E0B4" stroke="#3E3A39" stroke-width="2" />
-                <circle cx="-17" cy="57" r="1.8" fill="#F4A69A" />
+              <!-- 修正：將「座標定位」與「CSS動畫」分成內外兩層，避免座標被動畫歸零 -->
+              <g transform="translate(320, 542)">
+                <g class="anim-float">
+                  <circle cx="26" cy="48" r="20" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" />
+                  <circle cx="26" cy="22" r="14" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" />
+                  <!-- 紅色小木桶帽 -->
+                  <rect x="16" y="3" width="20" height="10" rx="2" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5" />
+                  <!-- 珊瑚粉圍巾 -->
+                  <rect x="12" y="31" width="28" height="8" rx="4" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5" />
+                  <rect x="30" y="35" width="7" height="14" rx="3" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.2" />
+                  <circle cx="21" cy="20" r="2" fill="#3E3A39" />
+                  <circle cx="31" cy="20" r="2" fill="#3E3A39" />
+                  <!-- 小雪兔 -->
+                  <ellipse cx="-12" cy="58" rx="11" ry="8" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5" />
+                  <path d="M-14 51 Q-6 45 -3 51" fill="#C2E0B4" stroke="#3E3A39" stroke-width="2" />
+                  <circle cx="-17" cy="57" r="1.8" fill="#F4A69A" />
+                </g>
               </g>
             </g>
           </svg>
         </div>
 
       </div>
-    </section>
-
-    <!-- =========================================================
-         分頁二：時間天氣 (Time & Weather)
-         ========================================================= -->
-    <section id="tab-weather" class="tab-pane hidden space-y-4 sm:space-y-6">
-      <div class="flex items-center justify-between flex-wrap gap-2">
-        <h2 class="text-lg sm:text-2xl font-bold flex items-center gap-2">
-          <span class="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-yamabuki border-[2.5px] border-[#3E3A39]">🕒</span>
-          <span>台日即時時鐘 ＆ 雪國四城天氣</span>
-        </h2>
-        <span class="ehon-tag bg-creamyellow font-bold text-xs">⚡ 日本快台灣 1 小時</span>
-      </div>
-
-      <!-- 3-A：台灣時間與日本時間即時同步雙時鐘卡片（手機維持左右雙欄並排 grid-cols-2） -->
-      <div class="grid grid-cols-2 gap-2.5 sm:gap-4">
-        <!-- 台灣時間卡 -->
-        <div class="ehon-card bg-snowpink p-3 sm:p-5 flex items-center justify-between">
-          <div class="min-w-0">
-            <div class="inline-flex items-center gap-1 bg-washi border-2 border-[#3E3A39] rounded-full px-2 py-0.5 text-[11px] sm:text-xs font-bold mb-1">
-              <span>🇹🇼 台灣 (UTC+8)</span>
-            </div>
-            <div id="clock-tw-time" class="clock-digits font-bold tracking-tight text-[#3E3A39] my-0.5">--:--:--</div>
-            <div id="clock-tw-date" class="text-[11px] sm:text-sm font-bold opacity-85 truncate">載入中...</div>
-          </div>
-          <!-- 手繪時鐘 SVG (桌面顯示) -->
-          <svg width="46" height="46" viewBox="0 0 64 64" class="hidden sm:block shrink-0" aria-hidden="true">
-            <circle cx="32" cy="32" r="26" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3"/>
-            <circle cx="32" cy="32" r="20" fill="#FCEFEF" stroke="#3E3A39" stroke-width="2.5"/>
-            <line x1="32" y1="32" x2="32" y2="18" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
-            <line x1="32" y1="32" x2="43" y2="32" stroke="#F4A69A" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="32" cy="32" r="3.5" fill="#3E3A39"/>
-          </svg>
-        </div>
-
-        <!-- 日本時間卡 -->
-        <div class="ehon-card bg-iceblue p-3 sm:p-5 flex items-center justify-between">
-          <div class="min-w-0">
-            <div class="inline-flex items-center gap-1 bg-yamabuki border-2 border-[#3E3A39] rounded-full px-2 py-0.5 text-[11px] sm:text-xs font-bold mb-1">
-              <span>🇯🇵 日本 (UTC+9)</span>
-            </div>
-            <div id="clock-jp-time" class="clock-digits font-bold tracking-tight text-[#3E3A39] my-0.5">--:--:--</div>
-            <div id="clock-jp-date" class="text-[11px] sm:text-sm font-bold opacity-85 truncate">載入中...</div>
-          </div>
-          <!-- 手繪時鐘 SVG (桌面顯示) -->
-          <svg width="46" height="46" viewBox="0 0 64 64" class="hidden sm:block shrink-0" aria-hidden="true">
-            <circle cx="32" cy="32" r="26" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3"/>
-            <circle cx="32" cy="32" r="20" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
-            <line x1="32" y1="32" x2="38" y2="20" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
-            <line x1="32" y1="32" x2="44" y2="32" stroke="#F4A69A" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="32" cy="32" r="3.5" fill="#3E3A39"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- 3-B：北陸與中部四城即時天氣 & 1月雪國氣候概覽（手機採用 2x2 雙欄網格 gap-[10px]） -->
-      <div class="ehon-box bg-palesky p-3.5 sm:p-6 space-y-3">
-        <div class="flex items-center justify-between gap-2">
-          <div>
-            <h3 class="text-sm sm:text-lg font-bold">❄️ 行程四城即時氣溫 ＆ 1月雪國基準</h3>
-          </div>
-          <button onclick="fetchAllJapanWeather()" class="ehon-pill bg-washi hover:bg-creamyellow px-2.5 py-1 text-xs font-bold shrink-0">
-            <span id="weather-refresh-text">🔄 更新氣溫</span>
-          </button>
-        </div>
-
-        <!-- 四城天氣卡片網格：手機 2x2 (grid-cols-2 gap-[10px])，桌面 4 欄 (lg:grid-cols-4) -->
-        <div id="four-cities-weather-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-[10px] sm:gap-3.5">
-          <!-- 由 JavaScript 渲染金澤、高山、白川鄉、名古屋天氣卡 -->
-        </div>
+      
+      <!-- 底部沉浸式開始行程按鈕 -->
+      <div class="absolute bottom-8 left-0 right-0 flex justify-center z-20">
+        <button onclick="startJourney()" class="ehon-btn bg-yamabuki px-8 py-3.5 text-base sm:text-lg font-bold flex items-center gap-2 shadow-[0_5px_0_#3E3A39] hover:bg-creamyellow">
+          📖 開始行程
+        </button>
       </div>
     </section>
 
@@ -964,8 +935,28 @@
         if (tabId === 'hotels') activeBtn.classList.add('bg-wakatake');
       }
 
+      // 控制導覽列的顯示與隱藏 (沉浸式首頁切換)
+      const header = document.getElementById('main-header');
+      if (header) {
+        if (tabId === 'home') {
+          header.classList.add('header-hidden');
+          header.classList.remove('header-enter');
+        } else {
+          if (header.classList.contains('header-hidden')) {
+            header.classList.remove('header-hidden');
+            header.classList.add('header-enter');
+          }
+        }
+      }
+
       // 切換分頁時自動捲動至頂部
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 從首頁封面進入行程的專屬按鈕功能
+    function startJourney() {
+      switchMainTab('itinerary');
+      selectDay(1, true);
     }
 
     /* ---------------------------------------------------------
