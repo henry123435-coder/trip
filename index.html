@@ -586,6 +586,39 @@
     </section>
 
     <!-- =========================================================
+         分頁二：時間天氣 (Weather & Clocks)
+         ========================================================= -->
+    <section id="tab-weather" class="tab-pane hidden space-y-4">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <h2 class="text-lg sm:text-2xl font-bold flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-iceblue border-[2.5px] border-[#3E3A39]">⛅</span>
+          <span>台日時間與天氣預報</span>
+        </h2>
+        <button onclick="fetchAllJapanWeather()" class="ehon-pill bg-cream px-2.5 py-1 text-xs font-bold flex items-center gap-1">
+          <span id="weather-refresh-text">🔄 更新氣溫</span>
+        </button>
+      </div>
+
+      <!-- 台日雙時區時鐘 -->
+      <div class="grid grid-cols-2 gap-3.5 sm:gap-5">
+        <div class="ehon-card bg-washi p-3 sm:p-5 flex flex-col items-center justify-center">
+          <span class="ehon-tag bg-cream font-bold text-xs mb-1.5 sm:mb-2">🇹🇼 台灣時間 (TPE)</span>
+          <div id="clock-tw-time" class="clock-digits font-bold text-[#3E3A39] tracking-widest">--:--:--</div>
+          <div id="clock-tw-date" class="text-xs sm:text-sm font-bold opacity-80 mt-1">----/--/--</div>
+        </div>
+        <div class="ehon-card bg-cream p-3 sm:p-5 flex flex-col items-center justify-center">
+          <span class="ehon-tag bg-yamabuki font-bold text-xs mb-1.5 sm:mb-2">🇯🇵 日本時間 (JST)</span>
+          <div id="clock-jp-time" class="clock-digits font-bold text-[#3E3A39] tracking-widest">--:--:--</div>
+          <div id="clock-jp-date" class="text-xs sm:text-sm font-bold opacity-80 mt-1">----/--/--</div>
+        </div>
+      </div>
+
+      <!-- 四城天氣網格 (由JS動態渲染) -->
+      <div id="four-cities-weather-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-5 mt-4">
+      </div>
+    </section>
+
+    <!-- =========================================================
          分頁三：航班 (Flights)
          ========================================================= -->
     <section id="tab-flights" class="tab-pane hidden space-y-4">
