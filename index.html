@@ -288,6 +288,18 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    /* 設定導覽列高度變數，精準控制行程子選單的置頂位置 */
+    :root {
+      --header-height: 98px;
+    }
+    .main-header {
+      height: var(--header-height);
+    }
+    .sticky-sub-nav {
+      top: var(--header-height);
+      z-index: 30;
+    }
   </style>
 </head>
 
@@ -299,220 +311,242 @@
   <div id="snow-container" aria-hidden="true" class="fixed inset-0 pointer-events-none overflow-hidden z-40"></div>
 
   <!-- =========================================================
-       1. 頂端固定導覽選單 (Sticky Navigation - 手機單行緊湊設計)
+       1. 頂端固定導覽選單 (App 雙層導航列)
        ========================================================= -->
-  <header class="sticky top-0 z-50 bg-washi border-b-[3px] border-[#3E3A39] px-2.5 sm:px-4 py-2">
-    <div class="max-w-5xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3">
-      <!-- 左側小標題 -->
-      <a href="#hero" class="flex items-center gap-1.5 shrink-0 font-bold text-[#3E3A39]">
-        <span class="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 bg-mizu border-[2.5px] border-[#3E3A39] rounded-full text-sm">⛄</span>
-        <span class="text-xs sm:text-base tracking-tight">北陸雪國旅誌</span>
-      </a>
-
-      <!-- 右側快速跳轉與功能按鈕（手機與電腦皆單行緊湊呈現） -->
-      <nav aria-label="主要導覽選單" class="overflow-x-auto no-scrollbar">
-        <div class="flex items-center gap-1 sm:gap-2 min-w-max py-0.5">
-          <a href="#time-weather" class="ehon-pill bg-palesky hover:bg-mizu px-2 sm:px-3 py-1 text-[11px] sm:text-xs font-bold">🕒 時鐘/天氣</a>
-          <a href="#flights" class="ehon-pill bg-iceblue hover:bg-mizu px-2 sm:px-3 py-1 text-[11px] sm:text-xs font-bold">✈️ 航班</a>
-          <a href="#itinerary" class="ehon-pill bg-snowpink hover:bg-coral px-2 sm:px-3 py-1 text-[11px] sm:text-xs font-bold">📅 每日行程</a>
-          <a href="#hotels" class="ehon-pill bg-milktea hover:bg-yamabuki px-2 sm:px-3 py-1 text-[11px] sm:text-xs font-bold">♨️ 住宿</a>
-          <button onclick="toggleSnow()" id="btn-snow-toggle" class="ehon-pill bg-iceblue px-2 sm:px-3 py-1 text-[11px] sm:text-xs font-bold">
-            ❄️ 雪花:開
-          </button>
-          <button onclick="downloadSingleFileHTML()" class="ehon-pill bg-yamabuki px-2 sm:px-3 py-1 text-[11px] sm:text-xs font-bold">
-            📥 下載檔案
-          </button>
-        </div>
-      </nav>
+  <header class="main-header sticky top-0 z-50 bg-washi border-b-[3px] border-[#3E3A39] flex flex-col justify-between">
+    <!-- 上層：標題與功能鍵 -->
+    <div class="flex items-center justify-between px-3 py-2 border-b-[2px] border-dashed border-[#3E3A39]/30">
+      <div class="flex items-center gap-1.5 shrink-0 font-bold text-[#3E3A39]">
+        <span class="inline-flex items-center justify-center w-7 h-7 bg-mizu border-[2.5px] border-[#3E3A39] rounded-full text-sm">⛄</span>
+        <span class="text-sm sm:text-base tracking-tight">北陸雪國旅誌</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="toggleSnow()" id="btn-snow-toggle" class="ehon-pill bg-iceblue px-2 py-1 text-[11px] font-bold">❄️ 雪花:開</button>
+        <button onclick="downloadSingleFileHTML()" class="ehon-pill bg-yamabuki px-2 py-1 text-[11px] font-bold">📥 離線下載</button>
+      </div>
     </div>
+    
+    <!-- 下層：5 大主分頁切換列 -->
+    <nav aria-label="主要分頁導覽" class="flex overflow-x-auto no-scrollbar px-2 py-2 gap-1.5 sm:gap-3">
+      <button id="nav-btn-home" onclick="switchMainTab('home')" class="nav-tab-btn ehon-pill bg-palesky px-3 py-1.5 text-xs sm:text-sm font-bold min-w-max">🗺️ 地圖首頁</button>
+      <button id="nav-btn-weather" onclick="switchMainTab('weather')" class="nav-tab-btn ehon-pill bg-cream px-3 py-1.5 text-xs sm:text-sm font-bold min-w-max">⛅ 時間天氣</button>
+      <button id="nav-btn-flights" onclick="switchMainTab('flights')" class="nav-tab-btn ehon-pill bg-cream px-3 py-1.5 text-xs sm:text-sm font-bold min-w-max">✈️ 航班</button>
+      <button id="nav-btn-itinerary" onclick="switchMainTab('itinerary')" class="nav-tab-btn ehon-pill bg-cream px-3 py-1.5 text-xs sm:text-sm font-bold min-w-max">📅 每日行程</button>
+      <button id="nav-btn-hotels" onclick="switchMainTab('hotels')" class="nav-tab-btn ehon-pill bg-cream px-3 py-1.5 text-xs sm:text-sm font-bold min-w-max">♨️ 住宿</button>
+    </nav>
   </header>
 
   <!-- 主要內容容器 -->
-  <main class="max-w-5xl mx-auto px-3 sm:px-6 pt-4 sm:pt-6 space-y-7 sm:space-y-10 relative z-10">
+  <main class="max-w-5xl mx-auto px-2.5 sm:px-6 pt-2.5 sm:pt-5 pb-8 relative z-10">
 
     <!-- =========================================================
-         2. 首頁主視覺插圖與旅遊標題 (Hero Section - 無倒數計時器)
+         分頁一：首頁 (Home - 白川鄉展望台點燈・油畫風大封面)
          ========================================================= -->
-    <section id="hero" class="scroll-mt-16">
-      <div class="ehon-box bg-palesky p-3.5 sm:p-7 relative overflow-hidden">
-        <!-- 卡片頂部繪本平塗積雪裝飾邊條 -->
-        <svg viewBox="0 0 800 28" class="w-full h-4 sm:h-6 mb-2.5" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 0 H800 V14 Q750 28 700 14 T600 16 T500 12 T400 18 T300 12 T200 18 T100 12 T0 16 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-        </svg>
+    <section id="tab-home" class="tab-pane block bounce-enter min-h-[calc(100dvh-115px)] flex flex-col">
+      <!-- 滿版油畫風繪本封面外框 -->
+      <div class="flex-1 ehon-box bg-[#1B2838] rounded-[26px] sm:rounded-[34px] p-2.5 sm:p-4 flex flex-col justify-between relative overflow-hidden">
 
-        <!-- 頂部裝飾貼紙標籤 -->
-        <div class="flex flex-wrap items-center justify-center sm:justify-between gap-1.5 mb-3">
-          <span class="ehon-tag bg-yamabuki font-bold text-xs sm:text-sm">
-            ❄️ 2027.01.09 - 01.13｜2027/01/09 (六) － 01/13 (三)｜5天4夜
-          </span>
-          <span class="ehon-tag bg-snowpink font-bold text-xs sm:text-sm">
-            ⛄ 北陸冬日雪國・白川鄉合掌村夢幻點燈
-          </span>
-        </div>
+        <!-- 底層：白川鄉荻町城山展望台俯瞰點燈・厚塗油畫風 SVG 畫布 -->
+        <div class="absolute inset-0 pointer-events-none">
+          <svg class="w-full h-full" viewBox="0 0 420 740" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <!-- 油畫畫布紋理與筆觸濾鏡 -->
+              <filter id="oil-brush" x="-5%" y="-5%" width="110%" height="110%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="4.5" xChannelSelector="R" yChannelSelector="G" />
+              </filter>
+            </defs>
 
-        <!-- 標題與副標題 -->
-        <div class="text-center max-w-2xl mx-auto mb-3.5 sm:mb-5">
-          <h1 class="text-xl sm:text-4xl font-bold text-[#3E3A39] tracking-wide mb-1.5 leading-snug">
-            🇯🇵 日本北陸自由行（金澤・高山・合掌村）
-          </h1>
-          <p class="text-xs sm:text-lg font-bold text-[#3E3A39] bg-cream inline-block px-3.5 py-1 rounded-full border-[2.5px] border-[#3E3A39]">
-            金澤・高山・白川鄉合掌村・名古屋
-          </p>
-        </div>
-
-        <!-- 原創日系繪本風冬季雪國主視覺 SVG 插圖（金澤鼓門、兼六園雪吊、合掌村點燈、飛驒木桶溫泉、濃飛巴士、雪人與日本雪兔） -->
-        <div class="ehon-card bg-washi p-2 sm:p-4">
-          <svg viewBox="0 0 800 330" class="w-full h-auto rounded-xl" role="img" aria-label="日本北陸冬季雪國：金澤鼓門、兼六園雪吊、白川鄉合掌村點燈、木桶溫泉與雪兔繪本插圖">
-            <!-- 冬日冰藍天空純色背景 -->
-            <rect x="0" y="0" width="800" height="330" rx="14" fill="#EAF4FC" stroke="#3E3A39" stroke-width="3"/>
-
-            <!-- 冬日暖陽與積雪雲朵 -->
-            <circle cx="695" cy="64" r="32" fill="#FAD77B" stroke="#3E3A39" stroke-width="3" class="anim-float"/>
-            <!-- 左側厚雪雲朵 -->
-            <g class="anim-float">
-              <path d="M75 72 H165 A18 18 0 0 0 165 40 A24 24 0 0 0 118 30 A20 20 0 0 0 82 48 A14 14 0 0 0 75 72 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-            </g>
-            <!-- 中右厚雪雲朵 -->
-            <g class="anim-snow-2">
-              <path d="M450 62 H525 A15 15 0 0 0 525 36 A20 20 0 0 0 486 28 A16 16 0 0 0 454 42 A13 13 0 0 0 450 62 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+            <!-- 1. 夜空厚塗筆觸層（深藍、藏青、暮光紫平塗色塊堆疊） -->
+            <rect width="420" height="740" fill="#182436" />
+            <g filter="url(#oil-brush)">
+              <path d="M-20 40 Q120 15 260 45 Q360 65 440 30 L440 140 L-20 140 Z" fill="#21324A" />
+              <path d="M-20 105 Q150 80 310 115 Q380 130 440 100 L440 220 L-20 220 Z" fill="#2B3E58" />
+              <path d="M40 28 Q110 18 180 32" stroke="#354C6B" stroke-width="14" stroke-linecap="round" fill="none" />
+              <path d="M230 68 Q310 52 390 72" stroke="#354C6B" stroke-width="16" stroke-linecap="round" fill="none" />
+              <path d="M15 145 Q130 125 245 148" stroke="#3D5575" stroke-width="12" stroke-linecap="round" fill="none" />
             </g>
 
-            <!-- 遠景北陸白山連峰與立山積雪山脈 -->
-            <path d="M-10 245 L115 118 L240 245 Z" fill="#A4D4EC" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M115 118 L74 160 L96 168 L115 152 L134 168 L156 160 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-
-            <path d="M170 245 L335 92 L500 245 Z" fill="#EADFD2" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M335 92 L282 145 L310 156 L335 136 L360 156 L388 145 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-
-            <path d="M430 245 L600 115 L765 245 Z" fill="#A4D4EC" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M600 115 L558 156 L580 164 L600 148 L620 164 L642 156 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-
-            <!-- 厚實雪地地面與雪丘曲線 -->
-            <rect x="0" y="232" width="800" height="98" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3"/>
-            <path d="M0 256 Q190 238 390 255 T800 248" fill="none" stroke="#EAF4FC" stroke-width="5"/>
-            <path d="M0 260 Q190 242 390 259 T800 252" fill="none" stroke="#3E3A39" stroke-width="2.5"/>
-
-            <!-- 左側地標 1：金澤車站「鼓門」手繪插圖 -->
-            <g transform="translate(22, 148)">
-              <path d="M16 92 L22 26 L32 26 L28 92 Z" fill="#F4A69A" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-              <path d="M68 92 L62 26 L72 26 L78 92 Z" fill="#F4A69A" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-              <rect x="10" y="34" width="74" height="8" rx="3" fill="#EADFD2" stroke="#3E3A39" stroke-width="3"/>
-              <path d="M2 26 Q47 36 92 26 L84 14 Q47 22 10 14 Z" fill="#3E3A39" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-              <path d="M8 14 Q47 22 86 14 Q47 6 8 14 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5" stroke-linejoin="round"/>
+            <!-- 夜空星點與飄雪油畫點綴 -->
+            <g class="anim-glow">
+              <circle cx="58" cy="52" r="4.5" fill="#FEECA6" opacity="0.35" />
+              <circle cx="58" cy="52" r="2" fill="#FFFDF9" />
+              <circle cx="348" cy="44" r="5" fill="#FAD77B" opacity="0.35" />
+              <circle cx="348" cy="44" r="2.2" fill="#FFFDF9" />
+              <circle cx="215" cy="36" r="4" fill="#FEECA6" opacity="0.3" />
+              <circle cx="215" cy="36" r="1.8" fill="#FFFDF9" />
+              <circle cx="132" cy="82" r="1.8" fill="#FFFDF9" />
+              <circle cx="288" cy="88" r="2" fill="#FEECA6" />
             </g>
 
-            <!-- 左側地標 2：金澤兼六園「雪吊」松樹與徽章石燈籠 -->
-            <g transform="translate(118, 126)">
-              <line x1="50" y1="0" x2="50" y2="112" stroke="#3E3A39" stroke-width="3"/>
-              <line x1="50" y1="4" x2="10" y2="95" stroke="#3E3A39" stroke-width="2.5"/>
-              <line x1="50" y1="4" x2="26" y2="98" stroke="#3E3A39" stroke-width="2.5"/>
-              <line x1="50" y1="4" x2="74" y2="98" stroke="#3E3A39" stroke-width="2.5"/>
-              <line x1="50" y1="4" x2="90" y2="95" stroke="#3E3A39" stroke-width="2.5"/>
-              <ellipse cx="50" cy="65" rx="32" ry="17" fill="#C2E0B4" stroke="#3E3A39" stroke-width="3"/>
-              <ellipse cx="32" cy="84" rx="24" ry="14" fill="#C2E0B4" stroke="#3E3A39" stroke-width="3"/>
-              <ellipse cx="68" cy="84" rx="24" ry="14" fill="#C2E0B4" stroke="#3E3A39" stroke-width="3"/>
-              <path d="M24 58 Q50 44 76 58" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5" stroke-linejoin="round"/>
-              <circle cx="50" cy="4" r="5" fill="#FAD77B" stroke="#3E3A39" stroke-width="2.5"/>
-              <rect x="98" y="92" width="14" height="20" fill="#EADFD2" stroke="#3E3A39" stroke-width="3"/>
-              <rect x="93" y="76" width="24" height="16" rx="3" fill="#FEECA6" stroke="#3E3A39" stroke-width="3"/>
-              <path d="M88 76 L105 63 L122 76 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+            <!-- 2. 遠景飛驒連峰與白山山脈（厚塗雪山稜線） -->
+            <g filter="url(#oil-brush)">
+              <!-- 最遠層暗藍雪山 -->
+              <path d="M-20 235 L55 155 L130 210 L225 135 L315 205 L385 150 L440 195 L440 320 L-20 320 Z" fill="#3B536E" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round" />
+              <!-- 山頭厚積雪筆觸 -->
+              <path d="M55 155 L22 195 Q55 188 85 198 Z" fill="#EAF4FC" />
+              <path d="M225 135 L182 185 Q215 175 245 190 L268 175 Z" fill="#FFFDF9" />
+              <path d="M385 150 L350 185 Q382 178 415 188 Z" fill="#EAF4FC" />
+
+              <!-- 中景山巒與雪谷森林 -->
+              <path d="M-20 270 Q95 215 195 255 Q305 210 440 260 L440 370 L-20 370 Z" fill="#5D7B93" stroke="#3E3A39" stroke-width="3" />
+              <path d="M-20 275 Q95 225 195 262 Q305 218 440 268 L440 305 Q300 265 195 295 Q90 265 -20 305 Z" fill="#EBF7FC" />
             </g>
 
-            <!-- 中央：白川鄉合掌村點燈木屋群（覆蓋厚厚白雪） -->
-            <g transform="translate(240, 144)">
-              <polygon points="45,0 0,70 90,70" fill="#EADFD2" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-              <path d="M45,0 L8,56 Q26,64 45,54 Q64,64 82,56 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-              <rect x="14" y="70" width="62" height="26" fill="#3E3A39" stroke="#3E3A39" stroke-width="3"/>
-              <rect x="36" y="34" width="18" height="14" rx="3" fill="#FAD77B" stroke="#3E3A39" stroke-width="2.5" class="anim-glow"/>
-              <rect x="24" y="75" width="16" height="14" rx="2" fill="#FAD77B" stroke="#3E3A39" stroke-width="2.5" class="anim-glow"/>
-              <rect x="50" y="75" width="16" height="14" rx="2" fill="#FAD77B" stroke="#3E3A39" stroke-width="2.5" class="anim-glow"/>
+            <!-- 3. 荻町盆地厚雪大地（由展望台俯瞰之雪原層次） -->
+            <g filter="url(#oil-brush)">
+              <path d="M-20 295 Q140 270 280 292 Q365 305 440 285 L440 620 L-20 620 Z" fill="#EAF4FC" stroke="#3E3A39" stroke-width="3" />
+              <path d="M-20 355 Q160 330 310 365 Q380 380 440 360 L440 620 L-20 620 Z" fill="#FFFBF3" />
+              <!-- 庄川結冰河道與雪地小徑油畫筆觸 -->
+              <path d="M365 288 Q305 345 328 415 Q350 485 275 565" stroke="#A4D4EC" stroke-width="22" stroke-linecap="round" fill="none" />
+              <path d="M365 288 Q305 345 328 415 Q350 485 275 565" stroke="#3E3A39" stroke-width="2.5" stroke-dasharray="10 8" fill="none" />
+              <!-- 村落蜿蜒暖光小路 -->
+              <path d="M95 330 Q185 375 160 445 Q135 515 235 565" stroke="#EADFD2" stroke-width="14" stroke-linecap="round" fill="none" />
+              <path d="M160 445 Q245 455 305 495" stroke="#EADFD2" stroke-width="11" stroke-linecap="round" fill="none" />
             </g>
 
-            <!-- 主合掌造大木屋 (中央夢幻點燈) -->
-            <g transform="translate(322, 102)">
-              <polygon points="78,0 0,108 156,108" fill="#EADFD2" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-              <path d="M78,0 L10,92 Q35,102 54,88 Q78,102 102,88 Q121,102 146,92 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
-              <rect x="20" y="108" width="116" height="38" fill="#3E3A39" stroke="#3E3A39" stroke-width="3"/>
-              <rect x="64" y="38" width="28" height="20" rx="4" fill="#FAD77B" stroke="#3E3A39" stroke-width="3" class="anim-glow"/>
-              <line x1="78" y1="38" x2="78" y2="58" stroke="#3E3A39" stroke-width="2.5"/>
-              <rect x="46" y="68" width="26" height="20" rx="4" fill="#FAD77B" stroke="#3E3A39" stroke-width="3" class="anim-glow"/>
-              <rect x="84" y="68" width="26" height="20" rx="4" fill="#FAD77B" stroke="#3E3A39" stroke-width="3" class="anim-glow"/>
-              <rect x="34" y="116" width="26" height="20" rx="3" fill="#FEECA6" stroke="#3E3A39" stroke-width="2.5" class="anim-glow"/>
-              <rect x="96" y="116" width="26" height="20" rx="3" fill="#FEECA6" stroke="#3E3A39" stroke-width="2.5" class="anim-glow"/>
-              <rect x="69" y="118" width="18" height="28" rx="3" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5"/>
+            <!-- 4. 雪地針葉林點綴（遠近松樹群） -->
+            <g stroke="#3E3A39" stroke-width="2.2" stroke-linejoin="round">
+              <polygon points="38,315 24,348 52,348" fill="#5A7D6C" />
+              <polygon points="38,305 27,330 49,330" fill="#FFFDF9" />
+              <polygon points="62,325 50,354 74,354" fill="#5A7D6C" />
+              <polygon points="375,320 360,355 390,355" fill="#5A7D6C" />
+              <polygon points="375,310 363,334 387,334" fill="#FFFDF9" />
+              <polygon points="46,455 28,498 64,498" fill="#5A7D6C" />
+              <polygon points="46,442 32,472 60,472" fill="#FFFDF9" />
             </g>
 
-            <!-- 中右：冒著熱氣的飛驒高山木桶露天溫泉 -->
-            <g transform="translate(485, 198)">
-              <ellipse cx="36" cy="40" rx="30" ry="12" fill="#EADFD2" stroke="#3E3A39" stroke-width="3"/>
-              <rect x="6" y="26" width="60" height="16" rx="4" fill="#EADFD2" stroke="#3E3A39" stroke-width="3"/>
-              <ellipse cx="36" cy="26" rx="30" ry="11" fill="#A4D4EC" stroke="#3E3A39" stroke-width="3"/>
-              <circle cx="10" cy="36" r="8" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5"/>
-              <circle cx="62" cy="36" r="9" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5"/>
-              <path d="M24 16 Q20 8 26 2" fill="none" stroke="#F4A69A" stroke-width="3" stroke-linecap="round" class="anim-steam"/>
-              <path d="M36 18 Q32 10 38 4" fill="none" stroke="#F4A69A" stroke-width="3" stroke-linecap="round" class="anim-steam"/>
-              <path d="M48 16 Q44 8 50 2" fill="none" stroke="#F4A69A" stroke-width="3" stroke-linecap="round" class="anim-steam"/>
+            <!-- 5. 點燈暖光暈染層（油畫橘黃光暈灑在雪地上） -->
+            <g class="anim-glow">
+              <ellipse cx="145" cy="362" rx="42" ry="18" fill="#FEECA6" opacity="0.75" />
+              <ellipse cx="248" cy="348" rx="38" ry="16" fill="#FEECA6" opacity="0.7" />
+              <ellipse cx="115" cy="438" rx="54" ry="22" fill="#FAD77B" opacity="0.65" />
+              <ellipse cx="222" cy="428" rx="64" ry="26" fill="#FAD77B" opacity="0.75" />
+              <ellipse cx="315" cy="442" rx="48" ry="20" fill="#FEECA6" opacity="0.7" />
+              <ellipse cx="168" cy="512" rx="72" ry="28" fill="#FAD77B" opacity="0.8" />
+              <ellipse cx="288" cy="518" rx="58" ry="24" fill="#FEECA6" opacity="0.75" />
             </g>
 
-            <!-- 右側：北陸雪國巴士 (修正動畫覆蓋座標的問題，多包一層 g) -->
-            <g transform="translate(562, 174)">
-              <g class="anim-bus">
-                <rect x="0" y="0" width="142" height="58" rx="15" fill="#F4A69A" stroke="#3E3A39" stroke-width="3"/>
-                <rect x="0" y="32" width="142" height="14" fill="#FFFBF3" stroke="#3E3A39" stroke-width="3"/>
-                <path d="M14 -7 H126 A8 8 0 0 1 126 3 H14 A8 8 0 0 1 14 -7 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3"/>
-                <rect x="12" y="9" width="26" height="18" rx="4" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
-                <rect x="44" y="9" width="26" height="18" rx="4" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
-                <rect x="76" y="9" width="26" height="18" rx="4" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
-                <rect x="108" y="9" width="24" height="18" rx="4" fill="#FEECA6" stroke="#3E3A39" stroke-width="2.5"/>
-                <circle cx="139" cy="44" r="5.5" fill="#FAD77B" stroke="#3E3A39" stroke-width="2.5"/>
-                <circle cx="34" cy="58" r="12" fill="#3E3A39"/>
-                <circle cx="34" cy="58" r="5" fill="#FFFDF9"/>
-                <circle cx="108" cy="58" r="12" fill="#3E3A39"/>
-                <circle cx="108" cy="58" r="5" fill="#FFFDF9"/>
+            <!-- 6. 俯瞰白川鄉合掌造群落（遠 ➔ 中 ➔ 近，厚雪屋頂與橘黃窗光） -->
+            <!-- 遠排合掌屋 A (和田家方向) -->
+            <g transform="translate(115, 312)">
+              <rect x="12" y="32" width="38" height="20" rx="2" fill="#4A3B32" stroke="#3E3A39" stroke-width="2.5" />
+              <polygon points="31,4 4,36 58,36" fill="#7A5C43" stroke="#3E3A39" stroke-width="2.5" stroke-linejoin="round" />
+              <path d="M31,4 L9,30 Q31,37 53,30 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.2" />
+              <rect x="21" y="37" width="8" height="9" rx="1.5" fill="#FAD77B" />
+              <rect x="33" y="37" width="8" height="9" rx="1.5" fill="#FAD77B" />
+              <rect x="26" y="22" width="10" height="6" rx="1" fill="#FEECA6" />
+            </g>
+
+            <!-- 遠排合掌屋 B -->
+            <g transform="translate(218, 302)">
+              <rect x="10" y="28" width="34" height="18" rx="2" fill="#4A3B32" stroke="#3E3A39" stroke-width="2.5" />
+              <polygon points="27,4 4,32 50,32" fill="#7A5C43" stroke="#3E3A39" stroke-width="2.5" stroke-linejoin="round" />
+              <path d="M27,4 L8,26 Q27,32 46,26 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.2" />
+              <rect x="18" y="33" width="7" height="8" rx="1" fill="#FAD77B" />
+              <rect x="29" y="33" width="7" height="8" rx="1" fill="#FAD77B" />
+            </g>
+
+            <!-- 中排左側合掌屋 C -->
+            <g transform="translate(72, 378)">
+              <rect x="12" y="38" width="48" height="24" rx="3" fill="#4A3B32" stroke="#3E3A39" stroke-width="2.8" />
+              <polygon points="36,4 2,42 70,42" fill="#6E503B" stroke="#3E3A39" stroke-width="2.8" stroke-linejoin="round" />
+              <path d="M36,4 L8,35 Q36,43 64,35 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5" />
+              <!-- 二樓與一樓點燈窗格 -->
+              <rect x="30" y="24" width="12" height="8" rx="1.5" fill="#FEECA6" stroke="#3E3A39" stroke-width="1.8" />
+              <rect x="20" y="44" width="12" height="11" rx="1.5" fill="#FAD77B" stroke="#3E3A39" stroke-width="1.8" />
+              <rect x="38" y="44" width="12" height="11" rx="1.5" fill="#FAD77B" stroke="#3E3A39" stroke-width="1.8" />
+            </g>
+
+            <!-- 中排核心大合掌屋 D（神田家/長瀨家群落感） -->
+            <g transform="translate(172, 362)">
+              <rect x="14" y="44" width="60" height="30" rx="3" fill="#4A3B32" stroke="#3E3A39" stroke-width="3" />
+              <polygon points="44,4 2,48 86,48" fill="#6E503B" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round" />
+              <!-- 厚塗白雪屋頂 -->
+              <path d="M44,4 L8,41 Q44,50 80,41 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.8" />
+              <path d="M44,8 L18,35 Q44,41 70,35 Z" fill="#EAF4FC" />
+              <!-- 閣樓與一樓溫暖橘黃窗光 -->
+              <rect x="36" y="26" width="16" height="10" rx="2" fill="#FEECA6" stroke="#3E3A39" stroke-width="2" class="anim-glow" />
+              <rect x="22" y="51" width="14" height="13" rx="2" fill="#FAD77B" stroke="#3E3A39" stroke-width="2" class="anim-glow" />
+              <rect x="40" y="51" width="12" height="13" rx="2" fill="#F4A69A" stroke="#3E3A39" stroke-width="2" />
+              <rect x="56" y="51" width="12" height="13" rx="2" fill="#FAD77B" stroke="#3E3A39" stroke-width="2" class="anim-glow" />
+            </g>
+
+            <!-- 中排右側合掌屋 E -->
+            <g transform="translate(278, 382)">
+              <rect x="10" y="36" width="44" height="22" rx="3" fill="#4A3B32" stroke="#3E3A39" stroke-width="2.8" />
+              <polygon points="32,4 2,40 62,40" fill="#7A5C43" stroke="#3E3A39" stroke-width="2.8" stroke-linejoin="round" />
+              <path d="M32,4 L8,33 Q32,40 56,33 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5" />
+              <rect x="26" y="23" width="12" height="7" rx="1.5" fill="#FEECA6" stroke="#3E3A39" stroke-width="1.8" />
+              <rect x="18" y="42" width="11" height="10" rx="1.5" fill="#FAD77B" stroke="#3E3A39" stroke-width="1.8" />
+              <rect x="35" y="42" width="11" height="10" rx="1.5" fill="#FAD77B" stroke="#3E3A39" stroke-width="1.8" />
+            </g>
+
+            <!-- 近景經典「三小屋」造型合掌屋 F & G -->
+            <g transform="translate(112, 442)">
+              <rect x="16" y="48" width="66" height="32" rx="3" fill="#4A3B32" stroke="#3E3A39" stroke-width="3" />
+              <polygon points="49,4 4,52 94,52" fill="#6E503B" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round" />
+              <path d="M49,4 L10,44 Q49,54 88,44 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.8" />
+              <!-- 發光窗格 -->
+              <rect x="40" y="28" width="18" height="11" rx="2" fill="#FEECA6" stroke="#3E3A39" stroke-width="2" class="anim-glow" />
+              <rect x="24" y="55" width="15" height="14" rx="2" fill="#FAD77B" stroke="#3E3A39" stroke-width="2" class="anim-glow" />
+              <rect x="44" y="55" width="15" height="14" rx="2" fill="#FEECA6" stroke="#3E3A39" stroke-width="2" class="anim-glow" />
+              <rect x="63" y="55" width="12" height="14" rx="2" fill="#F4A69A" stroke="#3E3A39" stroke-width="2" />
+              <!-- 門口雪堆與溫暖探照燈柱 -->
+              <path d="M10 80 Q49 70 90 80 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5" />
+            </g>
+
+            <g transform="translate(242, 452)">
+              <rect x="12" y="42" width="52" height="26" rx="3" fill="#4A3B32" stroke="#3E3A39" stroke-width="3" />
+              <polygon points="38,4 2,46 74,46" fill="#6E503B" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round" />
+              <path d="M38,4 L8,39 Q38,48 68,39 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.8" />
+              <rect x="30" y="25" width="15" height="9" rx="1.5" fill="#FEECA6" stroke="#3E3A39" stroke-width="2" class="anim-glow" />
+              <rect x="20" y="48" width="14" height="12" rx="2" fill="#FAD77B" stroke="#3E3A39" stroke-width="2" class="anim-glow" />
+              <rect x="40" y="48" width="14" height="12" rx="2" fill="#FAD77B" stroke="#3E3A39" stroke-width="2" class="anim-glow" />
+            </g>
+
+            <!-- 7. 前景：城山展望台木欄杆、厚雪坡與賞景雪人 -->
+            <g>
+              <!-- 展望台前景高坡積雪 -->
+              <path d="M-20 565 Q115 530 235 562 Q345 588 440 548 L440 740 L-20 740 Z" fill="#EAF4FC" stroke="#3E3A39" stroke-width="3.5" />
+              <path d="M-20 590 Q140 560 275 592 Q365 612 440 582 L440 740 L-20 740 Z" fill="#FFFDF9" />
+
+              <!-- 展望台木造護欄（覆蓋厚白雪） -->
+              <g stroke="#3E3A39" stroke-width="3" stroke-linecap="round">
+                <rect x="26" y="542" width="12" height="42" rx="3" fill="#7A5C43" />
+                <rect x="112" y="535" width="12" height="42" rx="3" fill="#7A5C43" />
+                <rect x="198" y="544" width="12" height="42" rx="3" fill="#7A5C43" />
+                <path d="M18 552 Q115 538 220 554" stroke="#7A5C43" stroke-width="9" fill="none" />
+                <path d="M18 548 Q115 534 220 550" stroke="#FFFDF9" stroke-width="6" fill="none" />
               </g>
-            </g>
 
-            <!-- 右下：戴珊瑚粉圍巾的繪本雪人 ＆ 日本雪兔（雪うさぎ） -->
-            <g transform="translate(712, 186)">
-              <circle cx="28" cy="46" r="19" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3"/>
-              <circle cx="28" cy="20" r="14" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3"/>
-              <path d="M14 14 Q28 -2 42 14 Z" fill="#FAD77B" stroke="#3E3A39" stroke-width="2.5" stroke-linejoin="round"/>
-              <circle cx="28" cy="2" r="4.5" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5"/>
-              <rect x="15" y="29" width="26" height="7" rx="3.5" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5"/>
-              <rect x="31" y="32" width="7" height="15" rx="3" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5"/>
-              <circle cx="23" cy="19" r="2" fill="#3E3A39"/>
-              <circle cx="33" cy="19" r="2" fill="#3E3A39"/>
-              <circle cx="19" cy="23" r="2.5" fill="#F4A69A"/>
-              <circle cx="37" cy="23" r="2.5" fill="#F4A69A"/>
-              <ellipse cx="62" cy="56" rx="13" ry="10" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5"/>
-              <ellipse cx="60" cy="44" rx="6" ry="3" transform="rotate(-20 60 44)" fill="#C2E0B4" stroke="#3E3A39" stroke-width="2"/>
-              <ellipse cx="66" cy="45" rx="6" ry="3" transform="rotate(-5 66 45)" fill="#C2E0B4" stroke="#3E3A39" stroke-width="2"/>
-              <circle cx="55" cy="56" r="2.2" fill="#F4A69A"/>
-            </g>
-
-            <!-- 天空飄落手繪雪花群 -->
-            <g class="anim-snow-1" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5">
-              <circle cx="55" cy="38" r="5"/>
-              <circle cx="215" cy="48" r="6"/>
-              <circle cx="385" cy="34" r="5"/>
-              <circle cx="585" cy="44" r="6"/>
-              <circle cx="755" cy="112" r="5"/>
-            </g>
-            <g class="anim-snow-2" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5">
-              <circle cx="145" cy="92" r="4.5"/>
-              <circle cx="285" cy="78" r="5"/>
-              <circle cx="445" cy="88" r="5.5"/>
-              <circle cx="640" cy="92" r="4.5"/>
+              <!-- 展望台戴珊瑚粉圍巾的小雪人與雪兔俯瞰夜景 -->
+              <g transform="translate(328, 515)" class="anim-float">
+                <circle cx="26" cy="48" r="20" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" />
+                <circle cx="26" cy="22" r="14" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3" />
+                <!-- 紅色小木桶帽 -->
+                <rect x="16" y="3" width="20" height="10" rx="2" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5" />
+                <!-- 珊瑚粉圍巾 -->
+                <rect x="12" y="31" width="28" height="8" rx="4" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.5" />
+                <rect x="30" y="35" width="7" height="14" rx="3" fill="#F4A69A" stroke="#3E3A39" stroke-width="2.2" />
+                <circle cx="21" cy="20" r="2" fill="#3E3A39" />
+                <circle cx="31" cy="20" r="2" fill="#3E3A39" />
+                <!-- 小雪兔 -->
+                <ellipse cx="-12" cy="58" rx="11" ry="8" fill="#FFFDF9" stroke="#3E3A39" stroke-width="2.5" />
+                <path d="M-14 51 Q-6 45 -3 51" fill="#C2E0B4" stroke="#3E3A39" stroke-width="2" />
+                <circle cx="-17" cy="57" r="1.8" fill="#F4A69A" />
+              </g>
             </g>
           </svg>
         </div>
+
       </div>
     </section>
 
     <!-- =========================================================
-         3. 台日雙時區即時時鐘 ＆ 日本當地天氣資訊專區 (手機雙欄並排 & 2x2 網格)
+         分頁二：時間天氣 (Time & Weather)
          ========================================================= -->
-    <section id="time-weather" class="scroll-mt-16 space-y-4 sm:space-y-6">
+    <section id="tab-weather" class="tab-pane hidden space-y-4 sm:space-y-6">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <h2 class="text-lg sm:text-2xl font-bold flex items-center gap-2">
           <span class="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-yamabuki border-[2.5px] border-[#3E3A39]">🕒</span>
@@ -581,9 +615,9 @@
     </section>
 
     <!-- =========================================================
-         4. 航班與跨城核心交通資訊卡片 (Flights & Core Transit)
+         分頁三：航班 (Flights)
          ========================================================= -->
-    <section id="flights" class="scroll-mt-16 space-y-4">
+    <section id="tab-flights" class="tab-pane hidden space-y-4">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <h2 class="text-lg sm:text-2xl font-bold flex items-center gap-2">
           <span class="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-mizu border-[2.5px] border-[#3E3A39]">✈️</span>
@@ -679,11 +713,11 @@
     </section>
 
     <!-- =========================================================
-         5. 每日行程區域 (5等份單列日期切換 + 100%寬度時間軸卡片 + Google Maps)
+         分頁四：每日行程 (Itinerary - 內建置頂天數切換)
          ========================================================= -->
-    <section id="itinerary" class="scroll-mt-16 space-y-3.5 sm:space-y-5">
+    <section id="tab-itinerary" class="tab-pane hidden">
       <!-- 區塊標題與篩選控制列 -->
-      <div class="flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-3.5">
         <h2 class="text-lg sm:text-2xl font-bold flex items-center gap-2">
           <span class="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-yamabuki border-[2.5px] border-[#3E3A39]">📅</span>
           <span>每日行程時間軸</span>
@@ -700,8 +734,8 @@
         </div>
       </div>
 
-      <!-- 交通方式顏色圖例小卡 -->
-      <div class="ehon-card bg-cream p-2.5 sm:p-3.5 flex flex-wrap items-center gap-1.5 text-xs">
+      <!-- 交通方式顏色圖例小卡（切換每日行程時自動置頂對齊至此卡） -->
+      <div id="traffic-legend-card" class="ehon-card bg-cream p-2.5 sm:p-3.5 flex flex-wrap items-center gap-1.5 text-xs mb-3 scroll-mt-[106px]">
         <span class="font-bold">🎨 交通色標：</span>
         <span class="ehon-tag bg-wakatake font-bold">🚶 步行</span>
         <span class="ehon-tag bg-yamabuki font-bold">🚌 巴士/公車/專車</span>
@@ -711,33 +745,35 @@
         <span class="ehon-tag bg-coral font-bold">⭐ 必去</span>
       </div>
 
-      <!-- 5天日期切換按鈕列：手機與電腦皆採用 5 等份單列並排 (grid-cols-5 gap-[6px])，免左右滑動一鍵切換 -->
-      <div class="grid grid-cols-5 gap-[6px] sm:gap-2.5" role="tablist" aria-label="每日行程切換">
-        <button onclick="selectDay(1)" id="tab-day-1" role="tab" aria-selected="true" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-yamabuki flex flex-col items-center justify-center">
-          <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 1</span>
-          <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/9</span>
-          <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">金澤</span>
-        </button>
-        <button onclick="selectDay(2)" id="tab-day-2" role="tab" aria-selected="false" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-cream flex flex-col items-center justify-center">
-          <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 2</span>
-          <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/10</span>
-          <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">高山</span>
-        </button>
-        <button onclick="selectDay(3)" id="tab-day-3" role="tab" aria-selected="false" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-cream flex flex-col items-center justify-center">
-          <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 3</span>
-          <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/11</span>
-          <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">合掌村</span>
-        </button>
-        <button onclick="selectDay(4)" id="tab-day-4" role="tab" aria-selected="false" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-cream flex flex-col items-center justify-center">
-          <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 4</span>
-          <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/12</span>
-          <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">名古屋</span>
-        </button>
-        <button onclick="selectDay(5)" id="tab-day-5" role="tab" aria-selected="false" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-cream flex flex-col items-center justify-center">
-          <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 5</span>
-          <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/13</span>
-          <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">返台</span>
-        </button>
+      <!-- 5天日期切換按鈕列：設定為 Sticky 置頂 -->
+      <div class="sticky-sub-nav sticky bg-washi py-2 border-y-2 border-dashed border-[#3E3A39]/30 mb-3.5">
+        <div class="grid grid-cols-5 gap-[6px] sm:gap-2.5" role="tablist" aria-label="每日行程切換">
+          <button onclick="selectDay(1)" id="tab-day-1" role="tab" aria-selected="true" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-yamabuki flex flex-col items-center justify-center">
+            <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 1</span>
+            <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/9</span>
+            <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">金澤</span>
+          </button>
+          <button onclick="selectDay(2)" id="tab-day-2" role="tab" aria-selected="false" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-cream flex flex-col items-center justify-center">
+            <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 2</span>
+            <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/10</span>
+            <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">高山</span>
+          </button>
+          <button onclick="selectDay(3)" id="tab-day-3" role="tab" aria-selected="false" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-cream flex flex-col items-center justify-center">
+            <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 3</span>
+            <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/11</span>
+            <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">合掌村</span>
+          </button>
+          <button onclick="selectDay(4)" id="tab-day-4" role="tab" aria-selected="false" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-cream flex flex-col items-center justify-center">
+            <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 4</span>
+            <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/12</span>
+            <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">名古屋</span>
+          </button>
+          <button onclick="selectDay(5)" id="tab-day-5" role="tab" aria-selected="false" class="ehon-btn py-2 px-1 sm:p-3 text-center bg-cream flex flex-col items-center justify-center">
+            <span class="text-[11px] sm:text-xs font-bold leading-tight">DAY 5</span>
+            <span class="text-[11px] sm:text-xs font-bold opacity-85 leading-tight">1/13</span>
+            <span class="text-xs sm:text-sm font-bold mt-0.5 leading-tight">返台</span>
+          </button>
+        </div>
       </div>
 
       <!-- 當日行程橫幅摘要、當日所在地天氣卡與時間軸容器 -->
@@ -747,9 +783,9 @@
     </section>
 
     <!-- =========================================================
-         6. 住宿資訊及相關介紹 (Accommodations Section)
+         分頁五：住宿資訊 (Hotels)
          ========================================================= -->
-    <section id="hotels" class="scroll-mt-28 space-y-5">
+    <section id="tab-hotels" class="tab-pane hidden space-y-5">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <h2 class="text-2xl sm:text-3xl font-bold flex items-center gap-2.5">
           <span class="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-coral border-[3px] border-[#3E3A39]">♨️</span>
@@ -884,33 +920,54 @@
       </div>
     </section>
 
-    <!-- =========================================================
-         頁尾與單一 HTML 檔案下載區 (Footer)
-         ========================================================= -->
-    <footer class="ehon-box bg-milktea p-6 text-center space-y-4">
-      <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-washi border-[3px] border-[#3E3A39] text-2xl">
-        ☃️
-      </div>
-      <h3 class="text-xl font-bold">祝 日本北陸冬日雪國旅途平安愉快・滿載而歸！</h3>
-      <p class="text-sm max-w-xl mx-auto">
-        本網站已整合台日雙時區時鐘、四城天氣氣溫、5日完整行程、備案與每個地點的 Google Maps 導航連結。點擊下方按鈕即可下載單一 HTML 檔案保存。
-      </p>
-      <div class="pt-1 flex flex-wrap justify-center gap-3">
-        <button onclick="downloadSingleFileHTML()" class="ehon-btn bg-yamabuki px-6 py-3 text-base font-bold inline-flex items-center gap-2">
-          <span>📥 下載完整離線網頁 (.html)</span>
-        </button>
-        <a href="#hero" class="ehon-btn bg-washi px-5 py-3 text-base font-bold inline-flex items-center gap-2">
-          <span>⬆️ 回到頂端</span>
-        </a>
-      </div>
-    </footer>
-
   </main>
 
   <!-- =========================================================
-       JavaScript：台日雙時鐘、Open-Meteo 即時天氣、每日所在地天氣、Google Maps 導航與時間軸
+       JavaScript：分頁切換、台日雙時鐘、氣象、Google Maps 導航
        ========================================================= -->
   <script>
+    /* ---------------------------------------------------------
+       0. 主分頁切換邏輯 (App Tabs)
+       --------------------------------------------------------- */
+    function switchMainTab(tabId) {
+      // 隱藏所有分頁
+      document.querySelectorAll('.tab-pane').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      });
+      // 顯示目標分頁並觸發動畫
+      const target = document.getElementById('tab-' + tabId);
+      if (target) {
+        target.classList.remove('hidden');
+        target.classList.add('block');
+        
+        // 重新觸發彈跳動畫
+        target.classList.remove("bounce-enter");
+        void target.offsetWidth;
+        target.classList.add("bounce-enter");
+      }
+
+      // 重置所有導覽按鈕顏色
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-palesky', 'bg-iceblue', 'bg-coral', 'bg-yamabuki', 'bg-wakatake');
+        btn.classList.add('bg-cream');
+      });
+
+      // 設定當前啟用按鈕顏色
+      const activeBtn = document.getElementById('nav-btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-cream');
+        if (tabId === 'home') activeBtn.classList.add('bg-palesky');
+        if (tabId === 'weather') activeBtn.classList.add('bg-iceblue');
+        if (tabId === 'flights') activeBtn.classList.add('bg-coral');
+        if (tabId === 'itinerary') activeBtn.classList.add('bg-yamabuki');
+        if (tabId === 'hotels') activeBtn.classList.add('bg-wakatake');
+      }
+
+      // 切換分頁時自動捲動至頂部
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     /* ---------------------------------------------------------
        1. 日本四城天氣設定與 Open-Meteo 即時氣象連線
        --------------------------------------------------------- */
@@ -1986,7 +2043,7 @@
       wrapper.innerHTML = timelineHTML;
     }
 
-    function selectDay(day) {
+    function selectDay(day, shouldScroll = true) {
       currentDay = day;
       for (let i = 1; i <= 5; i++) {
         const btn = document.getElementById(`tab-day-${i}`);
@@ -2001,6 +2058,24 @@
         }
       }
       renderDayTimeline();
+
+      // 切換天數時，自動置頂對齊至「🎨 交通色標」卡片 (#traffic-legend-card)
+      if (shouldScroll) {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            const legendCard = document.getElementById("traffic-legend-card");
+            const header = document.querySelector(".main-header");
+            if (legendCard) {
+              const headerHeight = header ? header.getBoundingClientRect().height : 98;
+              const targetY = Math.max(0, legendCard.getBoundingClientRect().top + window.pageYOffset - headerHeight - 8);
+              window.scrollTo({
+                top: targetY,
+                behavior: "smooth"
+              });
+            }
+          }, 30);
+        });
+      }
     }
 
     function toggleMustGoFilter() {
@@ -2179,6 +2254,8 @@
       renderFourCitiesWeather();
       renderDayTimeline();
       fetchAllJapanWeather();
+      // 初始化顯示首頁分頁
+      switchMainTab('home');
     });
   </script>
 </body>
