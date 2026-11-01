@@ -2143,8 +2143,20 @@
        6. 一鍵匯出下載單一 HTML 檔案功能
        --------------------------------------------------------- */
     function downloadSingleFileHTML() {
-      const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-      const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+      // 取得當前網頁的 HTML 內容
+      let htmlContent = document.documentElement.outerHTML;
+
+      // 移除可能由平台動態插入的特定 Google API script 標籤
+      // 使用正則表達式尋找並移除包含 "AIza" 的 script 標籤
+      htmlContent = htmlContent.replace(/<script[^>]*src=["']https:\/\/maps\.googleapis\.com\/maps\/api\/js\?key=AIza[^>]*><\/script>/gi, '');
+      
+      // 為了更保險，移除所有可能包含 AIza 字串的 script 標籤
+      htmlContent = htmlContent.replace(/<script[^>]*>[\s\S]*?AIza[\s\S]*?<\/script>/gi, '');
+
+      // 組合完整的 HTML 文件
+      const finalHtml = "<!DOCTYPE html>\n" + htmlContent;
+
+      const blob = new Blob([finalHtml], { type: "text/html;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
