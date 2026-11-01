@@ -454,20 +454,22 @@
               <path d="M48 16 Q44 8 50 2" fill="none" stroke="#F4A69A" stroke-width="3" stroke-linecap="round" class="anim-steam"/>
             </g>
 
-            <!-- 右側：北陸雪國巴士 -->
-            <g transform="translate(562, 174)" class="anim-bus">
-              <rect x="0" y="0" width="142" height="58" rx="15" fill="#F4A69A" stroke="#3E3A39" stroke-width="3"/>
-              <rect x="0" y="32" width="142" height="14" fill="#FFFBF3" stroke="#3E3A39" stroke-width="3"/>
-              <path d="M14 -7 H126 A8 8 0 0 1 126 3 H14 A8 8 0 0 1 14 -7 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3"/>
-              <rect x="12" y="9" width="26" height="18" rx="4" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
-              <rect x="44" y="9" width="26" height="18" rx="4" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
-              <rect x="76" y="9" width="26" height="18" rx="4" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
-              <rect x="108" y="9" width="24" height="18" rx="4" fill="#FEECA6" stroke="#3E3A39" stroke-width="2.5"/>
-              <circle cx="139" cy="44" r="5.5" fill="#FAD77B" stroke="#3E3A39" stroke-width="2.5"/>
-              <circle cx="34" cy="58" r="12" fill="#3E3A39"/>
-              <circle cx="34" cy="58" r="5" fill="#FFFDF9"/>
-              <circle cx="108" cy="58" r="12" fill="#3E3A39"/>
-              <circle cx="108" cy="58" r="5" fill="#FFFDF9"/>
+            <!-- 右側：北陸雪國巴士 (修正動畫覆蓋座標的問題，多包一層 g) -->
+            <g transform="translate(562, 174)">
+              <g class="anim-bus">
+                <rect x="0" y="0" width="142" height="58" rx="15" fill="#F4A69A" stroke="#3E3A39" stroke-width="3"/>
+                <rect x="0" y="32" width="142" height="14" fill="#FFFBF3" stroke="#3E3A39" stroke-width="3"/>
+                <path d="M14 -7 H126 A8 8 0 0 1 126 3 H14 A8 8 0 0 1 14 -7 Z" fill="#FFFDF9" stroke="#3E3A39" stroke-width="3"/>
+                <rect x="12" y="9" width="26" height="18" rx="4" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
+                <rect x="44" y="9" width="26" height="18" rx="4" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
+                <rect x="76" y="9" width="26" height="18" rx="4" fill="#EBF7FC" stroke="#3E3A39" stroke-width="2.5"/>
+                <rect x="108" y="9" width="24" height="18" rx="4" fill="#FEECA6" stroke="#3E3A39" stroke-width="2.5"/>
+                <circle cx="139" cy="44" r="5.5" fill="#FAD77B" stroke="#3E3A39" stroke-width="2.5"/>
+                <circle cx="34" cy="58" r="12" fill="#3E3A39"/>
+                <circle cx="34" cy="58" r="5" fill="#FFFDF9"/>
+                <circle cx="108" cy="58" r="12" fill="#3E3A39"/>
+                <circle cx="108" cy="58" r="5" fill="#FFFDF9"/>
+              </g>
             </g>
 
             <!-- 右下：戴珊瑚粉圍巾的繪本雪人 ＆ 日本雪兔（雪うさぎ） -->
