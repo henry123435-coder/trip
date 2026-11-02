@@ -108,11 +108,8 @@
   <!-- 背景冬日雪國飄雪特效層 -->
   <div id="snow-container" aria-hidden="true" class="fixed inset-0 pointer-events-none overflow-hidden z-40"></div>
 
-  <!-- 浮動退稅計算機按鈕 -->
-  <button onclick="toggleTaxModal()" class="fixed top-[110px] right-3 sm:right-6 z-40 ehon-pill bg-yamabuki w-11 h-11 flex flex-col items-center justify-center border-[3px] shadow-[2px_3px_0_#3E3A39] hover:bg-creamyellow">
-    <span class="text-base leading-none mt-0.5">🧮</span>
-    <span class="text-[9px] font-bold mt-[1px]">退稅</span>
-  </button>
+  <!-- 隱藏的圖片上傳元件 (相機/相簿選取用) -->
+  <input type="file" id="hidden-img-upload" accept="image/*" class="hidden">
 
   <!-- 退稅計算機 Modal 對話框 -->
   <div id="tax-modal" class="hidden fixed inset-0 z-50 bg-[#3E3A39]/60 flex items-center justify-center p-4">
@@ -152,9 +149,10 @@
         <span class="inline-flex items-center justify-center w-7 h-7 bg-mizu border-[2.5px] border-[#3E3A39] rounded-full text-sm">⛄</span>
         <span class="text-sm sm:text-base tracking-tight">北陸雪國旅誌</span>
       </div>
+      <!-- 工具列：退稅計算機與雪花開關並排，移除離線下載 -->
       <div class="flex items-center gap-2">
+        <button onclick="toggleTaxModal()" class="ehon-pill bg-yamabuki px-2 py-1 text-[11px] font-bold">🧮 退稅</button>
         <button onclick="toggleSnow()" id="btn-snow-toggle" class="ehon-pill bg-iceblue px-2 py-1 text-[11px] font-bold">❄️ 雪花:開</button>
-        <button onclick="downloadSingleFileHTML()" class="ehon-pill bg-yamabuki px-2 py-1 text-[11px] font-bold">📥 離線下載</button>
       </div>
     </div>
     
@@ -460,7 +458,7 @@
       }
     }
 
-    /* ================= 購物清單邏輯 (LocalStorage) ================= */
+    /* ================= 購物清單邏輯 (LocalStorage + 圖片上傳壓縮) ================= */
     const defaultShopping = [
       { id: 'g1', title: '💊 藥妝店 (松本清/大國)', isOpen: true, items: [
         { id: 'i1', name: '合利他命 EX Plus', spec: '270錠', memo: '代買 x2', price: 5000, bought: false, img: '💊' }
@@ -471,6 +469,67 @@
     ];
 
     let shoppingData = JSON.parse(localStorage.getItem('hokuriku_shopping')) || defaultShopping;
+    let currentUploadTarget = { gId: null, iId: null };
+
+    // 觸發隱藏的相機/檔案選取器
+    function triggerImageUpload(gId, iId) {
+      currentUploadTarget = { gId, iId };
+      const fileInput = document.getElementById('hidden-img-upload');
+      fileInput.value = ''; // 重置，確保重複選取相同相片也能觸發
+      fileInput.click();
+    }
+
+    // 監聽圖片選取並透過 Canvas 壓縮圖片，避免 LocalStorage 容量爆滿
+    document.addEventListener('DOMContentLoaded', () => {
+      const fileInput = document.getElementById('hidden-img-upload');
+      if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+              const canvas = document.createElement('canvas');
+              const MAX_SIZE = 300; // 將圖片限制在最大 300 像素以內
+              let width = img.width;
+              let height = img.height;
+
+              if (width > height) {
+                if (width > MAX_SIZE) {
+                  height *= MAX_SIZE / width;
+                  width = MAX_SIZE;
+                }
+              } else {
+                if (height > MAX_SIZE) {
+                  width *= MAX_SIZE / height;
+                  height = MAX_SIZE;
+                }
+              }
+
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              // 鋪底白色，避免帶有透明背景的 PNG 轉 JPEG 時變黑底
+              ctx.fillStyle = "#FFFDF9";
+              ctx.fillRect(0, 0, width, height);
+              ctx.drawImage(img, 0, 0, width, height);
+
+              // 壓縮並轉換為 Base64 字串 (品質設定為 70%)
+              const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+              
+              if (currentUploadTarget.gId && currentUploadTarget.iId) {
+                updateItem(currentUploadTarget.gId, currentUploadTarget.iId, 'img', dataUrl);
+                saveShopping();
+              }
+            };
+            img.src = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+    });
 
     function saveShopping() {
       localStorage.setItem('hokuriku_shopping', JSON.stringify(shoppingData));
@@ -536,14 +595,6 @@
       }
     }
 
-    function changeImg(gId, iId) {
-      const newImg = prompt('輸入圖片網址 或 Emoji圖案', '🛍️');
-      if (newImg) {
-        updateItem(gId, iId, 'img', newImg);
-        saveShopping();
-      }
-    }
-
     function renderTotal() {
       let total = 0;
       shoppingData.forEach(g => {
@@ -579,7 +630,7 @@
               <div class="ehon-card ${i.bought ? 'bg-wakatake/50' : 'bg-washi'} p-2.5 flex gap-2.5 relative transition-colors">
                 <button onclick="removeItem('${g.id}','${i.id}')" class="absolute -top-2 -left-2 bg-coral text-white rounded-full w-6 h-6 border-[2.5px] border-ink font-bold text-xs shadow-sm flex items-center justify-center z-10">✖</button>
                 
-                <div class="w-16 h-16 shrink-0 bg-iceblue border-[2.5px] border-ink rounded-xl flex items-center justify-center overflow-hidden cursor-pointer shadow-[2px_2px_0_#3E3A39]" onclick="changeImg('${g.id}','${i.id}')" title="點擊更換圖片">
+                <div class="w-16 h-16 shrink-0 bg-iceblue border-[2.5px] border-ink rounded-xl flex items-center justify-center overflow-hidden cursor-pointer shadow-[2px_2px_0_#3E3A39]" onclick="triggerImageUpload('${g.id}','${i.id}')" title="點擊上傳圖片">
                   ${imgContent}
                 </div>
 
@@ -912,21 +963,17 @@
       else { c.style.display = "none"; if(btn) btn.textContent = "⛄ 雪花:關"; }
     }
 
-    function downloadSingleFileHTML() {
-      let htmlContent = document.documentElement.outerHTML.replace(/<script[^>]*>[\s\S]*?AIza[\s\S]*?<\/script>/gi, '');
-      const blob = new Blob(["<!DOCTYPE html>\n" + htmlContent], { type: "text/html;charset=utf-8" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob); a.download = "日本北陸自由行_雪國繪本版.html";
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    }
-
     window.addEventListener("DOMContentLoaded", () => {
       createSnowflakes();
       updateDualClocks(); setInterval(updateDualClocks, 1000);
       renderFourCitiesWeather(); renderDayTimeline();
       fetchAllJapanWeather();
+      // 將預設啟動分頁改為「每日行程」
       switchMainTab('itinerary'); selectDay(1, false);
     });
   </script>
 </body>
 </html>
+```<ElicitationsGroup>
+  <FollowUp>購物清單的照片上傳功能，目前限制縮小到 300 像素以確保順暢。這對您在當地快速核對照片是否足夠清晰？</FollowUp>
+</ElicitationsGroup>
