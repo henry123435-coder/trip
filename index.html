@@ -622,14 +622,12 @@
           html += `<div class="space-y-3 mt-3">`;
           g.items.forEach(i => {
             const isImgUrl = i.img.length > 5 && (i.img.startsWith('http') || i.img.startsWith('data:'));
-            // 放大 Emoji 尺寸
             const imgContent = isImgUrl ? `<img src="${i.img}" class="w-full h-full object-cover">` : `<span class="text-4xl sm:text-5xl">${i.img}</span>`;
             
             html += `
               <div class="ehon-card ${i.bought ? 'bg-wakatake/50' : 'bg-washi'} p-2.5 flex gap-2.5 relative transition-colors">
                 <button onclick="removeItem('${g.id}','${i.id}')" class="absolute -top-2 -left-2 bg-coral text-white rounded-full w-6 h-6 border-[2.5px] border-ink font-bold text-xs shadow-sm flex items-center justify-center z-10">✖</button>
                 
-                <!-- 放大圖片預覽區至 112px -->
                 <div class="w-28 h-28 sm:w-32 sm:h-32 shrink-0 bg-iceblue border-[2.5px] border-ink rounded-xl flex items-center justify-center overflow-hidden cursor-pointer shadow-[2px_2px_0_#3E3A39]" onclick="triggerImageUpload('${g.id}','${i.id}')" title="點擊上傳圖片">
                   ${imgContent}
                 </div>
@@ -756,67 +754,118 @@
       setTimeout(() => { if (btnText) btnText.textContent = "🔄 更新氣溫"; }, 3000);
     }
 
+    /* ================= 完整還原之詳細行程與地標資料 ================= */
     const ITINERARY_DATA = {
-      1: { dayNum: 1, dateStr: "1/9 (六)", title: "DAY 1 (1/9)：金澤抵達・兼六園漫遊與能登牛燒肉", subtitle: "小松機場直達金澤 ➔ 8番拉麵 ➔ 尾山神社＆兼六園雪吊 ➔ 東茶屋街金箔冰 ➔ A5能登牛燒肉", bannerBg: "bg-iceblue", weatherCityKey: "kanazawa", dayWeatherTitle: "📍 DAY 1 行程所在地：石川縣・金澤市 (Kanazawa)", dayTempRange: "1°C ~ 7°C", dayWeatherDesc: "❄️ 濕冷降雪／雨夾雪（機率 75%）", dayClothingTip: "兼六園與金澤城石階遇雪濕滑，請穿防滑防水鞋，並隨身攜帶輕便摺疊傘與保暖手套。",
+      1: {
+        dayNum: 1,
+        dateStr: "1/9 (六)",
+        title: "DAY 1 (1/9)：金澤抵達・兼六園漫遊與能登牛燒肉",
+        subtitle: "小松機場直達金澤 ➔ 8番拉麵 ➔ 尾山神社＆兼六園雪吊 ➔ 東茶屋街金箔冰 ➔ A5能登牛燒肉",
+        bannerBg: "bg-iceblue",
+        weatherCityKey: "kanazawa",
+        dayWeatherTitle: "📍 DAY 1 行程所在地：石川縣・金澤市 (Kanazawa)",
+        dayTempRange: "1°C ~ 7°C",
+        dayWeatherDesc: "❄️ 濕冷降雪／雨夾雪（機率 75%）",
+        dayClothingTip: "兼六園與金澤城石階遇雪濕滑，請穿防滑防水鞋，並隨身攜帶輕便摺疊傘與保暖手套。",
         items: [
           { time: "10:25", route: "抵達小松機場 ➔ 金澤車站", transportText: "🚌 巴士 40分", transportType: "bus", mustGo: false, main: ["出關直接搭乘機場巴士直達金澤車站西口（車程約40分）。"], backup: "若班機延誤或人潮眾多，改搭下一班機場巴士或轉乘JR。", maps: [{ name: "小松機場 (KMQ)", query: "小松空港" }, { name: "金澤車站", query: "金沢駅" }] },
-          { time: "11:30", route: "金澤車站 ➔ 飯店寄物", transportText: "🚶 步行 3-5分", transportType: "walk", mustGo: false, main: ["金澤站西口大和Roynet飯店（西口步行4分）寄放大行李。"], backup: "若提早抵達或櫃檯人潮過多，可先使用金澤車站置物櫃寄物。", maps: [{ name: "金澤站西口大和Roynet飯店", query: "Daiwa Roynet Hotel Kanazawa-Eki Nishiguchi" }] },
-          { time: "12:00", route: "飯店 ➔ 8番拉麵", transportText: "🚶 步行 3-5分", transportType: "walk", mustGo: false, main: ["8番拉麵（金澤車站百番街 Anto 內，清甜蔬菜拉麵適合阿鑫）。"], backup: "黑百合關東煮（百番街 Anto 內，提供熱湯關東煮）。", maps: [{ name: "8番拉麵 金澤站店", query: "8番らーめん 金沢駅店" }] },
-          { time: "13:30", route: "車站 ➔ 尾山神社", transportText: "🚌 公車 10分", transportType: "bus", mustGo: true, main: ["搭公車至尾山神社欣賞特色神門，經鼠多門橋步入金澤城公園。"], transitNote: ["乘車處：金澤車站東口（兼六園口）公車總站 8、9、10 號月台"], backup: "若降雪過大或天候不佳，改搭公車直達兼六園下避開步道。", maps: [{ name: "尾山神社", query: "尾山神社 金沢" }] },
-          { time: "14:45", route: "金澤城 ➔ 兼六園", transportText: "🚶 步行 2分", transportType: "walk", mustGo: true, main: ["經金澤城 石川門(石川橋)直通兼六園入園，拍攝冬季絕景「雪吊」。"], backup: "若體力有限或天氣寒冷，縮短園區動線至時雨亭休憩喝茶。", maps: [{ name: "兼六園", query: "兼六園" }] },
-          { time: "16:15", route: "兼六園 ➔ 東茶屋街", transportText: "🚕 計程車 5-8分", transportType: "taxi", mustGo: true, main: ["先前往【烏雞庵】（烏骨雞蛋冰淇淋）或【茶房懷華樓】室內喫茶！", "17:00 後再去營業至 18:00 的【箔一 東山店】。"], backup: "若戶外風雪寒冷，直接進入茶房懷華樓或烏雞庵室內座位避寒。", maps: [{ name: "東茶屋街", query: "ひがし茶屋街" }] },
-          { time: "18:00", route: "東茶屋街 ➔ 能登牛燒肉", transportText: "🚕 計程車 5分", transportType: "taxi", mustGo: true, main: ["【和牛焼肉 すずや】頂級 A5 能登牛燒肉。"], backup: "【肉匠Jade金澤】（JA全農石川直營 A5 能登牛名店）。", maps: [{ name: "和牛焼肉 すずや", query: "和牛焼肉 すずや 金沢" }] },
-          { time: "20:30", route: "餐廳 ➔ 返回飯店", transportText: "🚶 步行 12分", transportType: "walk", mustGo: false, main: ["穿越金澤車站南北自由通路返回西口飯店。"], backup: "搭計程車回西口飯店（車程約 4 分鐘）。", maps: [{ name: "金澤站西口大和Roynet飯店", query: "Daiwa Roynet Hotel Kanazawa-Eki Nishiguchi" }] }
+          { time: "11:30", route: "金澤車站 ➔ 飯店寄物", transportText: "🚶 步行 3-5分", transportType: "walk", mustGo: false, main: ["金澤站西口大和Roynet飯店（西口步行4分）寄放大行李。"], backup: "若提早抵達或櫃檯人潮過多，可先使用金澤車站置物櫃寄物。", maps: [{ name: "金澤站西口大和Roynet飯店", query: "Daiwa Roynet Hotel Kanazawa-Eki Nishiguchi" }, { name: "金澤車站西口", query: "金沢駅西口" }] },
+          { time: "12:00", route: "飯店 ➔ 8番拉麵", transportText: "🚶 步行 3-5分", transportType: "walk", mustGo: false, main: ["8番拉麵（金澤車站百番街 Anto 內，清甜蔬菜拉麵適合阿鑫）。"], backup: "黑百合關東煮（百番街 Anto 內，提供熱湯關東煮）。", maps: [{ name: "8番拉麵 金澤站店", query: "8番らーめん 金沢駅店" }, { name: "黑百合關東煮 (備案)", query: "黒百合 金沢百番街店" }, { name: "金澤百番街 Anto", query: "金沢百番街 あんと" }] },
+          { time: "13:30", route: "車站 ➔ 尾山神社", transportText: "🚌 公車 10分", transportType: "bus", mustGo: true, main: ["搭公車至尾山神社欣賞特色神門，經鼠多門橋步入金澤城公園。"], transitNote: ["乘車處：金澤車站東口（兼六園口）公車總站 8、9、10 號月台（北鐵一般路線巴士皆可）", "搭乘路線：往香林坊、兼六園方向之一般路線巴士，或搭乘「城下町金澤周遊巴士（左迴路線）」（6號月台）", "下車站名：「南町・尾山神社」站下車"], backup: "若降雪過大或天候不佳，改搭公車直達兼六園下避開步道。", maps: [{ name: "金澤站東口巴士總站", query: "金沢駅東口バスターミナル" }, { name: "尾山神社", query: "尾山神社 金沢" }, { name: "鼠多門橋", query: "鼠多門橋" }, { name: "金澤城公園", query: "金沢城公園" }] },
+          { time: "14:45", route: "金澤城 ➔ 兼六園", transportText: "🚶 步行 2分", transportType: "walk", mustGo: true, main: ["經金澤城 石川門(石川橋)直通兼六園入園，拍攝冬季絕景「雪吊」。"], backup: "若體力有限或天氣寒冷，縮短園區動線至時雨亭休憩喝茶。", maps: [{ name: "兼六園", query: "兼六園" }, { name: "金澤城 石川門(石川橋)", query: "金沢城 石川門" }, { name: "兼六園 時雨亭 (備案)", query: "兼六園 時雨亭" }] },
+          { time: "16:15", route: "兼六園 ➔ 東茶屋街", transportText: "🚕 計程車 5-8分", transportType: "taxi", mustGo: true, main: ["⚠️ 打烊順序提醒：烏雞庵與懷華樓於 17:00 打烊（懷華樓最後點餐 16:30），抵達請先去【烏雞庵】（烏骨雞蛋冰淇淋）或【茶房懷華樓】室內喫茶！", "17:00 後再逛街並前往營業至 18:00 的【箔一 東山店】品嘗金箔冰淇淋（視覺震撼）。"], backup: "若戶外風雪寒冷，直接進入茶房懷華樓或烏雞庵室內座位享熱茶點避寒。", maps: [{ name: "烏雞庵 東山店 (17:00打烊先去)", query: "烏鶏庵 東山店" }, { name: "茶房 懷華樓 (17:00打烊先去)", query: "懐華樓 金沢" }, { name: "箔一 東山店 (開到18:00)", query: "箔一 東山店" }, { name: "東茶屋街", query: "ひがし茶屋街" }] },
+          { time: "18:00", route: "東茶屋街 ➔ 能登牛燒肉", transportText: "🚕 計程車 5分", transportType: "taxi", mustGo: true, main: ["【和牛焼肉 すずや (Suzuya)】頂級 A5 能登牛燒肉（必點招牌烤壽喜燒）。", "💡 提醒：すずや總座位數僅 20 席（含吧檯與二樓包廂），熱門時段易客滿，務必確認完成預約；若人數較多想要寬敞包廂，建議並列首選車站周邊的【肉匠Jade金澤】。"], backup: "【肉匠Jade金澤】（JA全農石川直營 A5 能登牛名店，座位寬敞且有包廂，距離金澤車站更近）。", maps: [{ name: "和牛焼肉 すずや (Suzuya)", query: "和牛焼肉 すずや 金沢" }, { name: "肉匠Jade金澤 (寬敞包廂備案)", query: "肉匠Jade金澤" }] },
+          { time: "20:30", route: "餐廳 ➔ 返回飯店", transportText: "🚶 步行 12-15分 / 🚕 計程車 4分", transportType: "walk", mustGo: false, main: ["穿越金澤車站南北自由通路返回西口飯店（雪地步行約 12～15 分鐘），享受大浴場泡湯洗去疲勞。"], backup: "すずや位於東口笠市町，若雪地路滑或全家疲憊，建議於餐廳門口直接搭計程車回西口飯店（車程約 4 分鐘）。", maps: [{ name: "金澤站西口大和Roynet飯店", query: "Daiwa Roynet Hotel Kanazawa-Eki Nishiguchi" }] }
         ]
       },
-      2: { dayNum: 2, dateStr: "1/10 (日)", title: "DAY 2 (1/10)：金澤市場巡禮 ➔ 高山溫泉飛驒牛", subtitle: "近江町市場美食 ➔ 石川縣立圖書館圓形書牆 ➔ 高速巴士往高山 ➔ 高山櫻庵＆味藏天國飛驒牛", bannerBg: "bg-creamyellow", weatherCityKey: "takayama", dayWeatherTitle: "📍 DAY 2 行程所在地：金澤市 ➔ 岐阜縣・飛驒高山", dayTempRange: "-4°C ~ 4°C", dayWeatherDesc: "🌨️ 午後進入飛驒山區，傍晚降雪結冰（機率 80%）", dayClothingTip: "下午抵達高山站時氣溫明顯比金澤低 4~5°C，下車前請先穿好毛帽、圍巾與防風大衣。",
+      2: {
+        dayNum: 2,
+        dateStr: "1/10 (日)",
+        title: "DAY 2 (1/10)：金澤市場巡禮 ➔ 高山溫泉飛驒牛",
+        subtitle: "近江町市場美食 ➔ 石川縣立圖書館圓形書牆 ➔ 高速巴士往高山 ➔ 高山櫻庵＆味藏天國飛驒牛",
+        bannerBg: "bg-creamyellow",
+        weatherCityKey: "takayama",
+        dayWeatherTitle: "📍 DAY 2 行程所在地：金澤市 ➔ 岐阜縣・飛驒高山",
+        dayTempRange: "-4°C ~ 4°C",
+        dayWeatherDesc: "🌨️ 午後進入飛驒山區，傍晚降雪結冰（機率 80%）",
+        dayClothingTip: "下午抵達高山站時氣溫明顯比金澤低 4~5°C，下車前請先穿好毛帽、圍巾與防風大衣。",
         items: [
-          { time: "09:00", route: "飯店 ➔ 近江町市場", transportText: "🚌 公車5分", transportType: "bus", mustGo: true, main: ["退房寄行李後前往近江町市場（可樂餅/能登牛串燒）。"], backup: "人潮眾多時改於外圍熟食攤外帶。", maps: [{ name: "近江町市場", query: "近江町市場" }] },
-          { time: "10:30", route: "市場 ➔ 石川縣立圖書館", transportText: "🚕 計程車 20分", transportType: "taxi", mustGo: true, main: ["搭計程車至石川縣立圖書館，欣賞壯闊圓形書牆。"], backup: "若遇休館或天候變化，改去金澤21世紀美術館。", maps: [{ name: "石川縣立圖書館", query: "石川県立図書館" }] },
-          { time: "12:00", route: "圖書館 ➔ 車站領行李", transportText: "🚕 計程車 25分", transportType: "taxi", mustGo: false, main: ["回金澤車站整頓、泡奶換尿布，並至飯店領取大行李。"], backup: "大人分工提領行李。", maps: [{ name: "金澤車站", query: "金沢駅" }] },
-          { time: "13:20", route: "金澤 ➔ 高山", transportText: "🚌 巴士 2h15m", transportType: "bus", mustGo: false, main: ["西口 4 號乘車處搭乘高速巴士，直達高山濃飛巴士中心。"], backup: "遇大雪停駛時改搭北陸新幹線至富山轉乘 JR 特急 Hida。", maps: [{ name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
-          { time: "15:40", route: "高山車站 ➔ 高山櫻庵", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["【高山櫻庵】辦理入住與卸下大行李休息，派人去味藏抽號碼牌。"], backup: "於車站前搭排班計程車直達飯店門口。", maps: [{ name: "飛驒花里之湯 高山櫻庵", query: "飛騨花里の湯 高山桜庵" }] },
-          { time: "18:30", route: "飯店 ➔ 飛驒牛燒肉", transportText: "🚶 步行 2分", transportType: "walk", mustGo: true, main: ["【味藏天國】享用厚切鹽味頂級飛驒牛燒肉。"], backup: "【丸明】飛驒高山店。", maps: [{ name: "味藏天國", query: "味蔵天国 高山" }] },
-          { time: "20:30", route: "餐廳 ➔ 返回飯店", transportText: "🚶 步行 2分", transportType: "walk", mustGo: false, main: ["散步回飯店，泡免費私人湯屋與頂樓大眾湯。"], backup: "若私人湯屋客滿，改使用客房衛浴。", maps: [{ name: "高山櫻庵", query: "飛騨花里の湯 高山桜庵" }] }
+          { time: "08:20", route: "飯店 ➔ 近江町市場", transportText: "🚶 步行15分 / 🚌 公車5分", transportType: "bus", mustGo: true, main: ["退房寄行李後前往近江町市場：", "1.【Omicho Croquette 世界の食品ダイヤモンドLⅡ 可樂餅】", "2.【フルーツ坂野】草莓串與鮮榨果汁", "3.【（有）天狗中田 青草町店】能登牛串燒", "4.【Mori Mori Sushi Omicho】"], transitNote: ["乘車處：金澤車站東口 6、7、8、9 號月台", "搭乘路線：任何經武藏辻的公車皆可（班次極密集，平均 2～3 分鐘一班）", "下車站名：「武藏辻・近江町市場」站下車"], backup: "人潮眾多時改於外圍熟食攤外帶。", maps: [{ name: "近江町市場", query: "近江町市場" }, { name: "Omicho Croquette 世界の食品ダイヤモンドLⅡ 可樂餅", query: "近江町コロッケ" }, { name: "フルーツ坂野 (草莓串)", query: "フルーツ坂野 近江町" }, { name: "（有）天狗中田 青草町店", query: "(有)天狗中田 青草町店" }, { name: "Mori Mori Sushi Omicho", query: "もりもり寿し 近江町店" }] },
+          { time: "10:00", route: "市場 ➔ 石川縣立圖書館", transportText: "🚕 計程車 20分", transportType: "taxi", mustGo: true, main: ["搭計程車至石川縣立圖書館，欣賞壯闊圓形書牆與利用兒童閱讀區室內避寒。"], backup: "若遇休館或天候變化，改去金澤21世紀美術館或提早回金澤車站商圈採買。", maps: [{ name: "石川縣立圖書館", query: "石川県立図書館" }, { name: "金澤21世紀美術館 (備案)", query: "金沢21世紀美術館" }] },
+          { time: "12:00", route: "圖書館 ➔ 車站領行李", transportText: "🚕 計程車 25分", transportType: "taxi", mustGo: false, main: ["搭計程車回金澤車站整頓、泡奶換尿布，並至飯店領取大行李。"], backup: "若時間緊迫，大人分工提領行李，其他人留在車站候車區照顧阿鑫。", maps: [{ name: "金澤車站", query: "金沢駅" }, { name: "金澤站西口大和Roynet飯店", query: "Daiwa Roynet Hotel Kanazawa-Eki Nishiguchi" }] },
+          { time: "13:20", route: "金澤 ➔ 高山", transportText: "🚌 高速巴士 2小時15分", transportType: "bus", mustGo: false, main: ["金澤車站西口 4 號乘車處搭乘 13:20 發車之高速巴士，直達高山濃飛巴士中心（表定 15:35 抵達，時間充裕）。"], backup: "遇大雪停駛時改搭北陸新幹線至富山轉乘 JR 特急 Hida。", maps: [{ name: "金澤站西口巴士總站 (4號月台)", query: "金沢駅西口バスターミナル" }, { name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
+          { time: "15:40", route: "高山車站 ➔ 高山櫻庵（*先派人抽燒肉號碼牌）", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["抵達高山車站，步行 5 分鐘至【高山櫻庵】辦理入住與卸下大行李休息。", "💡 連假戰術提醒：1/10(日) 適逢日本「成人の日」三連休，【味藏天國】不開放電話預約、採現場抽號碼牌。高山櫻庵走到味藏天國僅 2 分鐘，建議 16:30～17:00 先派一位大人去味藏天國抽晚場號碼牌，再回飯店休息！"], backup: "若積雪路滑推行李不便，於車站前搭排班計程車直達飯店門口（約2分鐘）。", maps: [{ name: "飛驒花里之湯 高山櫻庵", query: "飛騨花里の湯 高山桜庵" }, { name: "味藏天國", query: "味蔵天国 高山" }, { name: "JR 高山站", query: "高山駅" }] },
+          { time: "18:30", route: "飯店 ➔ 飛驒牛燒肉", transportText: "🚶 步行 2-7分", transportType: "walk", mustGo: true, main: ["【味藏天國】憑號碼牌入場，享用厚切鹽味頂級飛驒牛燒肉（感受豪邁肉感）。"], backup: "【丸明】飛驒高山店（若味藏天國候位截止或等待過長時，立即轉往步行 6 分鐘的丸明）。", maps: [{ name: "味藏天國 飛驒牛燒肉", query: "味蔵天国 高山" }, { name: "丸明 飛驒高山店 (備案)", query: "丸明 飛騨高山店" }] },
+          { time: "20:30", route: "餐廳 ➔ 返回飯店", transportText: "🚶 步行 2-7分", transportType: "walk", mustGo: false, main: ["散步回飯店，泡免費私人湯屋與享用頂樓大眾湯養足精神。"], backup: "若私人湯屋客滿，改使用客房衛浴或延後至離峰時段再前往大眾湯。", maps: [{ name: "飛驒花里之湯 高山櫻庵", query: "飛騨花里の湯 高山桜庵" }] }
         ]
       },
-      3: { dayNum: 3, dateStr: "1/11 (一)", title: "DAY 3 (1/11)：宮川朝市・高山老街 ➔ 白川鄉合掌村夢幻點燈", subtitle: "飛騨の里 ➔ 宮川朝市＆三町老街握壽司 ➔ 午睡防寒整備 ➔ 白川鄉合掌村夢幻點燈專車", bannerBg: "bg-snowpink", weatherCityKey: "shirakawago", dayWeatherTitle: "📍 DAY 3 行程所在地：飛驒高山 ➔ 白川鄉合掌村", dayTempRange: "-6°C ~ 2°C", dayWeatherDesc: "⛄ 豪雪嚴寒地帶（降雪機率 90%，入夜低於 -5°C）", dayClothingTip: "全趟最冷的一天！13:30 回飯店務必改用嬰兒揹巾（推車留飯店），貼妥足底與隨身暖暖包。",
+      3: {
+        dayNum: 3,
+        dateStr: "1/11 (一)",
+        title: "DAY 3 (1/11)：宮川朝市・高山老街 ➔ 白川鄉合掌村夢幻點燈",
+        subtitle: "飛騨の里 ➔ 宮川朝市＆三町老街握壽司 ➔ 午睡防寒整備 ➔ 白川鄉合掌村夢幻點燈專車",
+        bannerBg: "bg-snowpink",
+        weatherCityKey: "shirakawago",
+        dayWeatherTitle: "📍 DAY 3 行程所在地：飛驒高山 ➔ 白川鄉合掌村（豪雪點燈）",
+        dayTempRange: "-6°C ~ 2°C",
+        dayWeatherDesc: "⛄ 豪雪嚴寒地帶（降雪機率 90%，入夜低於 -5°C）",
+        dayClothingTip: "全趟最冷的一天！13:30 回飯店務必改用嬰兒揹巾（推車留飯店），貼妥足底與隨身暖暖包、穿防水防滑靴。",
         items: [
-          { time: "07:40", route: "飯店 ➔ 飛騨の里", transportText: "🚕 車程 10分", transportType: "taxi", mustGo: true, main: ["先至濃飛巴士中心換點燈車票！再前往飛騨の里。"], backup: "停留飯店休息。", maps: [{ name: "飛騨の里", query: "飛騨の里" }] },
-          { time: "10:00", route: "飛騨の里 ➔ 宮川朝市", transportText: "🚕 車程 15分", transportType: "taxi", mustGo: true, main: ["宮川河畔散策：高山布丁亭、現烤糰子。"], backup: "進咖啡店避寒喝熱飲。", maps: [{ name: "宮川朝市", query: "宮川朝市" }] },
-          { time: "10:45", route: "朝市 ➔ 高山老街", transportText: "🚶 步行 8分", transportType: "walk", mustGo: true, main: ["漫步三町筋老街：【飛驒こって牛】握壽司、清酒試飲。"], backup: "若排隊過長改買飛驒牛串燒。", maps: [{ name: "高山三町老街", query: "飛騨高山 古い町並" }] },
-          { time: "12:30", route: "老街 ➔ 高山拉麵午餐", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["【麵屋 Shirakawa】品嘗道地拉麵。"], backup: "【桔梗屋】傳統高山拉麵。", maps: [{ name: "麵屋 Shirakawa", query: "麺屋しらかわ" }] },
-          { time: "13:30", route: "回飯店午睡與防寒整備", transportText: "🚶 步行 10分", transportType: "walk", mustGo: false, main: ["阿鑫回房睡午覺充電；改用嬰兒揹巾（推車留飯店）。"], backup: "大廳泡足湯、檢查保暖配件。", maps: [{ name: "高山櫻庵", query: "飛騨花里の湯 高山桜庵" }] },
-          { time: "15:15", route: "飯店 ➔ 濃飛巴士中心", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["步行至高山濃飛巴士中心，排隊上車(15:40發車)。"], backup: "提早抵達核對預約車次。", maps: [{ name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
-          { time: "16:30", route: "抵達白川鄉 ➔ 步行過橋", transportText: "🚌 專車 1小時", transportType: "bus", mustGo: true, main: ["下車步行過相逢橋至白川鄉主街，拍攝白天雪景。"], backup: "風雪過大時，先至和田家/神田家付費入內避寒。", maps: [{ name: "白川鄉合掌造", query: "白川郷荻町合掌造り集落" }] },
-          { time: "17:30", route: "💡 白川鄉合掌村點燈開始", transportText: "🚶 村落漫步", transportType: "walk", mustGo: true, main: ["🎉 首場點燈（17:30～19:30）！於主街平地欣賞橘黃暖光雪景。"], backup: "視幼童體感隨時進入特產店回溫。", maps: [{ name: "白川鄉", query: "白川郷荻町合掌造り集落" }] },
-          { time: "18:00", route: "返回民家園 ➔ 熱紅豆湯", transportText: "🚶 步行回程", transportType: "walk", mustGo: true, main: ["回到「合掌造り民家園」喝熱紅豆湯暖身。"], backup: "至旁邊的巴士總站休息區避寒。", maps: [{ name: "合掌造り民家園", query: "野外博物館 合掌造り民家園" }] },
-          { time: "19:20", route: "白川鄉 ➔ 高山", transportText: "🚌 專車 1小時", transportType: "bus", mustGo: false, main: ["準時集合搭專車巴士返回高山。"], backup: "車上備妥保溫瓶熱水與零食。", maps: [{ name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
-          { time: "20:30", route: "高山車站 ➔ 宵夜", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["【鍛治橋】居酒屋享用宵夜，或吃飯店夜鳴拉麵。"], backup: "超商採買熱食回房。", maps: [{ name: "高山櫻庵", query: "飛騨花里の湯 高山桜庵" }] }
+          { time: "07:40", route: "飯店 ➔ 飛騨の里 (*先換點燈巴士車票)", transportText: "🚕 車程約 10分", transportType: "taxi", mustGo: true, main: ["*先至濃飛巴士中心換點燈巴士車票！", "前往飛騨の里（預先訂好計程車），飛騨の里 8:30 開園。"], backup: "停留飯店休息。", maps: [{ name: "高山濃飛巴士中心 (換票)", query: "高山濃飛バスセンター" }, { name: "飛騨の里 (飛驒民俗村)", query: "飛騨の里" }] },
+          { time: "10:00", route: "飛騨の里 ➔ 宮川朝市", transportText: "🚕 車程約 15分", transportType: "taxi", mustGo: true, main: ["宮川河畔散策：", "1.【林盛二郎】現削蘋果", "2.【高山布丁亭】雪國布丁", "3. 現烤純醬油焦香糰子"], backup: "若降大雪，轉往沿街有騎樓店家，或進咖啡店（喫茶去かつて）避寒喝熱飲。", maps: [{ name: "宮川朝市", query: "宮川朝市" }, { name: "高山布丁亭", query: "高山プリン亭" }, { name: "喫茶去かつて (備案咖啡)", query: "喫茶去かつて" }] },
+          { time: "10:45", route: "朝市 ➔ 高山老街", transportText: "🚶 步行 8分", transportType: "walk", mustGo: true, main: ["漫步三町筋老街：", "1.【飛驒こって牛】或【坂口屋】握壽司", "2.【Hida Gyuman Honpo(飛驒牛包子)】", "3.【原田酒造場】/【舩坂酒造店】清酒試飲"], backup: "若握壽司排隊過長改買飛驒牛串燒/可樂餅，或大人兵分兩路分批排隊。", maps: [{ name: "高山三町傳統建造物群 (老街)", query: "飛騨高山 古い町並" }, { name: "飛驒こって牛 (握壽司)", query: "飛驒こって牛" }, { name: "坂口屋 (握壽司)", query: "坂口屋 高山" }, { name: "Hida Gyuman Honpo(飛驒牛包子)", query: "Hida Gyuman Honpo" }, { name: "原田酒造場", query: "原田酒造場" }, { name: "舩坂酒造店", query: "舩坂酒造店" }] },
+          { time: "12:30", route: "老街 ➔ 高山拉麵午餐", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["【麵屋 Shirakawa (麺屋しらかわ)】品嘗道地高山深色醬油細捲拉麵。", "⚠️ 點燈日排隊提醒：1/11 適逢日本成人之日連假＋白川鄉首場點燈日，若排隊超過 20 分鐘，請果斷改吃備案【桔梗屋】或老街熟食，確保 13:30 準時回房午睡充電！"], backup: "【桔梗屋】傳統高山拉麵（排隊較快，確保不壓縮下午午睡與點燈集合時間）。", maps: [{ name: "麵屋 Shirakawa (麺屋しらかわ)", query: "麺屋しらかわ" }, { name: "桔梗屋 高山拉麵 (備案)", query: "桔梗屋 高山" }] },
+          { time: "13:30", route: "回飯店午睡與防寒整備", transportText: "🚶 步行 10分", transportType: "walk", mustGo: false, main: ["⚠️ 阿鑫回房睡午覺充電；改用嬰兒揹巾（推車留飯店）。"], backup: "若阿鑫精神良好未睡，在大廳泡足湯、檢查防寒暖暖包與幼童隨身溫水瓶。", maps: [{ name: "飛驒花里之湯 高山櫻庵", query: "飛騨花里の湯 高山桜庵" }] },
+          { time: "15:15", route: "飯店 ➔ 濃飛巴士中心", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["步行至高山濃飛巴士中心，憑「點燈專車 (Illumination Tour)」車票排隊上車。(15:40發車)"], backup: "提早15分鐘抵達核對預約車次與乘車月台，備妥長者與幼童保暖防風配件。", maps: [{ name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
+          { time: "16:30", route: "抵達白川鄉 ➔ 步行過橋至主街", transportText: "🚌 專車 1小時", transportType: "bus", mustGo: true, main: ["預計點燈專車巴士將停靠於「せせらぎ公園駐車場」，下車後步行過相逢橋至白川鄉主街逛街，趁日照拍攝白天雪景。"], backup: "若戶外風雪過大，先至合掌造和田家/神田家付費入內參觀兼室內避寒取暖。", maps: [{ name: "せせらぎ公園駐車場", query: "せせらぎ公園駐車場" }, { name: "相逢橋 (であい橋)", query: "であい橋 白川郷" }, { name: "白川鄉荻町合掌造集落 (主街)", query: "白川郷荻町合掌造り集落" }, { name: "合掌造 和田家 (備案)", query: "白川郷 和田家" }] },
+          { time: "17:30", route: "💡 白川鄉合掌村點燈開始（2027首場點燈日）", transportText: "🚶 村落漫步賞景", transportType: "walk", mustGo: true, main: ["🎉 命中 2027 年第 41 回白川鄉點燈首場（17:30～19:30）！天色變暗村落點燈，於主街平地近距離漫步欣賞橘黃暖光雪景，夢幻好拍。"], backup: "視幼童體感隨時進入休息站或特產店回溫，避免在零下戶外受凍過久。", maps: [{ name: "白川鄉荻町合掌造集落 (主街)", query: "白川郷荻町合掌造り集落" }] },
+          { time: "18:00", route: "返回民家園 ➔ 熱紅豆湯", transportText: "🚶 步行回程", transportType: "walk", mustGo: true, main: ["逛完主街與欣賞點燈後，步行回到停車場旁的「野外博物館 合掌造り民家園」喝熱紅豆湯暖身，等待回程集合。"], backup: "若民家園人潮過多，改至旁邊的巴士總站休息區避寒。", maps: [{ name: "野外博物館 合掌造り民家園", query: "野外博物館 合掌造り民家園" }, { name: "白川鄉巴士總站 (備案)", query: "白川郷バスターミナル" }] },
+          { time: "19:20", route: "白川鄉 ➔ 高山", transportText: "🚌 專車 1小時", transportType: "bus", mustGo: false, main: ["準時集合(原下車地點)搭專車巴士返回高山，小孩於車上剛好補眠充電。(19:20發車)"], backup: "回程若遇大雪車潮延誤，車上備妥保溫瓶熱水與常備零食適時安撫。", maps: [{ name: "白川鄉巴士總站 (集合上車)", query: "白川郷バスターミナル" }, { name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
+          { time: "20:30", route: "高山車站 ➔ 宵夜居酒屋", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["【鍛治橋】居酒屋享用宵夜，或回高山櫻庵享用 22:00 免費夜鳴拉麵。"], backup: "若全家疲憊不想外出，至超商採買熱食回房，直接等候飯店夜鳴拉麵。", maps: [{ name: "鍛治橋 居酒屋", query: "味の与平 鍛治橋" }, { name: "飛驒花里之湯 高山櫻庵", query: "飛騨花里の湯 高山桜庵" }] }
         ]
       },
-      4: { dayNum: 4, dateStr: "1/12 (二)", title: "DAY 4 (1/12)：高山飛驒特急 ➔ 名古屋名物鰻魚飯", subtitle: "駅弁の金亀館飛驒牛便當 ➔ JR特急 ➔ 炭焼うな富士＆弁才天大福 ➔ 大須商店街", bannerBg: "bg-wakatake", weatherCityKey: "nagoya", dayWeatherTitle: "📍 DAY 4 行程所在地：飛驒高山 ➔ 愛知縣・名古屋市", dayTempRange: "2°C ~ 9°C", dayWeatherDesc: "☀️ 特急南下，轉為晴朗乾冷（降雪機率 15%）", dayClothingTip: "名古屋地下街暖氣充足，可換回輕便推車。",
+      4: {
+        dayNum: 4,
+        dateStr: "1/12 (二)",
+        title: "DAY 4 (1/12)：高山飛驒特急 ➔ 名古屋名物鰻魚飯與大須商圈",
+        subtitle: "駅弁の金亀館飛驒牛便當 ➔ JR特急 Hida 6號 ➔ 炭焼うな富士名駅店＆弁才天大福 ➔ 大須商店街＆世界山將手羽先",
+        bannerBg: "bg-wakatake",
+        weatherCityKey: "nagoya",
+        dayWeatherTitle: "📍 DAY 4 行程所在地：飛驒高山 ➔ 愛知縣・名古屋市",
+        dayTempRange: "2°C ~ 9°C",
+        dayWeatherDesc: "☀️ 搭乘特急南下平原，轉為晴朗乾冷（降雪機率 15%）",
+        dayClothingTip: "抵達名古屋後陽光露臉且百貨與地下街暖氣充足，可收起厚重雪具，換回輕便推車逛大須商店街。",
         items: [
-          { time: "08:30", route: "飯店 ➔ 退房前往車站", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["退房並推大件行李步行至高山車站。"], backup: "路面積雪時請飯店叫車。", maps: [{ name: "JR 高山站", query: "高山駅" }] },
-          { time: "08:45", route: "高山車站 ➔ 採買", transportText: "🚶 車站東口", transportType: "walk", mustGo: false, main: ["【駅弁の金亀館】買飛驒牛便當；超商買熱咖啡。"], backup: "至車站超商買熱食。", maps: [{ name: "金亀館", query: "駅弁の金亀館 高山駅" }] },
-          { time: "09:36", route: "高山 ➔ 名古屋（Hida 6號）", transportText: "🚄 JR特急 2.5h", transportType: "train", mustGo: true, main: ["搭乘 JR 特急 Hida 6 號（12:04 抵達名古屋）。"], backup: "遇大雪列車延誤，車上備妥零食。", maps: [{ name: "JR 名古屋站", query: "名古屋駅" }] },
-          { time: "12:10", route: "名古屋車站 ➔ 飯店寄物", transportText: "🚶 步行 4分", transportType: "walk", mustGo: false, main: ["步行至「名鐵格蘭飯店」寄放大行李。"], backup: "走名古屋地下街通道。", maps: [{ name: "名鐵格蘭飯店", query: "名鉄グランドホテル" }] },
-          { time: "12:20", route: "飯店 ➔ 鰻魚飯午餐", transportText: "🚶 步行 2分", transportType: "walk", mustGo: true, main: ["【炭焼 うな富士 名駅店】招牌「肝入鰻魚飯三吃」。"], backup: "【ひつまぶし名古屋備長】。", maps: [{ name: "うな富士", query: "炭焼 うな富士 名駅店 名古屋三井ビルディング北館" }] },
-          { time: "13:30", route: "鰻魚飯 ➔ 草莓大福", transportText: "🚶 步行 4分", transportType: "walk", mustGo: true, main: ["【弁才天】採買新鮮草莓大福。"], backup: "N/A", maps: [{ name: "弁才天 大名古屋ビル店", query: "覚王山フルーツ大福 弁才天 大名古屋ビルヂング店" }] },
-          { time: "16:00", route: "車站 ➔ 大須商店街", transportText: "🚇 地鐵10分", transportType: "subway", mustGo: true, main: ["大須觀音站逛超大有棚商店街（推嬰兒車極好逛）。"], backup: "改逛車站直結高島屋商圈。", maps: [{ name: "大須商店街", query: "大須商店街" }] },
-          { time: "19:00", route: "大須 ➔ 世界的手羽先", transportText: "🚇 地鐵10分", transportType: "subway", mustGo: true, main: ["【世界の山ちゃん】品嘗招牌夢幻手羽先。"], backup: "外帶回飯店或改吃風來坊。", maps: [{ name: "世界の山ちゃん", query: "世界の山ちゃん 名駅西口店" }] },
-          { time: "21:00", route: "餐廳 ➔ 返回飯店", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["散步回名鐵格蘭飯店休息。"], backup: "搭計程車回飯店。", maps: [{ name: "名鐵格蘭飯店", query: "名鉄グランドホテル" }] }
+          { time: "08:30", route: "飯店 ➔ 退房前往車站", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["高山櫻庵退房，推大件行李步行5分鐘至高山車站。"], backup: "路面積雪結冰難行時，請飯店協助叫計程車接送長輩幼童與行李。", maps: [{ name: "飛驒花里之湯 高山櫻庵", query: "飛騨花里の湯 高山桜庵" }, { name: "JR 高山站", query: "高山駅" }] },
+          { time: "08:45", route: "高山車站 ➔ 採買早午餐", transportText: "🚶 車站東口即達", transportType: "walk", mustGo: false, main: ["車站戰術分工：主力至高山站東口出站即達的【駅弁の金亀館】（07:30～19:00營業）買飛驒牛便當；後勤買熱咖啡與阿鑫鮮奶/熱包子。"], backup: "金龜館若售罄，改至車站內 Bellmart Kiosk 超商採買熱食三明治與日式便當。", maps: [{ name: "駅弁の金亀館 (高山站東口)", query: "駅弁の金亀館 高山駅" }, { name: "Bellmart Kiosk 高山站 (備案)", query: "ベルマートキヨスク 高山" }] },
+          { time: "09:36", route: "高山 ➔ 名古屋（JR特急 Hida 6號）", transportText: "🚄 JR特急 2.5小時", transportType: "train", mustGo: true, main: ["搭乘 JR 特急 Hida 6 號（表定 09:36/09:38 發車 ➔ 12:04 抵達名古屋，請於 09:20 前進站月台），車上享用金龜館飛驒牛便當與欣賞沿途飛驒川雪景。"], backup: "若遇大雪列車減速或延誤，車上備妥熱水與零食安撫阿鑫。", maps: [{ name: "JR 高山站", query: "高山駅" }, { name: "JR 名古屋站", query: "名古屋駅" }] },
+          { time: "12:10", route: "名古屋車站 ➔ 飯店寄物", transportText: "🚶 步行 4-5分", transportType: "walk", mustGo: false, main: ["抵達名古屋，步行4-5分鐘至「名鐵格蘭飯店」寄放大行李。"], backup: "若遇雨雪不便，改走名古屋地下街通道前往飯店寄物。", maps: [{ name: "名古屋 名鐵格蘭飯店", query: "名鉄グランドホテル" }] },
+          { time: "12:20", route: "飯店 ➔ 鰻魚飯午餐", transportText: "🚶 步行 2-3分", transportType: "walk", mustGo: true, main: ["【炭焼 うな富士 名駅店】（位於「名古屋三井大廈北館 B1F」，從名鐵格蘭飯店步行僅 2～3 分鐘，地下街可連通），必點招牌「肝入鰻魚飯三吃 (肝入りひつまぶし)」。"], backup: "若名駅店客滿，可改往【炭焼 うな富士 名古屋駅太閤口店】或大名古屋大廈 3F 的【ひつまぶし名古屋備長】。", maps: [{ name: "炭焼 うな富士 名駅店 (三井大廈北館B1F)", query: "炭焼 うな富士 名駅店 名古屋三井ビルディング北館" }, { name: "炭焼 うな富士 太閤口店 (備案)", query: "炭焼 うな富士 名古屋駅太閤口店" }, { name: "名古屋備長 大名古屋ビル店 (備案)", query: "ひつまぶし名古屋備長 大名古屋ビルヂング店" }] },
+          { time: "13:30", route: "鰻魚飯午餐 ➔ 草莓大福", transportText: "🚶 步行 4分", transportType: "walk", mustGo: true, main: ["散步約 4 分鐘至大名古屋大廈 B1F【覚王山フルーツ大福 弁才天】（弁才天 と、餅 大名古屋ビル店）採買新鮮草莓大福。"], backup: "N/A", maps: [{ name: "弁才天 大名古屋ビル店 (B1F)", query: "覚王山フルーツ大福 弁才天 大名古屋ビルヂング店" }, { name: "大名古屋大廈 (B1F)", query: "大名古屋ビルヂング" }] },
+          { time: "16:00", route: "車站 ➔ 大須商店街", transportText: "🚇 地鐵10分 + 🚶 步行3分", transportType: "subway", mustGo: true, main: ["搭地鐵至大須觀音站，逛超大有棚商店街（推嬰兒車極度好逛，小吃、藥妝、扭蛋）。"], backup: "若天候不佳或體力有限，改逛名古屋車站直結之高島屋與名鐵百貨商圈。", maps: [{ name: "大須商店街", query: "大須商店街" }, { name: "大須觀音站", query: "大須観音駅" }, { name: "JR名古屋高島屋 (備案)", query: "ジェイアール名古屋タカシマヤ" }] },
+          { time: "19:00", route: "大須 ➔ 世界的手羽先", transportText: "🚇 地鐵10分 + 🚶 步行5分", transportType: "subway", mustGo: true, main: ["【世界の山ちゃん】品嘗招牌夢幻手羽先（胡椒微辣，長輩下酒首選），另點炒飯、炸雞等不辣餐點給阿鑫。"], backup: "若現場候位過久或店內環境擁擠，可改外帶回飯店享用，或換鄰近居酒屋（如風來坊）。", maps: [{ name: "世界の山ちゃん 名站西口店", query: "世界の山ちゃん 名駅西口店" }, { name: "風來坊 名站新幹線口店 (備案)", query: "風来坊 名駅新幹線口店" }] },
+          { time: "21:00", route: "餐廳 ➔ 返回飯店", transportText: "🚶 步行 5-10分", transportType: "walk", mustGo: false, main: ["散步回名鐵格蘭飯店休息，利用乾濕分離大浴室幫幼童洗澡整備。"], backup: "若採買戰利品過多或小孩疲倦，於居酒屋門口直接搭計程車回飯店。", maps: [{ name: "名古屋 名鐵格蘭飯店", query: "名鉄グランドホテル" }] }
         ]
       },
-      5: { dayNum: 5, dateStr: "1/13 (三)", title: "DAY 5 (1/13)：名站最後採買 ➔ 機場 μ-SKY 與返台滿載而歸", subtitle: "Bic Camera＆千里馬藥局 ➔ ESCA 親子丼 ➔ 名鐵 μ-SKY ➔ 溫暖返台", bannerBg: "bg-milktea", weatherCityKey: "nagoya", dayWeatherTitle: "📍 DAY 5 行程所在地：名古屋車站商圈 ➔ 中部國際機場 (NGO)", dayTempRange: "2°C ~ 9°C", dayWeatherDesc: "⛅ 晴時多雲舒適乾冷（室內地下街＆機場直通）", dayClothingTip: "今日全數為室內動線，穿著輕便保暖即可。",
+      5: {
+        dayNum: 5,
+        dateStr: "1/13 (三)",
+        title: "DAY 5 (1/13)：名站最後採買 ➔ 機場 μ-SKY 與返台滿載而歸",
+        subtitle: "Bic Camera＆千里馬藥局 ➔ ESCA 地下街親子丼/味噌烏龍麵 ➔ 名鐵 μ-SKY ➔ 蝦仙貝之里＆溫暖返台",
+        bannerBg: "bg-milktea",
+        weatherCityKey: "nagoya",
+        dayWeatherTitle: "📍 DAY 5 行程所在地：名古屋車站商圈 ➔ 中部國際機場 (NGO)",
+        dayTempRange: "2°C ~ 9°C",
+        dayWeatherDesc: "⛅ 晴時多雲舒適乾冷（室內地下街＆機場直通）",
+        dayClothingTip: "今日全數為車站商圈、ESCA 地下街與機場室內動線，穿著輕便保暖即可，把厚外套打包進託運行李。",
         items: [
-          { time: "10:00", route: "飯店 ➔ 車站商圈採買", transportText: "🚶 步行 5-10分", transportType: "walk", mustGo: true, main: ["Bic Camera (電器/玩具) 與千里馬藥局 (藥妝)。"], backup: "逛 JR Gate Tower 商圈。", maps: [{ name: "Bic Camera", query: "ビックカメラ 名古屋駅西店" }] },
-          { time: "13:00", route: "商圈 ➔ ESCA 地下街午餐", transportText: "🚶 步行 5分", transportType: "walk", mustGo: true, main: ["「鳥開總本家親子丼 / 山本屋本店味噌烏龍麵」"], backup: "N/A", maps: [{ name: "鳥開總本家", query: "鳥開総本家 名駅エスカ店" }] },
-          { time: "15:30", route: "午餐 ➔ 飯店領行李打包", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["回飯店領取戰利品並做最後裝箱打包。"], backup: "現場分裝至手提折疊袋。", maps: [{ name: "名鐵格蘭飯店", query: "名鉄グランドホテル" }] },
-          { time: "16:00", route: "飯店 ➔ 名鐵名古屋站", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["推行李前往名鐵車站。"], backup: "由名古屋地下街搭乘無障礙電梯。", maps: [{ name: "名鐵名古屋站", query: "名鉄名古屋駅" }] },
-          { time: "16:19", route: "名古屋 ➔ 中部國際機場", transportText: "🚄 μ-SKY 28分", transportType: "train", mustGo: false, main: ["🚄 μ-SKY：搭乘 16:19 或 16:49 發車，28分直達。", "🚆 特急：搭乘 16:30 發車，車程36分。"], backup: "班次極密集，現場購票即可。", maps: [{ name: "名鐵名古屋站", query: "名鉄名古屋駅" }, { name: "中部國際機場", query: "中部国際空港 セントレア" }] },
-          { time: "17:00", route: "機場報到 ➔ 免稅店", transportText: "🚶 步行", transportType: "walk", mustGo: true, main: ["機場櫃檯報到，前往 4F「提燈橫丁」採買蝦仙貝之里。"], backup: "通關後至管制區免稅店採買。", maps: [{ name: "蝦仙貝之里", query: "えびせんべいの里 セントレア店" }] },
-          { time: "19:40", route: "搭機 ➔ 返回台北 (TPE)", transportText: "✈️ 航班 2.5小時", transportType: "flight", mustGo: false, main: ["搭乘直飛航班，預計 22:15 抵達桃園機場 (TPE)。"], backup: "於候機長廊遊戲區安撫幼童。", maps: [{ name: "中部國際機場 第1航廈", query: "中部国際空港 第1ターミナル" }] }
+          { time: "10:00", route: "飯店 ➔ 車站商圈採買", transportText: "🚶 步行 5-10分", transportType: "walk", mustGo: true, main: ["睡到自然醒後退房寄行李，Bic Camera (電器/玩具) 與千里馬藥局 (藥妝)。"], backup: "若遇天候不佳改逛 JR Gate Tower 商圈與三省堂書店，室內直通免走戶外。", maps: [{ name: "Bic Camera 名古屋站西店", query: "ビックカメラ 名古屋駅西店" }, { name: "千里馬藥局 名站店", query: "千里馬薬局 名駅店" }, { name: "JR Gate Tower (備案)", query: "JRゲートタワー 名古屋" }] },
+          { time: "13:00", route: "商圈 ➔ ESCA 地下街午餐", transportText: "🚶 步行 5分", transportType: "walk", mustGo: true, main: ["「鳥開總本家親子丼 / 山本屋本店味噌烏龍麵」"], backup: "N/A", maps: [{ name: "ESCA 地下街", query: "エスカ地下街 名古屋" }, { name: "鳥開總本家 名站ESCA店", query: "鳥開総本家 名駅エスカ店" }, { name: "山本屋本店 ESCA店", query: "山本屋本店 エスカ店" }] },
+          { time: "15:30", route: "午餐 ➔ 飯店領行李打包", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["回名鐵格蘭飯店領取戰利品與大行李，於大廳做最後裝箱打包與重量分配。"], backup: "若行李箱空間不足或超重，現場分裝至手提行李袋或折疊袋備用。", maps: [{ name: "名古屋 名鐵格蘭飯店", query: "名鉄グランドホテル" }] },
+          { time: "16:00", route: "飯店 ➔ 名鐵名古屋站", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["推行李沿平坦騎樓步行前往名鐵車站，準備搭乘機場快線。"], backup: "若戶外風雨較大，改由名古屋地下街搭乘無障礙電梯直通名鐵閘門。", maps: [{ name: "名鐵名古屋站", query: "名鉄名古屋駅" }] },
+          { time: "16:19", route: "名古屋 ➔ 中部國際機場（16:19 / 16:30 / 16:49 彈性發車）", transportText: "🚄 μ-SKY 28分 / 特急 36分", transportType: "train", mustGo: false, main: ["🚄 方案1（全車指定席 μ-SKY）：搭乘 16:19 發車（16:47 抵達）或 16:49 發車（17:17 抵達），28分鐘快速直達中部國際機場 (NGO)。", "🚆 方案2（名鐵空港特急・一部特別車）：搭乘 16:30 發車（17:06 抵達，車程36分鐘），依現場領行李打包進度彈性搭車免撲空！"], backup: "名鐵往機場班次極密集（每 15～30 分鐘一班），現場購票劃位即可安心上車。", maps: [{ name: "名鐵名古屋站", query: "名鉄名古屋駅" }, { name: "中部國際機場 (NGO)", query: "中部国際空港 セントレア" }] },
+          { time: "17:00", route: "機場報到 ➔ 免稅店伴手禮採買", transportText: "🚶 航廈內步行", transportType: "walk", mustGo: true, main: ["機場櫃檯報到與行李託運，前往 4F「提燈橫丁」採買超人氣「蝦仙貝之里」伴手禮。"], backup: "若 4F 排隊過長，通關後至管制區免稅店採買名古屋銘菓伴手禮（如赤福、坂角總本鋪）。", maps: [{ name: "蝦仙貝之里 中部國際機場店", query: "えびせんべいの里 セントレア店" }, { name: "中部國際機場 4F 提燈橫丁", query: "中部国際空港 ちょうちん横丁" }] },
+          { time: "19:40", route: "搭機 ➔ 返回台北 (TPE)", transportText: "✈️ 航班 2.5小時", transportType: "flight", mustGo: false, main: ["搭乘星宇航空 JX839 (19:40 起飛) 直飛航班返台，預計 22:15 抵達桃園機場 (TPE) 滿載而歸！"], backup: "若遇航班延誤，於候機長廊遊戲區或餐飲休憩區安撫幼童休息。", maps: [{ name: "中部國際機場 第1航廈", query: "中部国際空港 第1ターミナル" }, { name: "台灣桃園國際機場 (TPE)", query: "桃園國際機場" }] }
         ]
       }
     };
@@ -974,4 +1023,4 @@
   </script>
 </body>
 </html>
-```<ElicitationsGroup>
+</ElicitationsGroup>
