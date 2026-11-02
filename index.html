@@ -111,24 +111,24 @@
   <!-- 隱藏的圖片上傳元件 (相機/相簿選取用) -->
   <input type="file" id="hidden-img-upload" accept="image/*" class="hidden">
 
-  <!-- 退稅計算機 Modal 對話框 -->
+  <!-- 計算機 Modal 對話框 -->
   <div id="tax-modal" class="hidden fixed inset-0 z-50 bg-[#3E3A39]/60 flex items-center justify-center p-4">
     <div class="ehon-box bg-cream w-full max-w-xs p-5 relative bounce-enter">
       <button onclick="toggleTaxModal()" class="absolute -top-3 -right-3 ehon-btn bg-coral text-white w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center shadow-[0_2px_0_#3E3A39]">✖</button>
       
       <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
         <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-yamabuki border-2 border-ink text-sm">🧮</span>
-        日圓退稅換算
+        日圓計算機
       </h3>
       
       <div class="space-y-3">
         <div class="flex items-center gap-2 bg-washi border-2 border-ink rounded-xl p-2">
           <label class="text-xs font-bold w-12">匯率</label>
-          <input type="number" id="tax-rate" value="0.215" step="0.001" oninput="calcTax()" class="flex-1 bg-transparent font-bold outline-none text-right">
+          <input type="number" id="tax-rate" value="0.215" step="0.001" inputmode="decimal" oninput="calcTax()" class="flex-1 bg-transparent font-bold outline-none text-right">
         </div>
         <div class="flex items-center gap-2 bg-palesky border-2 border-ink rounded-xl p-2 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]">
           <label class="text-sm font-bold w-12">日圓 ¥</label>
-          <input type="number" id="tax-jpy" placeholder="輸入商品金額" oninput="calcTax()" class="flex-1 bg-transparent font-bold text-lg outline-none text-right">
+          <input type="number" id="tax-jpy" placeholder="輸入商品金額" inputmode="numeric" pattern="[0-9]*" oninput="calcTax()" class="flex-1 bg-transparent font-bold text-lg outline-none text-right">
         </div>
         <div class="flex items-center gap-2 mt-2 px-2">
           <label class="text-sm font-bold w-16 text-[#3E3A39]">台幣 NT$</label>
@@ -149,9 +149,9 @@
         <span class="inline-flex items-center justify-center w-7 h-7 bg-mizu border-[2.5px] border-[#3E3A39] rounded-full text-sm">⛄</span>
         <span class="text-sm sm:text-base tracking-tight">北陸雪國旅誌</span>
       </div>
-      <!-- 工具列：退稅計算機與雪花開關並排，移除離線下載 -->
+      <!-- 工具列：計算機與雪花開關並排 -->
       <div class="flex items-center gap-2">
-        <button onclick="toggleTaxModal()" class="ehon-pill bg-yamabuki px-2 py-1 text-[11px] font-bold">🧮 退稅</button>
+        <button onclick="toggleTaxModal()" class="ehon-pill bg-yamabuki px-2 py-1 text-[11px] font-bold">🧮 計算機</button>
         <button onclick="toggleSnow()" id="btn-snow-toggle" class="ehon-pill bg-iceblue px-2 py-1 text-[11px] font-bold">❄️ 雪花:開</button>
       </div>
     </div>
@@ -427,7 +427,7 @@
       navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(console.error);
     }
 
-    /* ================= 退稅計算機邏輯 ================= */
+    /* ================= 計算機邏輯 ================= */
     function toggleTaxModal() {
       const modal = document.getElementById('tax-modal');
       if (modal.classList.contains('hidden')) {
@@ -471,15 +471,13 @@
     let shoppingData = JSON.parse(localStorage.getItem('hokuriku_shopping')) || defaultShopping;
     let currentUploadTarget = { gId: null, iId: null };
 
-    // 觸發隱藏的相機/檔案選取器
     function triggerImageUpload(gId, iId) {
       currentUploadTarget = { gId, iId };
       const fileInput = document.getElementById('hidden-img-upload');
-      fileInput.value = ''; // 重置，確保重複選取相同相片也能觸發
+      fileInput.value = '';
       fileInput.click();
     }
 
-    // 監聽圖片選取並透過 Canvas 壓縮圖片，避免 LocalStorage 容量爆滿
     document.addEventListener('DOMContentLoaded', () => {
       const fileInput = document.getElementById('hidden-img-upload');
       if (fileInput) {
@@ -492,7 +490,7 @@
             const img = new Image();
             img.onload = function() {
               const canvas = document.createElement('canvas');
-              const MAX_SIZE = 300; // 將圖片限制在最大 300 像素以內
+              const MAX_SIZE = 300;
               let width = img.width;
               let height = img.height;
 
@@ -511,12 +509,10 @@
               canvas.width = width;
               canvas.height = height;
               const ctx = canvas.getContext('2d');
-              // 鋪底白色，避免帶有透明背景的 PNG 轉 JPEG 時變黑底
               ctx.fillStyle = "#FFFDF9";
               ctx.fillRect(0, 0, width, height);
               ctx.drawImage(img, 0, 0, width, height);
 
-              // 壓縮並轉換為 Base64 字串 (品質設定為 70%)
               const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
               
               if (currentUploadTarget.gId && currentUploadTarget.iId) {
@@ -643,7 +639,7 @@
                     <input type="text" value="${i.memo}" onchange="updateItem('${g.id}','${i.id}','memo',this.value)" placeholder="數量/顏色/備忘" class="bg-cream border-2 border-ink rounded-lg px-2 py-1 w-full text-[11px] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]">
                     <div class="relative shrink-0 w-20">
                       <span class="absolute left-1.5 top-1 text-[10px] font-bold">¥</span>
-                      <input type="number" value="${i.price}" onchange="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" class="bg-cream border-2 border-ink rounded-lg pl-4 pr-1.5 py-1 w-full text-[11px] font-bold outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]">
+                      <input type="number" value="${i.price}" onchange="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" inputmode="numeric" pattern="[0-9]*" class="bg-cream border-2 border-ink rounded-lg pl-4 pr-1.5 py-1 w-full text-[11px] font-bold outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]">
                     </div>
                   </div>
                 </div>
@@ -974,6 +970,8 @@
   </script>
 </body>
 </html>
-```<ElicitationsGroup>
-  <FollowUp>購物清單的照片上傳功能，目前限制縮小到 300 像素以確保順暢。這對您在當地快速核對照片是否足夠清晰？</FollowUp>
+```<ElicitationsGroup message="這樣一來，畫面上就不會有任何浮動按鈕干擾了！">
+  <Elicitation label="加上匯出行程" query="加上匯出行程按鈕"/>
+  <Elicitation label="調整行程顏色" query="可以幫我把行程上的顏色也調整一下嗎？"/>
 </ElicitationsGroup>
+<FollowUp label="除了這些，您還有想調整哪些介面元素嗎？" query="除了這些，您還有想調整哪些介面元素嗎？"/>
