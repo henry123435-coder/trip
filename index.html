@@ -123,16 +123,18 @@
       
       <div class="space-y-3">
         <div class="flex items-center gap-2 bg-washi border-2 border-ink rounded-xl p-2">
-          <label class="text-xs font-bold w-12">匯率</label>
-          <input type="number" id="tax-rate" value="0.215" step="0.001" inputmode="decimal" oninput="calcTax()" class="flex-1 bg-transparent font-bold outline-none text-right">
+          <label class="text-xs font-bold w-12 shrink-0">匯率</label>
+          <input type="number" id="tax-rate" value="0.215" step="0.001" inputmode="decimal" oninput="calcTax()" class="flex-1 min-w-0 bg-transparent font-bold outline-none text-right">
         </div>
         <div class="flex items-center gap-2 bg-palesky border-2 border-ink rounded-xl p-2 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]">
-          <label class="text-sm font-bold w-12">日圓 ¥</label>
-          <input type="number" id="tax-jpy" placeholder="輸入商品金額" inputmode="numeric" pattern="[0-9]*" oninput="calcTax()" class="flex-1 bg-transparent font-bold text-lg outline-none text-right">
+          <label class="text-sm font-bold w-12 shrink-0">日圓 ¥</label>
+          <!-- 限制最大長度為 8 位數，防止輸入過長撐破畫面 -->
+          <input type="number" id="tax-jpy" placeholder="輸入金額" inputmode="numeric" pattern="[0-9]*" oninput="if(this.value.length>8)this.value=this.value.slice(0,8);calcTax()" class="flex-1 min-w-0 bg-transparent font-bold text-lg outline-none text-right">
         </div>
         <div class="flex items-center gap-2 mt-2 px-2">
-          <label class="text-sm font-bold w-16 text-[#3E3A39]">台幣 NT$</label>
-          <div id="tax-twd" class="flex-1 text-2xl font-bold text-coral text-right">0</div>
+          <label class="text-sm font-bold w-16 text-[#3E3A39] shrink-0">台幣 NT$</label>
+          <!-- 加入 truncate 與 min-w-0，若數字太大自動顯示省略號 -->
+          <div id="tax-twd" class="flex-1 min-w-0 text-2xl font-bold text-coral text-right truncate">0</div>
         </div>
         
         <div id="tax-status" class="mt-4 bg-washi border-2 border-ink rounded-xl p-2.5 text-center text-xs font-bold transition-colors">
@@ -620,26 +622,28 @@
           html += `<div class="space-y-3 mt-3">`;
           g.items.forEach(i => {
             const isImgUrl = i.img.length > 5 && (i.img.startsWith('http') || i.img.startsWith('data:'));
-            const imgContent = isImgUrl ? `<img src="${i.img}" class="w-full h-full object-cover">` : `<span class="text-2xl">${i.img}</span>`;
+            // 放大 Emoji 尺寸
+            const imgContent = isImgUrl ? `<img src="${i.img}" class="w-full h-full object-cover">` : `<span class="text-4xl sm:text-5xl">${i.img}</span>`;
             
             html += `
               <div class="ehon-card ${i.bought ? 'bg-wakatake/50' : 'bg-washi'} p-2.5 flex gap-2.5 relative transition-colors">
                 <button onclick="removeItem('${g.id}','${i.id}')" class="absolute -top-2 -left-2 bg-coral text-white rounded-full w-6 h-6 border-[2.5px] border-ink font-bold text-xs shadow-sm flex items-center justify-center z-10">✖</button>
                 
-                <div class="w-16 h-16 shrink-0 bg-iceblue border-[2.5px] border-ink rounded-xl flex items-center justify-center overflow-hidden cursor-pointer shadow-[2px_2px_0_#3E3A39]" onclick="triggerImageUpload('${g.id}','${i.id}')" title="點擊上傳圖片">
+                <!-- 放大圖片預覽區至 112px -->
+                <div class="w-28 h-28 sm:w-32 sm:h-32 shrink-0 bg-iceblue border-[2.5px] border-ink rounded-xl flex items-center justify-center overflow-hidden cursor-pointer shadow-[2px_2px_0_#3E3A39]" onclick="triggerImageUpload('${g.id}','${i.id}')" title="點擊上傳圖片">
                   ${imgContent}
                 </div>
 
-                <div class="flex-1 flex flex-col justify-between min-w-0">
+                <div class="flex-1 flex flex-col justify-center gap-3 min-w-0">
                   <div class="flex items-center gap-2">
-                    <button onclick="toggleBought('${g.id}','${i.id}')" class="checkbox-btn text-xl shrink-0">${i.bought ? '✅' : '⭕'}</button>
-                    <input type="text" value="${i.name}" onchange="updateItem('${g.id}','${i.id}','name',this.value)" placeholder="品名與規格..." class="bg-transparent border-b-2 border-ink/30 font-bold w-full outline-none text-sm px-1 ${i.bought ? 'line-through-custom' : ''}">
+                    <button onclick="toggleBought('${g.id}','${i.id}')" class="checkbox-btn text-xl sm:text-2xl shrink-0">${i.bought ? '✅' : '⭕'}</button>
+                    <input type="text" value="${i.name}" onchange="updateItem('${g.id}','${i.id}','name',this.value)" placeholder="品名與規格..." class="bg-transparent border-b-2 border-ink/30 font-bold w-full outline-none text-sm sm:text-base px-1 ${i.bought ? 'line-through-custom' : ''}">
                   </div>
-                  <div class="flex gap-2 mt-1.5 pl-7">
-                    <input type="text" value="${i.memo}" onchange="updateItem('${g.id}','${i.id}','memo',this.value)" placeholder="數量/顏色/備忘" class="bg-cream border-2 border-ink rounded-lg px-2 py-1 w-full text-[11px] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]">
-                    <div class="relative shrink-0 w-20">
-                      <span class="absolute left-1.5 top-1 text-[10px] font-bold">¥</span>
-                      <input type="number" value="${i.price}" onchange="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" inputmode="numeric" pattern="[0-9]*" class="bg-cream border-2 border-ink rounded-lg pl-4 pr-1.5 py-1 w-full text-[11px] font-bold outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]">
+                  <div class="flex flex-col gap-2 pl-8 sm:pl-9">
+                    <input type="text" value="${i.memo}" onchange="updateItem('${g.id}','${i.id}','memo',this.value)" placeholder="數量/顏色/備忘" class="bg-cream border-2 border-ink rounded-lg px-2 py-1.5 w-full text-xs outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]">
+                    <div class="relative w-full">
+                      <span class="absolute left-2 top-1.5 text-xs font-bold">¥</span>
+                      <input type="number" value="${i.price}" onchange="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" inputmode="numeric" pattern="[0-9]*" class="bg-cream border-2 border-ink rounded-lg pl-6 pr-2 py-1.5 w-full text-xs font-bold outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]">
                     </div>
                   </div>
                 </div>
@@ -970,8 +974,4 @@
   </script>
 </body>
 </html>
-```<ElicitationsGroup message="這樣一來，畫面上就不會有任何浮動按鈕干擾了！">
-  <Elicitation label="加上匯出行程" query="加上匯出行程按鈕"/>
-  <Elicitation label="調整行程顏色" query="可以幫我把行程上的顏色也調整一下嗎？"/>
-</ElicitationsGroup>
-<FollowUp label="除了這些，您還有想調整哪些介面元素嗎？" query="除了這些，您還有想調整哪些介面元素嗎？"/>
+```<ElicitationsGroup>
