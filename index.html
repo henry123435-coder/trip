@@ -67,7 +67,7 @@
     a.map-pill:hover { background: #edf1f2; }
 
     /* 行程時間軸垂直線設計 */
-    .stop { border-left: 1px solid #cbd7dc; padding: 0 0 25px 17px; margin-left: 5px; position: relative; }
+    .stop { border-left: 1px solid #cbd7dc; padding: 0 0 25px 17px; margin-left: 5px; position: relative; transition: background-color 0.8s ease; }
     .stop:last-child { border-left-color: transparent; }
 
     /* 天數切換按鈕 */
@@ -330,10 +330,13 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 飯店 1 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3">DAY 1 (1 晚)</span>
             <h3 class="text-[16px] font-medium text-[#26343b] leading-snug">大和 Roynet 飯店</h3>
+            <p class="text-[12px] text-[#26343b] font-medium mt-1">ダイワロイネットホテル金沢駅西口</p>
+            <p class="text-[11px] text-[#849098] mb-1">〒920-0031 石川県金沢市広岡1-12-17</p>
             <p class="text-[11px] text-[#849098] mb-4">金澤站西口步行 4 分鐘</p>
             <div class="text-[13px] text-[#26343b] space-y-1.5 pl-3 border-l-2 border-[#e8eae8] mb-4">
               <p>・出小松機場巴士直達西口，寄放行李超順路。</p>
@@ -344,10 +347,13 @@
           <a href="https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Kanazawa-Eki+Nishiguchi" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
         </div>
 
+        <!-- 飯店 2 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3 !bg-[#fcf7f0] !text-[#c5ad85] !border !border-[#c5ad85]/30">DAY 2 & 3 (連泊 2 晚)</span>
             <h3 class="text-[16px] font-medium text-[#26343b] leading-snug">飛驒花里之湯 高山櫻庵</h3>
+            <p class="text-[12px] text-[#26343b] font-medium mt-1">飛騨花里の湯 高山桜庵</p>
+            <p class="text-[11px] text-[#849098] mb-1">〒506-0026 岐阜県高山市花里町4-313</p>
             <p class="text-[11px] text-[#849098] mb-4">高山站步行 5 分鐘 / 全館榻榻米</p>
             <div class="text-[13px] text-[#26343b] space-y-1.5 pl-3 border-l-2 border-[#e8eae8] mb-4">
               <p>・頂樓天然溫泉與 <b>3間免費私人湯屋</b>。</p>
@@ -358,10 +364,13 @@
           <a href="https://www.google.com/maps/search/?api=1&query=飛騨花里の湯+高山桜庵" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
         </div>
 
+        <!-- 飯店 3 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3">DAY 4 (1 晚)</span>
             <h3 class="text-[16px] font-medium text-[#26343b] leading-snug">名鐵格蘭飯店</h3>
+            <p class="text-[12px] text-[#26343b] font-medium mt-1">名鉄グランドホテル</p>
+            <p class="text-[11px] text-[#849098] mb-1">〒450-0002 愛知県名古屋市中村区名駅1-2-4</p>
             <p class="text-[11px] text-[#849098] mb-4">名古屋車站步行 4 分鐘 (車站共構)</p>
             <div class="text-[13px] text-[#26343b] space-y-1.5 pl-3 border-l-2 border-[#e8eae8] mb-4">
               <p>・配備乾濕分離寬敞浴室，逛完大須回來超舒適。</p>
@@ -685,8 +694,8 @@
       },
       2: { dayNum: 2, dateStr: "1/10 (日)", title: "金澤市場巡禮 ➔ 高山飛驒牛", subtitle: "近江町市場 ➔ 石川縣立圖書館 ➔ 高速巴士往高山 ➔ 高山櫻庵", weatherCityKey: "takayama", dayWeatherTitle: "岐阜縣・飛驒高山", dayTempRange: "-4°C ~ 4°C", dayWeatherDesc: "午後入山傍晚降雪結冰（機率 80%）", dayClothingTip: "下午抵達高山時氣溫比金澤低 4~5°C，下車前請穿好防寒配件。",
         items: [
-          { time: "09:00", route: "飯店 ➔ 近江町市場", transportText: "🚌 公車 5分", transportType: "bus", mustGo: true, main: ["退房寄行李後前往近江町市場：", "【可樂餅】/【草莓串】/【天狗中田串燒】/【Mori Mori 壽司】"], transitNote: ["乘車處：東口 6、7、8、9 號月台皆可", "下車站名：「武藏辻・近江町市場」"], backup: "人潮眾多時改於外圍熟食攤外帶。", maps: [{ name: "近江町市場", query: "近江町市場" }, { name: "可樂餅", query: "近江町コロッケ" }, { name: "草莓串", query: "フルーツ坂野 近江町" }] },
-          { time: "10:30", route: "市場 ➔ 石川縣立圖書館", transportText: "🚕 計程車 20分", transportType: "taxi", mustGo: true, main: ["搭計程車欣賞壯闊圓形書牆與利用兒童閱讀區室內避寒。"], backup: "若遇休館或天候變化，改去金澤21世紀美術館。", maps: [{ name: "圖書館", query: "石川県立図書館" }, { name: "21世紀美術館", query: "金沢21世紀美術館" }] },
+          { time: "08:30", route: "飯店 ➔ 近江町市場", transportText: "🚌 公車 5分", transportType: "bus", mustGo: true, main: ["退房寄行李後前往近江町市場：", "【可樂餅】/【草莓串】/【天狗中田串燒】/【Mori Mori 壽司】"], transitNote: ["乘車處：東口 6、7、8、9 號月台皆可", "下車站名：「武藏辻・近江町市場」"], backup: "人潮眾多時改於外圍熟食攤外帶。", maps: [{ name: "近江町市場", query: "近江町市場" }, { name: "可樂餅", query: "近江町コロッケ" }, { name: "草莓串", query: "フルーツ坂野 近江町" }] },
+          { time: "10:00", route: "市場 ➔ 石川縣立圖書館", transportText: "🚕 計程車 20分", transportType: "taxi", mustGo: true, main: ["搭計程車欣賞壯闊圓形書牆與利用兒童閱讀區室內避寒。"], backup: "若遇休館或天候變化，改去金澤21世紀美術館。", maps: [{ name: "圖書館", query: "石川県立図書館" }, { name: "21世紀美術館", query: "金沢21世紀美術館" }] },
           { time: "12:00", route: "圖書館 ➔ 車站領行李", transportText: "🚕 計程車 25分", transportType: "taxi", mustGo: false, main: ["回金澤車站整頓、泡奶換尿布，並至飯店領取大行李。"], backup: "若時間緊迫，大人分工提領行李，其他人照顧小孩。", maps: [{ name: "金澤車站", query: "金沢駅" }, { name: "西口大和Roynet", query: "Daiwa Roynet Hotel Kanazawa-Eki Nishiguchi" }] },
           { time: "13:20", route: "金澤 ➔ 高山", transportText: "🚌 高速巴士 2.5h", transportType: "bus", mustGo: false, main: ["西口 4 號乘車處搭乘 13:20 巴士，直達高山濃飛巴士中心。"], backup: "遇大雪停駛時改搭北陸新幹線至富山轉乘 JR 特急 Hida。", maps: [{ name: "西口巴士總站", query: "金沢駅西口バスターミナル" }, { name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
           { time: "15:40", route: "高山車站 ➔ 高山櫻庵", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["步行至【高山櫻庵】入住休息。", "💡 戰術提醒：適逢三連休，【味藏天國】需現場抽號碼牌。建議 16:30 先派人去抽晚場號碼牌！"], backup: "若積雪路滑推行李不便，搭排班計程車直達飯店門口。", maps: [{ name: "高山櫻庵", query: "飛騨花里の湯 高山桜庵" }, { name: "味藏天國", query: "味蔵天国 高山" }, { name: "JR 高山站", query: "高山駅" }] },
@@ -797,7 +806,7 @@
         }
 
         timelineHTML += `
-          <div class="stop relative ${isLast ? '!border-transparent' : ''}">
+          <div id="stop-${currentDay}-${idx}" class="stop relative ${isLast ? '!border-transparent' : ''}">
             <div class="absolute left-[-4.5px] top-[7px] w-2 h-2 rounded-full ${item.mustGo ? 'bg-[#c5ad85] shadow-[0_0_0_2px_#fff]' : 'bg-[#e8eae8] border border-[#849098]'}"></div>
             
             <div class="flex flex-wrap items-center gap-2 mb-1">
@@ -845,6 +854,70 @@
       }
     }
 
+    /* ================= 智慧定位行程 (Auto-Focus) ================= */
+    function autoFocusItinerary() {
+      // 取得日本當前時間 (JST)
+      const jstDateString = new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"});
+      const jstTime = new Date(jstDateString);
+      
+      let targetDay = 1;
+      const y = jstTime.getFullYear(), m = jstTime.getMonth() + 1, d = jstTime.getDate();
+      
+      // 判斷是否落在旅程期間 (2027/1/9 - 1/13)
+      if (y === 2027 && m === 1 && d >= 9 && d <= 13) {
+        targetDay = d - 8; // 9日->Day1, 13日->Day5
+      }
+      
+      selectDay(targetDay, false);
+      
+      // 比對時間自動滾動
+      const currentHour = jstTime.getHours();
+      const currentMin = jstTime.getMinutes();
+      const currentTimeNum = currentHour * 60 + currentMin;
+      
+      const dayData = ITINERARY_DATA[targetDay];
+      const filteredItems = onlyMustGo ? dayData.items.filter(item => item.mustGo) : dayData.items;
+      
+      let targetIdx = -1;
+      for (let i = 0; i < filteredItems.length; i++) {
+        const timeParts = filteredItems[i].time.split(":");
+        if(timeParts.length === 2) {
+          const itemTimeNum = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
+          // 找到第一個時間大於等於當前時間的行程
+          if (itemTimeNum >= currentTimeNum) {
+            targetIdx = i;
+            break;
+          }
+        }
+      }
+      
+      // 若時間已超過當日所有行程，則停留在最後一個
+      if (targetIdx === -1 && filteredItems.length > 0) {
+        targetIdx = filteredItems.length - 1;
+      }
+      
+      if (targetIdx !== -1) {
+        setTimeout(() => {
+          const targetEl = document.getElementById(`stop-${targetDay}-${targetIdx}`);
+          if (targetEl) {
+            const headerHeight = document.querySelector("header").getBoundingClientRect().height;
+            const subNavHeight = document.querySelector(".sticky-sub-nav").getBoundingClientRect().height;
+            const offset = headerHeight + subNavHeight + 10;
+            
+            window.scrollTo({
+              top: targetEl.getBoundingClientRect().top + window.pageYOffset - offset,
+              behavior: "smooth"
+            });
+            
+            // 加入提示閃爍效果
+            targetEl.style.backgroundColor = "rgba(197, 173, 133, 0.15)";
+            targetEl.style.borderRadius = "8px";
+            setTimeout(() => { targetEl.style.backgroundColor = "transparent"; }, 2000);
+          }
+        }, 300);
+      }
+    }
+
     function toggleMustGoFilter() {
       onlyMustGo = !onlyMustGo;
       const btn = document.getElementById("btn-filter-must");
@@ -870,9 +943,10 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       updateDualClocks(); setInterval(updateDualClocks, 1000);
-      renderFourCitiesWeather(); renderDayTimeline();
+      renderFourCitiesWeather();
       fetchAllJapanWeather();
-      switchMainTab('itinerary'); selectDay(1, false);
+      switchMainTab('itinerary'); 
+      autoFocusItinerary(); // 啟用智慧對標
     });
   </script>
 </body>
