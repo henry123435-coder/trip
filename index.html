@@ -191,7 +191,7 @@
       </div>
 
       <!-- 天數切換 Sub Nav -->
-      <div class="flex overflow-x-auto gap-2.5 mb-6 pb-2 no-scrollbar sticky top-[62px] z-30 bg-[#f7f7f4]/95 backdrop-blur py-2">
+      <div class="sticky-sub-nav flex overflow-x-auto gap-2.5 mb-6 pb-2 no-scrollbar sticky top-[62px] z-30 bg-[#f7f7f4]/95 backdrop-blur py-2">
         <button id="tab-day-1" class="day-tab-btn active flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(1)">
           <div class="tab-date text-[10px] mb-0.5">1/9</div>
           <div class="tab-title text-[13px] font-medium">金澤</div>
@@ -688,13 +688,13 @@
           { time: "13:30", route: "車站 ➔ 尾山神社", transportText: "🚌 公車 10分", transportType: "bus", mustGo: true, main: ["搭公車至尾山神社欣賞特色神門，經鼠多門橋步入金澤城公園。"], transitNote: ["乘車處：東口公車總站 8、9、10 號月台", "下車站名：「南町・尾山神社」站下車"], backup: "若降雪過大或天候不佳，改搭公車直達兼六園下避開步道。", maps: [{ name: "東口巴士總站", query: "金沢駅東口バスターミナル" }, { name: "尾山神社", query: "尾山神社 金沢" }, { name: "鼠多門橋", query: "鼠多門橋" }] },
           { time: "14:45", route: "金澤城 ➔ 兼六園", transportText: "🚶 步行 2分", transportType: "walk", mustGo: true, main: ["經金澤城 石川門(石川橋)直通兼六園入園，拍攝冬季絕景「雪吊」。"], backup: "若體力有限或天氣寒冷，縮短園區動線至時雨亭休憩喝茶。", maps: [{ name: "兼六園", query: "兼六園" }, { name: "石川門", query: "金沢城 石川門" }] },
           { time: "16:15", route: "兼六園 ➔ 東茶屋街", transportText: "🚕 計程車 8分", transportType: "taxi", mustGo: true, main: ["⚠️ 先去 17:00 打烊的【烏雞庵】或【茶房懷華樓】喫茶！", "17:00 後再逛街並前往開至 18:00 的【箔一】品嘗金箔冰淇淋。"], backup: "若戶外風雪寒冷，直接進入室內座位享熱茶點避寒。", maps: [{ name: "烏雞庵", query: "烏鶏庵 東山店" }, { name: "茶房 懷華樓", query: "懐華樓 金沢" }, { name: "箔一", query: "箔一 東山店" }, { name: "東茶屋街", query: "ひがし茶屋街" }] },
-          { time: "18:00", route: "東茶屋街 ➔ 能登牛燒肉", transportText: "🚕 計程車 5分", transportType: "taxi", mustGo: true, main: ["【和牛焼肉 すずや】頂級 A5 能登牛燒肉（必點烤壽喜燒）。", "💡 提醒：座位僅 20 席，務必預約；若需寬敞包廂建議備案。"], backup: "【肉匠Jade金澤】（JA全農直營，座位寬敞且有包廂）。", maps: [{ name: "すずや", query: "和牛焼肉 すずや 金沢" }, { name: "肉匠Jade", query: "肉匠Jade金澤" }] },
+          { time: "18:20", route: "東茶屋街 ➔ 能登牛燒肉", transportText: "🚕 計程車 5分", transportType: "taxi", mustGo: true, main: ["【和牛焼肉 すずや】頂級 A5 能登牛燒肉（必點烤壽喜燒）。", "💡 提醒：座位僅 20 席，務必預約；若需寬敞包廂建議備案。"], backup: "【肉匠Jade金澤】（JA全農直營，座位寬敞且有包廂）。", maps: [{ name: "すずや", query: "和牛焼肉 すずや 金沢" }, { name: "肉匠Jade", query: "肉匠Jade金澤" }] },
           { time: "20:30", route: "餐廳 ➔ 返回飯店", transportText: "🚶 步行 12分", transportType: "walk", mustGo: false, main: ["雪地步行約 12～15 分鐘返回西口飯店，享受大浴場。"], backup: "若雪地路滑，建議於餐廳門口搭計程車（約 4 分鐘）。", maps: [{ name: "西口大和Roynet", query: "Daiwa Roynet Hotel Kanazawa-Eki Nishiguchi" }] }
         ]
       },
       2: { dayNum: 2, dateStr: "1/10 (日)", title: "金澤市場巡禮 ➔ 高山飛驒牛", subtitle: "近江町市場 ➔ 石川縣立圖書館 ➔ 高速巴士往高山 ➔ 高山櫻庵", weatherCityKey: "takayama", dayWeatherTitle: "岐阜縣・飛驒高山", dayTempRange: "-4°C ~ 4°C", dayWeatherDesc: "午後入山傍晚降雪結冰（機率 80%）", dayClothingTip: "下午抵達高山時氣溫比金澤低 4~5°C，下車前請穿好防寒配件。",
         items: [
-          { time: "08:30", route: "飯店 ➔ 近江町市場", transportText: "🚌 公車 5分", transportType: "bus", mustGo: true, main: ["退房寄行李後前往近江町市場：", "【可樂餅】/【草莓串】/【天狗中田串燒】/【Mori Mori 壽司】"], transitNote: ["乘車處：東口 6、7、8、9 號月台皆可", "下車站名：「武藏辻・近江町市場」"], backup: "人潮眾多時改於外圍熟食攤外帶。", maps: [{ name: "近江町市場", query: "近江町市場" }, { name: "可樂餅", query: "近江町コロッケ" }, { name: "草莓串", query: "フルーツ坂野 近江町" }] },
+          { time: "08:30", route: "飯店 ➔ 近江町市場", transportText: "🚌 公車 5分", transportType: "bus", mustGo: true, main: ["退房寄行李後前往近江町市場：", "【可樂餅】/【草莓串】/【天狗中田串燒】/【Mori Mori 壽司】"], transitNote: ["乘車處：東口 6、7、8、9 號月台皆可", "下車站名：「武藏辻・近江町市場」"], backup: "人潮眾多時改於外圍熟食攤外帶。", maps: [{ name: "近江町市場", query: "近江町市場" }, { name: "可樂餅", query: "近江町コロッケ" }, { name: "草莓串", query: "フルーツ坂野 近江町" }, { name: "Mori Mori 壽司", query: "Mori Mori Sushi Omicho" }] },
           { time: "10:00", route: "市場 ➔ 石川縣立圖書館", transportText: "🚕 計程車 20分", transportType: "taxi", mustGo: true, main: ["搭計程車欣賞壯闊圓形書牆與利用兒童閱讀區室內避寒。"], backup: "若遇休館或天候變化，改去金澤21世紀美術館。", maps: [{ name: "圖書館", query: "石川県立図書館" }, { name: "21世紀美術館", query: "金沢21世紀美術館" }] },
           { time: "12:00", route: "圖書館 ➔ 車站領行李", transportText: "🚕 計程車 25分", transportType: "taxi", mustGo: false, main: ["回金澤車站整頓、泡奶換尿布，並至飯店領取大行李。"], backup: "若時間緊迫，大人分工提領行李，其他人照顧小孩。", maps: [{ name: "金澤車站", query: "金沢駅" }, { name: "西口大和Roynet", query: "Daiwa Roynet Hotel Kanazawa-Eki Nishiguchi" }] },
           { time: "13:20", route: "金澤 ➔ 高山", transportText: "🚌 高速巴士 2.5h", transportType: "bus", mustGo: false, main: ["西口 4 號乘車處搭乘 13:20 巴士，直達高山濃飛巴士中心。"], backup: "遇大雪停駛時改搭北陸新幹線至富山轉乘 JR 特急 Hida。", maps: [{ name: "西口巴士總站", query: "金沢駅西口バスターミナル" }, { name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
@@ -707,7 +707,7 @@
         items: [
           { time: "07:40", route: "飯店 ➔ 飛騨の里", transportText: "🚕 計程車 10分", transportType: "taxi", mustGo: true, main: ["*先至濃飛巴士中心換點燈巴士車票！", "再搭計程車前往飛騨の里 (8:30開園)。"], backup: "停留飯店休息。", maps: [{ name: "濃飛換票", query: "高山濃飛バスセンター" }, { name: "飛騨の里", query: "飛騨の里" }] },
           { time: "10:00", route: "飛騨の里 ➔ 宮川朝市", transportText: "🚕 計程車 15分", transportType: "taxi", mustGo: true, main: ["宮川河畔散策：", "【林盛二郎蘋果】/【高山布丁亭】/【現烤焦香糰子】"], backup: "若降大雪，轉往沿街騎樓，或進咖啡店（喫茶去かつて）避寒。", maps: [{ name: "宮川朝市", query: "宮川朝市" }, { name: "高山布丁亭", query: "高山プリン亭" }, { name: "喫茶去かつて", query: "喫茶去かつて" }] },
-          { time: "10:45", route: "朝市 ➔ 高山老街", transportText: "🚶 步行 8分", transportType: "walk", mustGo: true, main: ["漫步三町筋老街：", "【飛驒こって牛】或【坂口屋】握壽司 /【飛驒牛包子】/ 清酒試飲"], backup: "若握壽司排隊過長改買串燒，或大人兵分兩路排隊。", maps: [{ name: "高山老街", query: "飛騨高山 古い町並" }, { name: "飛驒こって牛", query: "飛驒こって牛" }, { name: "坂口屋", query: "坂口屋 高山" }, { name: "原田酒造場", query: "原田酒造場" }] },
+          { time: "10:45", route: "朝市 ➔ 高山老街", transportText: "🚶 步行 8分", transportType: "walk", mustGo: true, main: ["漫步三町筋老街：", "【飛驒こって牛】或【坂口屋】握壽司 /【飛驒牛包子】/ 清酒試飲"], backup: "若握壽司排隊過長改買串燒，或大人兵分兩路排隊。", maps: [{ name: "高山老街", query: "飛騨高山 古い町並" }, { name: "飛驒こって牛", query: "飛驒こって牛" }, { name: "坂口屋", query: "坂口屋 高山" }, { name: "原田酒造場", query: "原田酒造場" }, { name: "飛驒牛包子", query: "飛騨牛まん本舗" }] },
           { time: "12:30", route: "老街 ➔ 高山拉麵午餐", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["【麵屋 Shirakawa】品嘗道地高山深色醬油拉麵。", "⚠️ 點燈日若排隊超過 20 分鐘，請果斷改吃備案確保午睡時間！"], backup: "【桔梗屋】傳統高山拉麵（排隊較快）。", maps: [{ name: "麵屋 Shirakawa", query: "麺屋しらかわ" }, { name: "桔梗屋", query: "桔梗屋 高山" }] },
           { time: "13:30", route: "回飯店午睡與防寒整備", transportText: "🚶 步行 10分", transportType: "walk", mustGo: false, main: ["⚠️ 幼童回房睡午覺；改用嬰兒揹巾（推車留飯店）。"], backup: "若幼童未睡，在大廳泡足湯、檢查防寒與溫水瓶。", maps: [{ name: "高山櫻庵", query: "飛騨花里の湯 高山桜庵" }] },
           { time: "15:15", route: "飯店 ➔ 濃飛巴士中心", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["憑「點燈專車」車票排隊上車 (15:40發車)。"], backup: "提早15分鐘抵達核對預約車次與乘車月台。", maps: [{ name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
@@ -854,7 +854,7 @@
       }
     }
 
-    /* ================= 智慧定位行程 (Auto-Focus) ================= */
+  /* ================= 智慧定位行程 (Auto-Focus) ================= */
     function autoFocusItinerary() {
       // 取得日本當前時間 (JST)
       const jstDateString = new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"});
@@ -864,12 +864,16 @@
       const y = jstTime.getFullYear(), m = jstTime.getMonth() + 1, d = jstTime.getDate();
       
       // 判斷是否落在旅程期間 (2027/1/9 - 1/13)
-      if (y === 2027 && m === 1 && d >= 9 && d <= 13) {
+      const isDuringTrip = (y === 2027 && m === 1 && d >= 9 && d <= 13);
+      if (isDuringTrip) {
         targetDay = d - 8; // 9日->Day1, 13日->Day5
       }
       
       selectDay(targetDay, false);
       
+      // 💡 關鍵修正：若非實際旅程期間（平時測試時），直接保持在頂部，不進行時間自動對標滾動
+      if (!isDuringTrip) return;
+
       // 比對時間自動滾動
       const currentHour = jstTime.getHours();
       const currentMin = jstTime.getMinutes();
@@ -900,8 +904,9 @@
         setTimeout(() => {
           const targetEl = document.getElementById(`stop-${targetDay}-${targetIdx}`);
           if (targetEl) {
-            const headerHeight = document.querySelector("header").getBoundingClientRect().height;
-            const subNavHeight = document.querySelector(".sticky-sub-nav").getBoundingClientRect().height;
+            const headerHeight = document.querySelector("header") ? document.querySelector("header").getBoundingClientRect().height : 60;
+            const subNav = document.querySelector(".sticky-sub-nav");
+            const subNavHeight = subNav ? subNav.getBoundingClientRect().height : 50;
             const offset = headerHeight + subNavHeight + 10;
             
             window.scrollTo({
