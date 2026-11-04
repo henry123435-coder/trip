@@ -7,11 +7,13 @@
   <title>Hokuriku Journey | 北陸雪國旅誌</title>
   
   <!-- 動態 PWA Manifest -->
-  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi5YyX6Zm46Zuq5ZyL5peF6KqMIiwic2hvcnRfbmFtZSI6IumbquWci+aXheiqjCIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjRkZGREY5IiwidGhlbWVfY29sb3ciOiIjM0UzQTM5IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlppQjRiV3h1Y3owaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaUlIcGxZMkpoZVMwOUlqQWdNQ0F4TURBZ01UQXdJajQ4Y21WalRDQjNhV1IwYURwaU1UQXdJaUJvWldWbmFIUTlJakV3TUNJZ1ptbHNiRDBpSTJGalpUaGxaaUkvUGp4MFpYaDBJSEc5SWpVd0lpQjVQU0kxTkNJZ1ptOXVkQzF6YVhwbFBTSTFNQ0lnZEdWNGRDMWhibU5vYjNJOUltdHBaR1JzWlNJZ1lXeHBaMjV0Wlc1MExXSmhjMlZzYVc1bFBTSTtiV0ZrWkd4bElqPuKbsjwvdGV4dD48L3N2Zz4iLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
+  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi5YyX6Zm46Zuq5ZyL5peF6KqMIiwic2hvcnRfbmFtZSI6IumbquWci+aXheiqjCIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjZjdmN2Y0IiwidGhlbWVfY29sb3ciOiIjM0UzQTM5IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBTUFBQUFEQUNBWUFBQUJ2Z1dxVUFBQUFCbUVRVlI0Mm0zTUFRRUFBQWNDQjhLQUwzRDRNQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFCSXdBQjdnQUFBQzhOcmF3QUFBQUJKUlU1RXJrSmdnZz09Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="雪國旅誌">
-  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2FjZThlZSIvPjx0ZXh0IHg9IjUwIiB5PSI1NCIgZm9udC1zaXplPSI1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgYWxpZ25tZW50LWJhc2VsaW5lPSJtYWRkbGUiPuKbsjwvdGV4dD48L3N2Zz4=">
+  
+  <!-- iOS 專用 PNG Base64 圖標 -->
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5wQcCBwvO+eH7QAAIABJREFUeNrs... (此處採用精簡版合掌村雪藍色圖標佔位，建議實體上線時以真實圖片替換)">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -253,7 +255,6 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- 去程航班卡 -->
         <div class="card">
           <div class="flex justify-between items-center mb-4">
             <span class="pill !bg-[#f7f7f4] !text-[#26343b]">🛫 DAY 1 (1/9 六)</span>
@@ -286,7 +287,6 @@
           </div>
         </div>
 
-        <!-- 回程航班卡 -->
         <div class="card">
           <div class="flex justify-between items-center mb-4">
             <span class="pill !bg-[#f7f7f4] !text-[#26343b]">🛬 DAY 5 (1/13 三)</span>
@@ -330,7 +330,6 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- 飯店 1 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3">DAY 1 (1 晚)</span>
@@ -347,7 +346,6 @@
           <a href="https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Kanazawa-Eki+Nishiguchi" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
         </div>
 
-        <!-- 飯店 2 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3 !bg-[#fcf7f0] !text-[#c5ad85] !border !border-[#c5ad85]/30">DAY 2 & 3 (連泊 2 晚)</span>
@@ -364,7 +362,6 @@
           <a href="https://www.google.com/maps/search/?api=1&query=飛騨花里の湯+高山桜庵" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
         </div>
 
-        <!-- 飯店 3 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3">DAY 4 (1 晚)</span>
@@ -466,7 +463,7 @@
       }
     }
 
-    /* ================= 購物清單邏輯 ================= */
+    /* ================= 購物清單邏輯 (已修復儲存防呆與 oninput 靜默存檔) ================= */
     const defaultShopping = [
       { id: 'g1', title: '💊 藥妝店 (松本清/大國)', isOpen: true, items: [
         { id: 'i1', name: '合利他命 EX Plus', spec: '270錠', memo: '代買 x2', price: 5000, bought: false, img: '💊' }
@@ -476,14 +473,30 @@
       ]}
     ];
 
-    let shoppingData = JSON.parse(localStorage.getItem('hokuriku_shopping_v2')) || defaultShopping;
+    let shoppingData = defaultShopping;
+    
+    // 加入 try...catch 避免 localStorage 異常卡死應用程式
+    try {
+      const storedData = localStorage.getItem('hokuriku_shopping_v3');
+      if (storedData) {
+        shoppingData = JSON.parse(storedData);
+      }
+    } catch (e) {
+      console.error("LocalStorage parse error, resetting to default.", e);
+      shoppingData = defaultShopping;
+    }
+
     let currentUploadTarget = { gId: null, iId: null };
 
-    function triggerImageUpload(gId, iId) {
-      currentUploadTarget = { gId, iId };
-      const fileInput = document.getElementById('hidden-img-upload');
-      fileInput.value = '';
-      fileInput.click();
+    // HTML 實體跳脫防護 (避免單雙引號破壞 HTML 結構)
+    function escapeHTML(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -506,8 +519,11 @@
               ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h);
               ctx.drawImage(img, 0, 0, w, h);
               if (currentUploadTarget.gId && currentUploadTarget.iId) {
-                updateItem(currentUploadTarget.gId, currentUploadTarget.iId, 'img', canvas.toDataURL('image/jpeg', 0.7));
-                saveShopping();
+                const g = shoppingData.find(x => x.id === currentUploadTarget.gId);
+                if (g) {
+                  const i = g.items.find(x => x.id === currentUploadTarget.iId);
+                  if (i) { i.img = canvas.toDataURL('image/jpeg', 0.7); saveShopping(); }
+                }
               }
             };
             img.src = event.target.result;
@@ -517,14 +533,35 @@
       }
     });
 
-    function saveShopping() { localStorage.setItem('hokuriku_shopping_v2', JSON.stringify(shoppingData)); renderShopping(); }
+    function saveShopping() { 
+      try {
+        localStorage.setItem('hokuriku_shopping_v3', JSON.stringify(shoppingData)); 
+      } catch (e) { console.error('Save failed', e); }
+      renderShopping(); 
+    }
+
+    // 靜默寫入資料不刷新畫面 (解決手機版 onchange 失焦不儲存的問題)
+    function updateItem(gId, iId, f, v) { 
+      const g = shoppingData.find(x => x.id === gId); 
+      if (g) { 
+        const i = g.items.find(x => x.id === iId); 
+        if (i) { 
+          i[f] = f === 'price' ? (parseFloat(v) || 0) : v; 
+          try {
+            localStorage.setItem('hokuriku_shopping_v3', JSON.stringify(shoppingData)); 
+          } catch(e) { console.error('Save failed', e); }
+          if (f === 'price' || f === 'bought') renderTotal(); 
+        } 
+      } 
+    }
+
     function addShoppingGroup() { const t = prompt('請輸入群組名稱'); if (t) { shoppingData.push({ id: 'g_' + Date.now(), title: t, isOpen: true, items: [] }); saveShopping(); } }
     function removeGroup(gId) { if(confirm('確定刪除此群組？')) { shoppingData = shoppingData.filter(g => g.id !== gId); saveShopping(); } }
     function toggleGroup(gId) { const g = shoppingData.find(x => x.id === gId); if (g) { g.isOpen = !g.isOpen; saveShopping(); } }
     function addItem(gId) { const g = shoppingData.find(x => x.id === gId); if (g) { g.items.push({ id: 'i_' + Date.now(), name: '', spec: '', memo: '', price: 0, bought: false, img: '🛍️' }); g.isOpen = true; saveShopping(); } }
     function removeItem(gId, iId) { const g = shoppingData.find(x => x.id === gId); if (g) { g.items = g.items.filter(i => i.id !== iId); saveShopping(); } }
-    function updateItem(gId, iId, f, v) { const g = shoppingData.find(x => x.id === gId); if (g) { const i = g.items.find(x => x.id === iId); if (i) { i[f] = f === 'price' ? (parseFloat(v) || 0) : v; localStorage.setItem('hokuriku_shopping_v2', JSON.stringify(shoppingData)); if(f==='price'||f==='bought') renderTotal(); } } }
     function toggleBought(gId, iId) { const g = shoppingData.find(x => x.id === gId); if (g) { const i = g.items.find(x => x.id === iId); if (i) { i.bought = !i.bought; saveShopping(); } } }
+    
     function renderTotal() {
       let t = 0; shoppingData.forEach(g => g.items.forEach(i => { if(!i.bought) t += i.price; }));
       document.getElementById('shopping-total').textContent = '¥ ' + t.toLocaleString();
@@ -539,7 +576,7 @@
             <div class="flex justify-between items-center mb-3 ${g.isOpen ? 'border-b border-[#e8eae8] pb-3' : ''}">
               <div class="flex items-center gap-2 cursor-pointer text-[#26343b]" onclick="toggleGroup('${g.id}')">
                 <span class="text-xs text-[#849098] w-4 text-center">${g.isOpen ? '▼' : '▶'}</span>
-                <h4 class="font-medium text-[15px]">${g.title}</h4>
+                <h4 class="font-medium text-[15px]">${escapeHTML(g.title)}</h4>
               </div>
               <div class="flex gap-2">
                 <button onclick="addItem('${g.id}')" class="text-[11px] text-[#526d7c] bg-[#f7f7f4] px-2.5 py-1 rounded-md hover:bg-[#e8eae8]">＋ 商品</button>
@@ -551,7 +588,9 @@
           html += `<div class="space-y-4 pt-1">`;
           g.items.forEach(i => {
             const isImg = i.img.startsWith('http') || i.img.startsWith('data:');
-            const imgHtml = isImg ? `<img src="${i.img}" class="w-full h-full object-cover">` : `<span class="text-4xl">${i.img}</span>`;
+            const imgHtml = isImg ? `<img src="${i.img}" class="w-full h-full object-cover">` : `<span class="text-4xl">${escapeHTML(i.img)}</span>`;
+            
+            // onchange 全面改為 oninput
             html += `
               <div class="flex gap-3 relative ${i.bought ? 'opacity-60' : ''} transition-opacity">
                 <button onclick="removeItem('${g.id}','${i.id}')" class="absolute -top-1.5 -left-1.5 bg-white border border-[#e8eae8] text-[#849098] rounded-full w-5 h-5 text-[10px] flex items-center justify-center shadow-sm z-10 hover:text-[#26343b]">&times;</button>
@@ -561,13 +600,13 @@
                 <div class="flex-1 flex flex-col justify-center gap-2.5 min-w-0">
                   <div class="flex items-center gap-2">
                     <button onclick="toggleBought('${g.id}','${i.id}')" class="checkbox-btn text-xl shrink-0">${i.bought ? '✅' : '⭕'}</button>
-                    <input type="text" value="${i.name}" onchange="updateItem('${g.id}','${i.id}','name',this.value)" placeholder="品名與規格..." class="shop-input !py-1.5 !px-2 text-[13px] font-medium ${i.bought ? 'line-through-custom' : ''}">
+                    <input type="text" value="${escapeHTML(i.name)}" oninput="updateItem('${g.id}','${i.id}','name',this.value)" placeholder="品名與規格..." class="shop-input !py-1.5 !px-2 text-[13px] font-medium ${i.bought ? 'line-through-custom' : ''}">
                   </div>
                   <div class="flex flex-col gap-2 pl-8">
-                    <input type="text" value="${i.memo}" onchange="updateItem('${g.id}','${i.id}','memo',this.value)" placeholder="數量/顏色/備忘" class="shop-input !py-1 !px-2 text-[11px] text-[#526d7c]">
+                    <input type="text" value="${escapeHTML(i.memo)}" oninput="updateItem('${g.id}','${i.id}','memo',this.value)" placeholder="數量/顏色/備忘" class="shop-input !py-1 !px-2 text-[11px] text-[#526d7c]">
                     <div class="relative w-full">
                       <span class="absolute left-2 top-1 text-[11px] text-[#849098]">¥</span>
-                      <input type="number" value="${i.price}" onchange="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" inputmode="numeric" pattern="[0-9]*" class="shop-input !py-1 !pl-6 !pr-2 text-[12px] font-medium">
+                      <input type="number" value="${i.price}" oninput="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" inputmode="numeric" pattern="[0-9]*" class="shop-input !py-1 !pl-6 !pr-2 text-[12px] font-medium">
                     </div>
                   </div>
                 </div>
@@ -585,7 +624,6 @@
     /* ================= 導航與分頁切換邏輯 ================= */
     const TABS = ['itinerary', 'weather', 'flights', 'hotels', 'shopping'];
     function switchMainTab(tabId) {
-      // 切換內容
       TABS.forEach(t => {
         const el = document.getElementById('tab-' + t);
         if (el) {
@@ -593,19 +631,14 @@
           else { el.classList.add('hidden'); el.classList.remove('block', 'modal-enter'); }
         }
       });
-
-      // 更新桌機 Nav 狀態
       TABS.forEach(t => {
         const deskBtn = document.getElementById('nav-desk-' + t);
         if (deskBtn) deskBtn.className = (t === tabId) ? 'active' : '';
       });
-
-      // 更新手機 Nav 狀態
       TABS.forEach(t => {
         const mobBtn = document.getElementById('nav-mob-' + t);
         if (mobBtn) mobBtn.className = (t === tabId) ? 'active' : '';
       });
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
       if(tabId === 'shopping') renderShopping();
     }
@@ -694,7 +727,7 @@
       },
       2: { dayNum: 2, dateStr: "1/10 (日)", title: "金澤市場巡禮 ➔ 高山飛驒牛", subtitle: "近江町市場 ➔ 石川縣立圖書館 ➔ 高速巴士往高山 ➔ 高山櫻庵", weatherCityKey: "takayama", dayWeatherTitle: "岐阜縣・飛驒高山", dayTempRange: "-4°C ~ 4°C", dayWeatherDesc: "午後入山傍晚降雪結冰（機率 80%）", dayClothingTip: "下午抵達高山時氣溫比金澤低 4~5°C，下車前請穿好防寒配件。",
         items: [
-          { time: "08:30", route: "飯店 ➔ 近江町市場", transportText: "🚌 公車 5分", transportType: "bus", mustGo: true, main: ["退房寄行李後前往近江町市場：", "【可樂餅】/【草莓串】/【天狗中田串燒】/【Mori Mori 壽司】"], transitNote: ["乘車處：東口 6、7、8、9 號月台皆可", "下車站名：「武藏辻・近江町市場」"], backup: "人潮眾多時改於外圍熟食攤外帶。", maps: [{ name: "近江町市場", query: "近江町市場" }, { name: "可樂餅", query: "近江町コロッケ" }, { name: "草莓串", query: "フルーツ坂野 近江町" }] },
+          { time: "08:30", route: "飯店 ➔ 近江町市場", transportText: "🚌 公車 5分", transportType: "bus", mustGo: true, main: ["退房寄行李後前往近江町市場：", "【可樂餅】/【草莓串】/【天狗中田串燒】/【Mori Mori 壽司】"], transitNote: ["乘車處：東口 6、7、8、9 號月台皆可", "下車站名：「武藏辻・近江町市場」"], backup: "人潮眾多時改於外圍熟食攤外帶。", maps: [{ name: "近江町市場", query: "近江町市場" }, { name: "可樂餅", query: "近江町コロッケ" }, { name: "草莓串", query: "フルーツ坂野 近江町" }, { name: "MoriMori壽司", query: "もりもり寿し 近江町店" }] },
           { time: "10:00", route: "市場 ➔ 石川縣立圖書館", transportText: "🚕 計程車 20分", transportType: "taxi", mustGo: true, main: ["搭計程車欣賞壯闊圓形書牆與利用兒童閱讀區室內避寒。"], backup: "若遇休館或天候變化，改去金澤21世紀美術館。", maps: [{ name: "圖書館", query: "石川県立図書館" }, { name: "21世紀美術館", query: "金沢21世紀美術館" }] },
           { time: "12:00", route: "圖書館 ➔ 車站領行李", transportText: "🚕 計程車 25分", transportType: "taxi", mustGo: false, main: ["回金澤車站整頓、泡奶換尿布，並至飯店領取大行李。"], backup: "若時間緊迫，大人分工提領行李，其他人照顧小孩。", maps: [{ name: "金澤車站", query: "金沢駅" }, { name: "西口大和Roynet", query: "Daiwa Roynet Hotel Kanazawa-Eki Nishiguchi" }] },
           { time: "13:20", route: "金澤 ➔ 高山", transportText: "🚌 高速巴士 2.5h", transportType: "bus", mustGo: false, main: ["西口 4 號乘車處搭乘 13:20 巴士，直達高山濃飛巴士中心。"], backup: "遇大雪停駛時改搭北陸新幹線至富山轉乘 JR 特急 Hida。", maps: [{ name: "西口巴士總站", query: "金沢駅西口バスターミナル" }, { name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
@@ -707,7 +740,7 @@
         items: [
           { time: "07:40", route: "飯店 ➔ 飛騨の里", transportText: "🚕 計程車 10分", transportType: "taxi", mustGo: true, main: ["*先至濃飛巴士中心換點燈巴士車票！", "再搭計程車前往飛騨の里 (8:30開園)。"], backup: "停留飯店休息。", maps: [{ name: "濃飛換票", query: "高山濃飛バスセンター" }, { name: "飛騨の里", query: "飛騨の里" }] },
           { time: "10:00", route: "飛騨の里 ➔ 宮川朝市", transportText: "🚕 計程車 15分", transportType: "taxi", mustGo: true, main: ["宮川河畔散策：", "【林盛二郎蘋果】/【高山布丁亭】/【現烤焦香糰子】"], backup: "若降大雪，轉往沿街騎樓，或進咖啡店（喫茶去かつて）避寒。", maps: [{ name: "宮川朝市", query: "宮川朝市" }, { name: "高山布丁亭", query: "高山プリン亭" }, { name: "喫茶去かつて", query: "喫茶去かつて" }] },
-          { time: "10:45", route: "朝市 ➔ 高山老街", transportText: "🚶 步行 8分", transportType: "walk", mustGo: true, main: ["漫步三町筋老街：", "【飛驒こって牛】或【坂口屋】握壽司 /【飛驒牛包子】/ 清酒試飲"], backup: "若握壽司排隊過長改買串燒，或大人兵分兩路排隊。", maps: [{ name: "高山老街", query: "飛騨高山 古い町並" }, { name: "飛驒こって牛", query: "飛驒こって牛" }, { name: "坂口屋", query: "坂口屋 高山" }, { name: "原田酒造場", query: "原田酒造場" }] },
+          { time: "10:45", route: "朝市 ➔ 高山老街", transportText: "🚶 步行 8分", transportType: "walk", mustGo: true, main: ["漫步三町筋老街：", "【飛驒こって牛】或【坂口屋】握壽司 /【飛驒牛包子】/ 清酒試飲"], backup: "若握壽司排隊過長改買串燒，或大人兵分兩路排隊。", maps: [{ name: "高山老街", query: "飛騨高山 古い町並" }, { name: "飛驒こって牛", query: "飛驒こって牛" }, { name: "坂口屋", query: "坂口屋 高山" }, { name: "原田酒造場", query: "原田酒造場" }, { name: "飛驒牛包子", query: "飛騨牛まん本舗" }] },
           { time: "12:30", route: "老街 ➔ 高山拉麵午餐", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["【麵屋 Shirakawa】品嘗道地高山深色醬油拉麵。", "⚠️ 點燈日若排隊超過 20 分鐘，請果斷改吃備案確保午睡時間！"], backup: "【桔梗屋】傳統高山拉麵（排隊較快）。", maps: [{ name: "麵屋 Shirakawa", query: "麺屋しらかわ" }, { name: "桔梗屋", query: "桔梗屋 高山" }] },
           { time: "13:30", route: "回飯店午睡與防寒整備", transportText: "🚶 步行 10分", transportType: "walk", mustGo: false, main: ["⚠️ 幼童回房睡午覺；改用嬰兒揹巾（推車留飯店）。"], backup: "若幼童未睡，在大廳泡足湯、檢查防寒與溫水瓶。", maps: [{ name: "高山櫻庵", query: "飛騨花里の湯 高山桜庵" }] },
           { time: "15:15", route: "飯店 ➔ 濃飛巴士中心", transportText: "🚶 步行 5分", transportType: "walk", mustGo: false, main: ["憑「點燈專車」車票排隊上車 (15:40發車)。"], backup: "提早15分鐘抵達核對預約車次與乘車月台。", maps: [{ name: "高山濃飛巴士中心", query: "高山濃飛バスセンター" }] },
@@ -856,21 +889,18 @@
 
     /* ================= 智慧定位行程 (Auto-Focus) ================= */
     function autoFocusItinerary() {
-      // 取得日本當前時間 (JST)
       const jstDateString = new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"});
       const jstTime = new Date(jstDateString);
       
       let targetDay = 1;
       const y = jstTime.getFullYear(), m = jstTime.getMonth() + 1, d = jstTime.getDate();
       
-      // 判斷是否落在旅程期間 (2027/1/9 - 1/13)
       if (y === 2027 && m === 1 && d >= 9 && d <= 13) {
-        targetDay = d - 8; // 9日->Day1, 13日->Day5
+        targetDay = d - 8; 
       }
       
       selectDay(targetDay, false);
       
-      // 比對時間自動滾動
       const currentHour = jstTime.getHours();
       const currentMin = jstTime.getMinutes();
       const currentTimeNum = currentHour * 60 + currentMin;
@@ -883,7 +913,6 @@
         const timeParts = filteredItems[i].time.split(":");
         if(timeParts.length === 2) {
           const itemTimeNum = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
-          // 找到第一個時間大於等於當前時間的行程
           if (itemTimeNum >= currentTimeNum) {
             targetIdx = i;
             break;
@@ -891,7 +920,6 @@
         }
       }
       
-      // 若時間已超過當日所有行程，則停留在最後一個
       if (targetIdx === -1 && filteredItems.length > 0) {
         targetIdx = filteredItems.length - 1;
       }
@@ -901,7 +929,7 @@
           const targetEl = document.getElementById(`stop-${targetDay}-${targetIdx}`);
           if (targetEl) {
             const headerHeight = document.querySelector("header").getBoundingClientRect().height;
-            const subNavHeight = document.querySelector(".sticky-sub-nav").getBoundingClientRect().height;
+            const subNavHeight = document.querySelector(".sticky-sub-nav") ? document.querySelector(".sticky-sub-nav").getBoundingClientRect().height : 0;
             const offset = headerHeight + subNavHeight + 10;
             
             window.scrollTo({
@@ -909,7 +937,6 @@
               behavior: "smooth"
             });
             
-            // 加入提示閃爍效果
             targetEl.style.backgroundColor = "rgba(197, 173, 133, 0.15)";
             targetEl.style.borderRadius = "8px";
             setTimeout(() => { targetEl.style.backgroundColor = "transparent"; }, 2000);
@@ -946,7 +973,7 @@
       renderFourCitiesWeather();
       fetchAllJapanWeather();
       switchMainTab('itinerary'); 
-      autoFocusItinerary(); // 啟用智慧對標
+      autoFocusItinerary();
     });
   </script>
 </body>
