@@ -7,11 +7,11 @@
   <title>Hokuriku Journey | 北陸雪國旅誌</title>
   
   <!-- 動態 PWA Manifest -->
-  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi5YyX6Zm46Zuq5ZyL5peF6KqMIiwic2hvcnRfbmFtZSI6IumbquWci+aXheiqjCIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjRkZGREY5IiwidGhlbWVfY29sb3ciOiIjM0UzQTM5IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlppQjRiV3h1Y3owaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaUlIcGxZMkpoZVMwOUlqQWdNQ0F4TURBZ01UQXdJajQ4Y21WalRDQjNhV1IwYURwaU1UQXdJaUJvWldWbmFIUTlJakV3TUNJZ1ptbHNiRDBpSTJGalpUaGxaaUkvUGp4MFpYaDBJSEc5SWpVd0lpQjVQU0kxTkNJZ1ptOXVkQzF6YVhwbFBTSTFNQ0lnZEdWNGRDMWhibU5vYjNJOUltdHBaR1JzWlNJZ1lXeHBaMjV0Wlc1MExXSmhjMlZzYVc1bFBTSTtiV0ZrWkd4bElqPuKbsjwvdGV4dD48L3N2Zz4iLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
+  <link rel="manifest" href="./manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="雪國旅誌">
-  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2FjZThlZSIvPjx0ZXh0IHg9IjUwIiB5PSI1NCIgZm9udC1zaXplPSI1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgYWxpZ25tZW50LWJhc2VsaW5lPSJtYWRkbGUiPuKbsjwvdGV4dD48L3N2Zz4=">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -452,23 +452,11 @@
   <script>
     // PWA Service Worker (Network-First 策略，確保能讀到最新代碼)
     if ('serviceWorker' in navigator) {
-      const swCode = `
-        const CACHE_NAME = 'hokuriku-trip-v1';
-        self.addEventListener('install', e => { self.skipWaiting(); });
-        self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
-        self.addEventListener('fetch', e => {
-          e.respondWith(
-            fetch(e.request).then(res => {
-              const resClone = res.clone();
-              caches.open(CACHE_NAME).then(cache => cache.put(e.request, resClone));
-              return res;
-            }).catch(() => caches.match(e.request))
-          );
-        });
-      `;
-      const blob = new Blob([swCode], { type: 'application/javascript' });
-      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(console.error);
-    }
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .catch(err => console.error('SW 註冊失敗:', err));
+  });
+}
 
     /* ================= IndexedDB 本機資料庫引擎 ================= */
     const idb = {
