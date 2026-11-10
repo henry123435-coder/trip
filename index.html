@@ -118,7 +118,7 @@
     @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
     .modal-enter { animation: bounceIn 0.2s ease-out forwards; }
 
-        /* ================= 靈感圖集與燈箱樣式 ================= */
+    /* ================= 靈感圖集與燈箱樣式 ================= */
     @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
     .fade-in { animation: fadeIn 0.2s ease-out forwards; }
     
@@ -136,7 +136,7 @@
       border: 1px solid rgba(0,0,0,0.1); cursor: pointer; z-index: 10;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-      .inspiration-delete:hover { background: #fff; transform: scale(1.1); }  
+    .inspiration-delete:hover { background: #fff; transform: scale(1.1); }  
   </style>
 </head>
 
@@ -144,7 +144,7 @@
   <!-- 隱藏的圖片上傳元件 (相機/相簿選取用) -->
   <input type="file" id="hidden-img-upload" accept="image/*" class="hidden">
 
-    <div id="lightbox-modal" class="hidden fixed inset-0 z-[70] bg-black/90 flex items-center justify-center p-4 fade-in" onclick="closeLightbox()">
+  <div id="lightbox-modal" class="hidden fixed inset-0 z-[70] bg-black/90 flex items-center justify-center p-4 fade-in" onclick="closeLightbox()">
     <button class="absolute top-4 right-4 text-white/70 hover:text-white text-4xl leading-none px-4 py-2" onclick="closeLightbox()">&times;</button>
     <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain rounded-md" onclick="event.stopPropagation()">
   </div>
@@ -161,7 +161,7 @@
       <div class="space-y-4">
         <div>
           <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">匯率 RATE</label>
-          <input type="number" id="tax-rate" value="0.215" step="0.001" inputmode="decimal" oninput="calcTax()" class="shop-input font-medium text-[#26343b]">
+          <input type="text" id="tax-rate" value="0.215" inputmode="decimal" pattern="[0-9]*\.?[0-9]*" oninput="calcTax()" class="shop-input font-medium text-[#26343b]">
         </div>
         <div>
           <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">日圓 JPY ¥</label>
@@ -250,7 +250,7 @@
           <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">02 / WEATHER & TIME</small>
           <h2 class="text-2xl font-medium text-[#26343b] mt-1">時間與天氣預報</h2>
         </div>
-        <button onclick="fetchAllJapanWeather()" class="pill !bg-white !border !border-[#e8eae8]">
+        <button id="btn-weather-refresh" onclick="fetchAllJapanWeather()" class="pill !bg-white !border !border-[#e8eae8]">
           <span id="weather-refresh-text">🔄 更新氣溫</span>
         </button>
       </div>
@@ -453,7 +453,7 @@
     // PWA Service Worker (Network-First 策略，確保能讀到最新代碼)
     if ('serviceWorker' in navigator) {
       const swCode = `
-        const CACHE_NAME = 'shanghai-trip-v2.0-idb';
+        const CACHE_NAME = 'hokuriku-trip-v1';
         self.addEventListener('install', e => { self.skipWaiting(); });
         self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
         self.addEventListener('fetch', e => {
@@ -475,7 +475,7 @@
       db: null,
       init: function() {
         return new Promise((resolve, reject) => {
-          const req = indexedDB.open('ShanghaiTripDB', 1);
+          const req = indexedDB.open('HokurikuTripDB', 1);
           req.onupgradeneeded = e => {
             const db = e.target.result;
             if(!db.objectStoreNames.contains('TripStore')) {
@@ -639,7 +639,7 @@
       ]}
     ];
 
-      function saveShopping() { 
+    function saveShopping() { 
       idb.set('shoppingData', shoppingData).then(() => renderShopping()); 
     }
     
@@ -688,7 +688,6 @@
             const isImg = i.img.startsWith('http') || i.img.startsWith('data:');
             let imgHtml = '';
             
-            // 💡 全新購物相片渲染邏輯：支援獨立刪除鈕與點擊放大
             if (isImg) {
               imgHtml = `
                 <div class="relative w-full h-full group">
@@ -737,7 +736,6 @@
     /* ================= 導航與分頁切換邏輯 ================= */
     const TABS = ['itinerary', 'weather', 'flights', 'hotels', 'shopping'];
     function switchMainTab(tabId) {
-      // 切換內容
       TABS.forEach(t => {
         const el = document.getElementById('tab-' + t);
         if (el) {
@@ -746,13 +744,11 @@
         }
       });
 
-      // 更新桌機 Nav 狀態
       TABS.forEach(t => {
         const deskBtn = document.getElementById('nav-desk-' + t);
         if (deskBtn) deskBtn.className = (t === tabId) ? 'active' : '';
       });
 
-      // 更新手機 Nav 狀態
       TABS.forEach(t => {
         const mobBtn = document.getElementById('nav-mob-' + t);
         if (mobBtn) mobBtn.className = (t === tabId) ? 'active' : '';
@@ -810,7 +806,9 @@
 
     async function fetchAllJapanWeather() {
       const btn = document.getElementById("weather-refresh-text");
+      const refreshBtn = document.getElementById("btn-weather-refresh");
       if (btn) btn.textContent = "⏳ 更新中...";
+      if (refreshBtn) refreshBtn.disabled = true;
       await Promise.allSettled(
         Object.values(CITIES_WEATHER).map(async (c) => {
           try {
@@ -828,7 +826,13 @@
         })
       );
       renderFourCitiesWeather(); renderDayTimeline();
-      if (btn) { btn.textContent = "✅ 已更新"; setTimeout(() => btn.textContent = "🔄 更新氣溫", 3000); }
+      if (btn) { 
+        btn.textContent = "✅ 已更新"; 
+        setTimeout(() => {
+          btn.textContent = "🔄 更新氣溫";
+          if (refreshBtn) refreshBtn.disabled = false;
+        }, 3000); 
+      }
     }
 
     const ITINERARY_DATA = {
@@ -972,8 +976,9 @@
 
         const inspirationGalleryHTML = photos.length > 0 ? `<div class="inspiration-grid mt-2">${photosHTML}</div>` : "";
 
+        // 💡 修改處：幫 stop 加上動態 id，以便 autoFocusItinerary 可以錨定
         timelineHTML += `
-          <div class="stop relative ${isLast ? '!border-transparent' : ''}">
+          <div id="stop-${currentDay}-${idx}" class="stop relative ${isLast ? '!border-transparent' : ''}">
             <div class="absolute left-[-4.5px] top-[7px] w-2 h-2 rounded-full ${item.mustGo ? 'bg-[#b39b74] shadow-[0_0_0_2px_#fff]' : 'bg-[#e8eae8] border border-[#8a837e]'}"></div>
             
             <div class="flex flex-wrap items-center gap-2 mb-1">
@@ -1044,68 +1049,26 @@
     function updateDualClocks() {
       const now = new Date();
       const format = (tz, isDate) => new Intl.DateTimeFormat("zh-TW", { timeZone: tz, hour12: false, ...isDate ? {year:"numeric", month:"2-digit", day:"2-digit", weekday:"short"} : {hour:"2-digit", minute:"2-digit", second:"2-digit"} }).format(now);
-      const els = ["clock-tw-time", "clock-tw-date", "clock-cn-time", "clock-cn-date"];
-      [format("Asia/Taipei"), format("Asia/Taipei", 1), format("Asia/Shanghai"), format("Asia/Shanghai", 1)].forEach((v, i) => { if(document.getElementById(els[i])) document.getElementById(els[i]).textContent = v; });
+      const els = ["clock-tw-time", "clock-tw-date", "clock-jp-time", "clock-jp-date"];
+      [format("Asia/Taipei"), format("Asia/Taipei", 1), format("Asia/Tokyo"), format("Asia/Tokyo", 1)].forEach((v, i) => { if(document.getElementById(els[i])) document.getElementById(els[i]).textContent = v; });
     }
 
-    /* ================= 啟動與自動轉移舊資料 ================= */
-    window.addEventListener("DOMContentLoaded", async () => {
-      try {
-        await idb.init();
-        const savedShopping = await idb.get('shoppingData');
-        const savedPhotos = await idb.get('itineraryPhotos');
-        
-        // 舊 localStorage 資料無痛轉移機制
-        if (!savedPhotos && localStorage.getItem('shanghai_itinerary_photos_v1')) {
-            itineraryPhotos = JSON.parse(localStorage.getItem('shanghai_itinerary_photos_v1')) || {};
-            await idb.set('itineraryPhotos', itineraryPhotos);
-            console.log("已從舊版成功轉移行程相片！");
-        } else {
-            itineraryPhotos = savedPhotos ? savedPhotos : {};
-        }
-
-        if (!savedShopping && localStorage.getItem('shanghai_shopping_v1')) {
-            shoppingData = JSON.parse(localStorage.getItem('shanghai_shopping_v1')) || defaultShopping;
-            await idb.set('shoppingData', shoppingData);
-            console.log("已從舊版成功轉移購物清單！");
-        } else {
-            shoppingData = savedShopping ? savedShopping : defaultShopping;
-        }
-
-      } catch (e) {
-        console.error("IndexedDB 初始化失敗，進入降級模式", e);
-        shoppingData = defaultShopping;
-        itineraryPhotos = {};
-      }
-
-      updateDualClocks(); setInterval(updateDualClocks, 1000);
-      renderWeatherGrid(); renderDayTimeline();
-      fetchAllWeather();
-      switchMainTab('itinerary'); selectDay(1, false);
-    });
-
-
-  /* ================= 智慧定位行程 (Auto-Focus) ================= */
+    /* ================= 智慧定位行程 (Auto-Focus) ================= */
     function autoFocusItinerary() {
-      // 取得日本當前時間 (JST)
       const jstDateString = new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"});
       const jstTime = new Date(jstDateString);
       
       let targetDay = 1;
       const y = jstTime.getFullYear(), m = jstTime.getMonth() + 1, d = jstTime.getDate();
       
-      // 判斷是否落在旅程期間 (2027/1/9 - 1/13)
       const isDuringTrip = (y === 2027 && m === 1 && d >= 9 && d <= 13);
       if (isDuringTrip) {
-        targetDay = d - 8; // 9日->Day1, 13日->Day5
+        targetDay = d - 8;
       }
       
       selectDay(targetDay, false);
-      
-      // 💡 關鍵修正：若非實際旅程期間（平時測試時），直接保持在頂部，不進行時間自動對標滾動
       if (!isDuringTrip) return;
 
-      // 比對時間自動滾動
       const currentHour = jstTime.getHours();
       const currentMin = jstTime.getMinutes();
       const currentTimeNum = currentHour * 60 + currentMin;
@@ -1118,7 +1081,6 @@
         const timeParts = filteredItems[i].time.split(":");
         if(timeParts.length === 2) {
           const itemTimeNum = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
-          // 找到第一個時間大於等於當前時間的行程
           if (itemTimeNum >= currentTimeNum) {
             targetIdx = i;
             break;
@@ -1126,13 +1088,13 @@
         }
       }
       
-      // 若時間已超過當日所有行程，則停留在最後一個
       if (targetIdx === -1 && filteredItems.length > 0) {
         targetIdx = filteredItems.length - 1;
       }
       
       if (targetIdx !== -1) {
         setTimeout(() => {
+          // 💡 此處依賴上面加入的 stop ID 定位
           const targetEl = document.getElementById(`stop-${targetDay}-${targetIdx}`);
           if (targetEl) {
             const headerHeight = document.querySelector("header") ? document.querySelector("header").getBoundingClientRect().height : 60;
@@ -1145,7 +1107,6 @@
               behavior: "smooth"
             });
             
-            // 加入提示閃爍效果
             targetEl.style.backgroundColor = "rgba(197, 173, 133, 0.15)";
             targetEl.style.borderRadius = "8px";
             setTimeout(() => { targetEl.style.backgroundColor = "transparent"; }, 2000);
@@ -1154,35 +1115,46 @@
       }
     }
 
-    function toggleMustGoFilter() {
-      onlyMustGo = !onlyMustGo;
-      const btn = document.getElementById("btn-filter-must");
-      if (onlyMustGo) { btn.classList.add("!bg-[#fcf7f0]", "!text-[#c5ad85]", "!border-[#c5ad85]/30"); btn.innerHTML = "⭐ 顯示全部"; } 
-      else { btn.classList.remove("!bg-[#fcf7f0]", "!text-[#c5ad85]", "!border-[#c5ad85]/30"); btn.innerHTML = "⭐ 僅看必去"; }
-      renderDayTimeline();
-    }
+    /* ================= 啟動與整合邏輯 ================= */
+    window.addEventListener("DOMContentLoaded", async () => {
+      // 1. 初始化資料庫並讀取資料
+      try {
+        await idb.init();
+        const savedShopping = await idb.get('shoppingData');
+        const savedPhotos = await idb.get('itineraryPhotos');
+        
+        // 舊 localStorage 資料轉移 (名稱已改為 hokuriku 防衝突)
+        if (!savedPhotos && localStorage.getItem('hokuriku_itinerary_photos_v1')) {
+            itineraryPhotos = JSON.parse(localStorage.getItem('hokuriku_itinerary_photos_v1')) || {};
+            await idb.set('itineraryPhotos', itineraryPhotos);
+            console.log("已從舊版成功轉移行程相片！");
+        } else {
+            itineraryPhotos = savedPhotos ? savedPhotos : {};
+        }
 
-    function toggleAllBackups() {
-      showBackups = !showBackups;
-      const btnText = document.getElementById("backup-btn-text"), btn = document.getElementById("btn-toggle-backup");
-      if (showBackups) { btnText.textContent = "🛡️ 隱藏備案"; btn.classList.remove("!bg-[#f4f7f4]", "!text-[#527c5a]", "!border-[#527c5a]/30"); } 
-      else { btnText.textContent = "🛡️ 顯示備案"; btn.classList.add("!bg-[#f4f7f4]", "!text-[#527c5a]", "!border-[#527c5a]/30"); }
-      renderDayTimeline();
-    }
+        if (!savedShopping && localStorage.getItem('hokuriku_shopping_v1')) {
+            shoppingData = JSON.parse(localStorage.getItem('hokuriku_shopping_v1')) || defaultShopping;
+            await idb.set('shoppingData', shoppingData);
+            console.log("已從舊版成功轉移購物清單！");
+        } else {
+            shoppingData = savedShopping ? savedShopping : defaultShopping;
+        }
+      } catch (e) {
+        console.error("IndexedDB 初始化失敗，進入降級模式", e);
+        shoppingData = defaultShopping;
+        itineraryPhotos = {};
+      }
 
-    function updateDualClocks() {
-      const now = new Date();
-      const format = (tz, isDate) => new Intl.DateTimeFormat("zh-TW", { timeZone: tz, hour12: false, ...isDate ? {year:"numeric", month:"2-digit", day:"2-digit", weekday:"short"} : {hour:"2-digit", minute:"2-digit", second:"2-digit"} }).format(now);
-      const els = ["clock-tw-time", "clock-tw-date", "clock-jp-time", "clock-jp-date"];
-      [format("Asia/Taipei"), format("Asia/Taipei", 1), format("Asia/Tokyo"), format("Asia/Tokyo", 1)].forEach((v, i) => { if(document.getElementById(els[i])) document.getElementById(els[i]).textContent = v; });
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      updateDualClocks(); setInterval(updateDualClocks, 1000);
-      renderFourCitiesWeather();
+      // 2. 啟動時鐘與 UI 渲染
+      updateDualClocks(); 
+      setInterval(updateDualClocks, 1000);
+      
+      renderFourCitiesWeather(); 
       fetchAllJapanWeather();
+      
+      // 3. 初始化畫面與智慧定位
       switchMainTab('itinerary'); 
-      autoFocusItinerary(); // 啟用智慧對標
+      autoFocusItinerary(); 
     });
   </script>
 </body>
