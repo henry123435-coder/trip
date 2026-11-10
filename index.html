@@ -80,24 +80,21 @@
     .day-tab-btn.active .tab-date { color: rgba(255,255,255,0.7); }
     .day-tab-btn.active .tab-title { color: #fff; }
 
-    /* 手機版底部導航列 (優化：支援橫向滑動) */
+    /* 手機版底部導航列 */
     .bottom-nav {
       display: none; position: fixed; bottom: 0; left: 0; right: 0;
       background: rgba(255, 255, 255, .94); backdrop-filter: blur(15px);
-      border-top: 1px solid var(--line); padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-      z-index: 50; box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
-      overflow-x: auto; white-space: nowrap; gap: 20px; align-items: center; justify-content: flex-start;
+      border-top: 1px solid var(--line); padding: 8px 5px calc(8px + env(safe-area-inset-bottom));
+      justify-content: space-around; z-index: 50; box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
     }
-    .bottom-nav::-webkit-scrollbar { display: none; }
     .bottom-nav button {
       display: flex; flex-direction: column; align-items: center; gap: 3px;
-      color: var(--muted); background: none; border: none; font-size: 10px; padding: 4px 5px;
-      flex: 0 0 auto; min-width: 40px;
+      color: var(--muted); background: none; border: none; font-size: 10px; padding: 4px 12px;
     }
     .bottom-nav button .icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
     .bottom-nav button.active { color: var(--blue); font-weight: 700; }
 
-    @media (max-width: 850px) {
+    @media (max-width: 650px) {
       .navlinks { display: none; }
       .bottom-nav { display: flex; }
       main { padding: 20px 16px 110px; }
@@ -107,7 +104,7 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
-    /* 共用輸入框 (購物清單與分帳共用) */
+    /* 購物清單輸入框 */
     .shop-input {
       width: 100%; padding: 8px 12px; border: 1px solid var(--line);
       border-radius: 8px; background: #fafafa; font: inherit; outline: none; transition: 0.2s;
@@ -117,9 +114,9 @@
     .checkbox-btn:active { transform: scale(0.9); }
     .line-through-custom { text-decoration: line-through; opacity: 0.5; }
     
-    /* 彈跳動畫 (用於 Modal 與分頁切換) */
-    @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1); } }
-    .modal-enter { animation: bounceIn 0.25s ease-out forwards; }
+    /* 彈跳動畫 (用於 Modal) */
+    @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+    .modal-enter { animation: bounceIn 0.2s ease-out forwards; }
 
     /* ================= 靈感圖集與燈箱樣式 ================= */
     @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
@@ -144,22 +141,23 @@
 </head>
 
 <body>
-  <!-- 隱藏的圖片上傳元件 -->
+  <!-- 隱藏的圖片上傳元件 (相機/相簿選取用) -->
   <input type="file" id="hidden-img-upload" accept="image/*" class="hidden">
 
-  <!-- 燈箱 Modal -->
   <div id="lightbox-modal" class="hidden fixed inset-0 z-[70] bg-black/90 flex items-center justify-center p-4 fade-in" onclick="closeLightbox()">
     <button class="absolute top-4 right-4 text-white/70 hover:text-white text-4xl leading-none px-4 py-2" onclick="closeLightbox()">&times;</button>
     <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain rounded-md" onclick="event.stopPropagation()">
   </div>
 
-  <!-- 計算機 Modal -->
+  <!-- 計算機 Modal 對話框 -->
   <div id="tax-modal" class="hidden fixed inset-0 z-[60] bg-[#26343b]/40 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="card w-full max-w-xs modal-enter relative !p-6">
       <button onclick="toggleTaxModal()" class="absolute top-4 right-4 text-[#849098] hover:text-[#26343b] text-xl leading-none">&times;</button>
+      
       <h3 class="text-lg font-medium mb-5 text-[#26343b] flex items-center gap-2">
         <span class="text-xl">🧮</span> 日圓計算機
       </h3>
+      
       <div class="space-y-4">
         <div>
           <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">匯率 RATE</label>
@@ -184,26 +182,28 @@
   <header>
     <nav class="nav">
       <div class="brand">❄ HOKURIKU JOURNEY</div>
+      
+      <!-- 桌面版導覽按鈕 -->
       <div class="navlinks">
         <a href="javascript:void(0)" onclick="switchMainTab('itinerary')" id="nav-desk-itinerary" class="active">每日行程</a>
         <a href="javascript:void(0)" onclick="switchMainTab('weather')" id="nav-desk-weather">時間天氣</a>
         <a href="javascript:void(0)" onclick="switchMainTab('flights')" id="nav-desk-flights">航班交通</a>
         <a href="javascript:void(0)" onclick="switchMainTab('hotels')" id="nav-desk-hotels">住宿指南</a>
         <a href="javascript:void(0)" onclick="switchMainTab('shopping')" id="nav-desk-shopping">購物清單</a>
-        <a href="javascript:void(0)" onclick="switchMainTab('ledger')" id="nav-desk-ledger">公費分帳</a>
-        <a href="javascript:void(0)" onclick="switchMainTab('tickets')" id="nav-desk-tickets">憑證票券</a>
       </div>
+
+      <!-- 右側工具 (桌機與手機共用) -->
       <div>
         <button onclick="toggleTaxModal()" class="pill !bg-white !border !border-[#e8eae8] shadow-sm hover:!bg-[#f7f7f4] transition-colors">
-          🧮 計算機
+          🧮 匯率計算
         </button>
       </div>
     </nav>
   </header>
 
   <main>
-    <!-- 分頁 1：每日行程 -->
-    <section id="tab-itinerary" class="tab-pane block modal-enter">
+    <!-- 分頁：每日行程 -->
+    <section id="tab-itinerary" class="tab-pane block">
       <div class="mb-6 flex flex-wrap justify-between items-end gap-3 border-b border-[#e8eae8] pb-4">
         <div>
           <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">01 / ITINERARY</small>
@@ -214,28 +214,36 @@
           <button id="btn-toggle-backup" onclick="toggleAllBackups()" class="pill !bg-white !border !border-[#e8eae8] hover:!bg-[#f7f7f4]"><span id="backup-btn-text">🛡️ 隱藏備案</span></button>
         </div>
       </div>
+
       <!-- 天數切換 Sub Nav -->
       <div class="sticky-sub-nav flex overflow-x-auto gap-2.5 mb-6 pb-2 no-scrollbar sticky top-[62px] z-30 bg-[#f7f7f4]/95 backdrop-blur py-2">
         <button id="tab-day-1" class="day-tab-btn active flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(1)">
-          <div class="tab-date text-[10px] mb-0.5">1/9</div><div class="tab-title text-[13px] font-medium">金澤</div>
+          <div class="tab-date text-[10px] mb-0.5">1/9</div>
+          <div class="tab-title text-[13px] font-medium">金澤</div>
         </button>
         <button id="tab-day-2" class="day-tab-btn flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(2)">
-          <div class="tab-date text-[10px] mb-0.5">1/10</div><div class="tab-title text-[13px] font-medium">高山</div>
+          <div class="tab-date text-[10px] mb-0.5">1/10</div>
+          <div class="tab-title text-[13px] font-medium">高山</div>
         </button>
         <button id="tab-day-3" class="day-tab-btn flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(3)">
-          <div class="tab-date text-[10px] mb-0.5">1/11</div><div class="tab-title text-[13px] font-medium">白川鄉</div>
+          <div class="tab-date text-[10px] mb-0.5">1/11</div>
+          <div class="tab-title text-[13px] font-medium">白川鄉</div>
         </button>
         <button id="tab-day-4" class="day-tab-btn flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(4)">
-          <div class="tab-date text-[10px] mb-0.5">1/12</div><div class="tab-title text-[13px] font-medium">名古屋</div>
+          <div class="tab-date text-[10px] mb-0.5">1/12</div>
+          <div class="tab-title text-[13px] font-medium">名古屋</div>
         </button>
         <button id="tab-day-5" class="day-tab-btn flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(5)">
-          <div class="tab-date text-[10px] mb-0.5">1/13</div><div class="tab-title text-[13px] font-medium">返台</div>
+          <div class="tab-date text-[10px] mb-0.5">1/13</div>
+          <div class="tab-title text-[13px] font-medium">返台</div>
         </button>
       </div>
-      <div id="day-content-wrapper"></div>
+
+      <!-- 時間軸內容容器 -->
+      <div id="day-content-wrapper" class="modal-enter"></div>
     </section>
 
-    <!-- 分頁 2：時間天氣 -->
+    <!-- 分頁：時間天氣 -->
     <section id="tab-weather" class="tab-pane hidden">
       <div class="mb-6 flex flex-wrap justify-between items-end gap-3 border-b border-[#e8eae8] pb-4">
         <div>
@@ -246,6 +254,7 @@
           <span id="weather-refresh-text">🔄 更新氣溫</span>
         </button>
       </div>
+
       <div class="grid grid-cols-2 gap-4 mb-6">
         <div class="card flex flex-col items-center justify-center text-center !p-4 sm:!p-6">
           <small class="text-[10px] font-bold tracking-wider mb-2 text-[#849098]">TAIWAN (TPE)</small>
@@ -261,13 +270,15 @@
       <div id="four-cities-weather-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
     </section>
 
-    <!-- 分頁 3：航班交通 -->
+    <!-- 分頁：航班交通 -->
     <section id="tab-flights" class="tab-pane hidden">
       <div class="mb-6 border-b border-[#e8eae8] pb-4">
         <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">03 / FLIGHTS</small>
         <h2 class="text-2xl font-medium text-[#26343b] mt-1">航班與跨城交通</h2>
       </div>
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- 去程航班卡 -->
         <div class="card">
           <div class="flex justify-between items-center mb-4">
             <span class="pill !bg-[#f7f7f4] !text-[#26343b]">🛫 DAY 1 (1/9 六)</span>
@@ -280,7 +291,8 @@
               <div class="text-[10px] mt-1 text-[#526d7c]">06:35 起飛</div>
             </div>
             <div class="text-center text-[#849098] text-xs px-2 flex flex-col items-center">
-              <span class="text-lg">✈️</span><span class="mt-1">長榮 BR158</span>
+              <span class="text-lg">✈️</span>
+              <span class="mt-1">長榮 BR158</span>
             </div>
             <div class="text-center">
               <div class="text-[11px] text-[#849098]">石川小松</div>
@@ -289,13 +301,17 @@
             </div>
           </div>
           <div class="text-[13px] text-[#26343b] leading-relaxed">
-            <b class="text-[#526d7c]">🚌 機場接駁 (約40分)：</b><br>出關直接搭乘機場巴士直達金澤車站西口。<br>
+            <b class="text-[#526d7c]">🚌 機場接駁 (約40分)：</b><br>
+            出關直接搭乘機場巴士直達金澤車站西口。<br>
+            <span class="text-[#849098] text-[12px]">備案：若班機延誤或人潮眾多，改搭下班巴士或轉 JR。</span>
             <div class="flex gap-2 mt-2">
               <a href="https://www.google.com/maps/search/?api=1&query=小松空港" target="_blank" class="map-pill">📍 小松機場</a>
               <a href="https://www.google.com/maps/search/?api=1&query=金沢駅" target="_blank" class="map-pill">📍 金澤車站</a>
             </div>
           </div>
         </div>
+
+        <!-- 回程航班卡 -->
         <div class="card">
           <div class="flex justify-between items-center mb-4">
             <span class="pill !bg-[#f7f7f4] !text-[#26343b]">🛬 DAY 5 (1/13 三)</span>
@@ -308,7 +324,8 @@
               <div class="text-[10px] mt-1 text-[#526d7c]">19:40 起飛</div>
             </div>
             <div class="text-center text-[#849098] text-xs px-2 flex flex-col items-center">
-              <span class="text-lg text-[#c5ad85]">✈️</span><span class="mt-1">星宇 JX839</span>
+              <span class="text-lg text-[#c5ad85]">✈️</span>
+              <span class="mt-1">星宇 JX839</span>
             </div>
             <div class="text-center">
               <div class="text-[11px] text-[#849098]">台北桃園</div>
@@ -317,7 +334,10 @@
             </div>
           </div>
           <div class="text-[13px] text-[#26343b] leading-relaxed">
-            <b class="text-[#526d7c]">🚄 機場快線 (28~36分)：</b><br>全車指定席 μ-SKY：16:19 發或 16:49 發。<br>一部特別車 特急：16:30 發。<br>
+            <b class="text-[#526d7c]">🚄 機場快線 (28~36分)：</b><br>
+            ・全車指定席 μ-SKY：<b>16:19</b> 發或 <b>16:49</b> 發。<br>
+            ・一部特別車 特急：<b>16:30</b> 發。<br>
+            <span class="text-[#849098] text-[12px]">提早至4F提燈橫丁買蝦仙貝之里。</span>
             <div class="flex gap-2 mt-2">
               <a href="https://www.google.com/maps/search/?api=1&query=名鉄名古屋駅" target="_blank" class="map-pill">📍 名鐵名古屋</a>
               <a href="https://www.google.com/maps/search/?api=1&query=中部国際空港" target="_blank" class="map-pill">📍 機場 NGO</a>
@@ -327,56 +347,68 @@
       </div>
     </section>
 
-    <!-- 分頁 4：住宿指南 -->
+    <!-- 分頁：住宿指南 -->
     <section id="tab-hotels" class="tab-pane hidden">
       <div class="mb-6 border-b border-[#e8eae8] pb-4">
         <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">04 / ACCOMMODATION</small>
         <h2 class="text-2xl font-medium text-[#26343b] mt-1">住宿指南</h2>
       </div>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 飯店 1 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3">DAY 1 (1 晚)</span>
             <h3 class="text-[16px] font-medium text-[#26343b] leading-snug">大和 Roynet 飯店</h3>
             <p class="text-[12px] text-[#26343b] font-medium mt-1">ダイワロイネットホテル金沢駅西口</p>
+            <p class="text-[11px] text-[#849098] mb-1">〒920-0031 石川県金沢市広岡1-12-17</p>
             <p class="text-[11px] text-[#849098] mb-4">金澤站西口步行 4 分鐘</p>
             <div class="text-[13px] text-[#26343b] space-y-1.5 pl-3 border-l-2 border-[#e8eae8] mb-4">
               <p>・出小松機場巴士直達西口，寄放行李超順路。</p>
               <p>・館內設有大浴場，吃完燒肉回來泡湯驅寒。</p>
+              <p>・Day 2 領行李去 4 號月台搭高山巴士零距離。</p>
             </div>
           </div>
-          <a href="https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Kanazawa-Eki+Nishiguchi" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8]">📍 導航至飯店</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Kanazawa-Eki+Nishiguchi" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
         </div>
+
+        <!-- 飯店 2 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3 !bg-[#fcf7f0] !text-[#c5ad85] !border !border-[#c5ad85]/30">DAY 2 & 3 (連泊 2 晚)</span>
             <h3 class="text-[16px] font-medium text-[#26343b] leading-snug">飛驒花里之湯 高山櫻庵</h3>
             <p class="text-[12px] text-[#26343b] font-medium mt-1">飛騨花里の湯 高山桜庵</p>
+            <p class="text-[11px] text-[#849098] mb-1">〒506-0026 岐阜県高山市花里町4-313</p>
             <p class="text-[11px] text-[#849098] mb-4">高山站步行 5 分鐘 / 全館榻榻米</p>
             <div class="text-[13px] text-[#26343b] space-y-1.5 pl-3 border-l-2 border-[#e8eae8] mb-4">
               <p>・頂樓天然溫泉與 <b>3間免費私人湯屋</b>。</p>
               <p>・大廳附設足湯，22:00 免費提供夜鳴拉麵。</p>
+              <p>・Day 3 中午可輕鬆走回飯店午睡充電、換揹巾。</p>
             </div>
           </div>
-          <a href="https://www.google.com/maps/search/?api=1&query=飛騨花里の湯+高山桜庵" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8]">📍 導航至飯店</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=飛騨花里の湯+高山桜庵" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
         </div>
+
+        <!-- 飯店 3 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3">DAY 4 (1 晚)</span>
             <h3 class="text-[16px] font-medium text-[#26343b] leading-snug">名鐵格蘭飯店</h3>
             <p class="text-[12px] text-[#26343b] font-medium mt-1">名鉄グランドホテル</p>
+            <p class="text-[11px] text-[#849098] mb-1">〒450-0002 愛知県名古屋市中村区名駅1-2-4</p>
             <p class="text-[11px] text-[#849098] mb-4">名古屋車站步行 4 分鐘 (車站共構)</p>
             <div class="text-[13px] text-[#26343b] space-y-1.5 pl-3 border-l-2 border-[#e8eae8] mb-4">
               <p>・配備乾濕分離寬敞浴室，逛完大須回來超舒適。</p>
               <p>・鄰近千里馬藥局、Bic Camera 與 ESCA 地下街。</p>
+              <p>・Day 5 大廳打包戰利品，下樓 5 分鐘直上機場快線。</p>
             </div>
           </div>
-          <a href="https://www.google.com/maps/search/?api=1&query=名鉄グランドホテル" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8]">📍 導航至飯店</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=名鉄グランドホテル" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
         </div>
       </div>
     </section>
 
-    <!-- 分頁 5：購物清單 -->
+    <!-- 分頁：購物清單 -->
     <section id="tab-shopping" class="tab-pane hidden pb-12">
       <div class="mb-6 flex flex-wrap justify-between items-end gap-3 border-b border-[#e8eae8] pb-4">
         <div>
@@ -387,157 +419,13 @@
           ➕ 新增群組
         </button>
       </div>
+      
       <div class="card flex justify-between items-center mb-6 !py-4">
         <span class="font-medium text-[13px] text-[#849098]">💰 總預估花費</span>
         <span class="text-xl font-bold text-[#526d7c]" id="shopping-total">¥0</span>
       </div>
+
       <div id="shopping-groups-container" class="space-y-4"></div>
-    </section>
-
-    <!-- 分頁 6：分帳明細 (新增整合) -->
-    <section id="tab-ledger" class="tab-pane hidden">
-      <div class="mb-6 flex flex-wrap justify-between items-end gap-3 border-b border-[#e8eae8] pb-4">
-        <div>
-          <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">06 / LEDGER</small>
-          <h2 class="text-2xl font-medium text-[#26343b] mt-1">公費代墊與分帳</h2>
-        </div>
-      </div>
-
-      <!-- 匯率與LINE設定 -->
-      <div class="card flex items-center justify-between mb-4 !p-4 sm:!p-5">
-        <div>
-          <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">當前匯率 (JPY➔TWD)</label>
-          <input type="number" id="ledger-rate" step="0.0001" value="0.2150" onchange="saveLedgerRate()" class="shop-input !py-1.5 w-28 font-medium">
-        </div>
-        <button onclick="generateLineReport()" class="bg-[#2ECC71] text-white font-medium text-[13px] py-2 px-4 rounded-lg shadow-sm hover:bg-[#27ae60] transition-colors flex items-center gap-2">
-          <span>傳送 LINE 結算</span>
-        </button>
-      </div>
-
-      <!-- 新增代墊表單 -->
-      <div class="card mb-6">
-        <h3 class="text-[16px] font-medium text-[#26343b] mb-4 flex items-center gap-2">📝 新增代墊花費</h3>
-        <div class="space-y-3">
-          <div>
-            <input type="text" id="ledger-item" placeholder="消費項目 (例: 濃飛巴士點燈專車)" class="shop-input">
-          </div>
-          <div class="flex gap-3">
-            <select id="ledger-payer" class="shop-input flex-1 bg-white">
-              <option value="柏子">代墊：柏子</option>
-              <option value="阿馳">代墊：阿馳</option>
-              <option value="葉子">代墊：葉子</option>
-              <option value="猴子">代墊：猴子</option>
-              <option value="欣儀">代墊：欣儀</option>
-              <option value="政衛">代墊：政衛</option>
-            </select>
-            <select id="ledger-currency" class="shop-input flex-1 bg-white">
-              <option value="JPY">幣別：日幣 (¥)</option>
-              <option value="TWD">幣別：台幣 (NT$)</option>
-            </select>
-          </div>
-          <div>
-            <input type="number" id="ledger-amount" placeholder="輸入金額" class="shop-input font-bold text-[#26343b]">
-          </div>
-          <div class="pt-2">
-            <label class="text-[12px] font-bold text-[#849098] mb-2 block tracking-wider">分攤成員 (預設全選大人)</label>
-            <div class="flex flex-wrap gap-2" id="ledger-participants-container">
-              <!-- JS 動態生成勾選框 -->
-            </div>
-          </div>
-          <button onclick="addLedgerRecord()" class="w-full bg-[#526d7c] text-white font-medium py-3 rounded-xl mt-2 hover:bg-[#3e5663] transition-colors">
-            ＋ 寫入帳本
-          </button>
-        </div>
-      </div>
-
-      <!-- 帳目列表 -->
-      <div class="card">
-        <h3 class="text-[16px] font-medium text-[#26343b] mb-2 flex items-center gap-2">📋 歷史明細</h3>
-        <div id="ledger-records-list" class="divide-y divide-[#e8eae8]">
-          <!-- JS 動態生成列表 -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 分頁 7：訂票查詢 (新增整合) -->
-    <section id="tab-tickets" class="tab-pane hidden">
-      <div class="mb-6 border-b border-[#e8eae8] pb-4">
-        <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">07 / TICKETS</small>
-        <h2 class="text-2xl font-medium text-[#26343b] mt-1">憑證與電子票券</h2>
-      </div>
-
-      <div class="bg-[#fcf7f0] border border-[#c5ad85]/30 rounded-xl p-3 mb-6 text-center text-[12px] text-[#b39b74] font-medium">
-        💡 建議將 Google Drive 檔案設為「離線存取」以防山區無訊號
-      </div>
-
-      <div class="space-y-6">
-        <div>
-          <h3 class="text-[14px] font-bold text-[#849098] mb-3 ml-1">🚆 交通運輸</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <a href="#" target="_blank" class="card !p-4 flex items-center gap-4 hover:shadow-md transition-shadow group">
-              <div class="text-3xl bg-[#f7f7f4] w-12 h-12 flex items-center justify-center rounded-xl group-hover:scale-105 transition-transform">✈️</div>
-              <div>
-                <h4 class="text-[15px] font-medium text-[#26343b]">去程機票 (長榮 BR158)</h4>
-                <p class="text-[12px] text-[#849098] mt-0.5">TPE 06:35 ➔ KMQ 10:25</p>
-              </div>
-            </a>
-            <a href="#" target="_blank" class="card !p-4 flex items-center gap-4 hover:shadow-md transition-shadow group">
-              <div class="text-3xl bg-[#f7f7f4] w-12 h-12 flex items-center justify-center rounded-xl group-hover:scale-105 transition-transform">✈️</div>
-              <div>
-                <h4 class="text-[15px] font-medium text-[#26343b]">回程機票 (星宇 JX839)</h4>
-                <p class="text-[12px] text-[#849098] mt-0.5">NGO 19:40 ➔ TPE 22:15</p>
-              </div>
-            </a>
-            <a href="#" target="_blank" class="card !p-4 flex items-center gap-4 hover:shadow-md transition-shadow group">
-              <div class="text-3xl bg-[#fcf7f0] w-12 h-12 flex items-center justify-center rounded-xl group-hover:scale-105 transition-transform">🚌</div>
-              <div>
-                <h4 class="text-[15px] font-medium text-[#26343b]">濃飛巴士 (點燈專車 A)</h4>
-                <p class="text-[12px] text-[#849098] mt-0.5">乘車憑證 QR Code (高山發)</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="text-[14px] font-bold text-[#849098] mb-3 ml-1">🏨 住宿憑證</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <a href="#" target="_blank" class="card !p-4 flex items-center gap-4 hover:shadow-md transition-shadow group">
-              <div class="text-3xl bg-[#f7f7f4] w-12 h-12 flex items-center justify-center rounded-xl group-hover:scale-105 transition-transform">🛏️</div>
-              <div>
-                <h4 class="text-[15px] font-medium text-[#26343b]">高山櫻庵 連泊確認信</h4>
-                <p class="text-[12px] text-[#849098] mt-0.5">訂房代號與入住明細</p>
-              </div>
-            </a>
-            <a href="#" target="_blank" class="card !p-4 flex items-center gap-4 hover:shadow-md transition-shadow group">
-              <div class="text-3xl bg-[#f7f7f4] w-12 h-12 flex items-center justify-center rounded-xl group-hover:scale-105 transition-transform">🛏️</div>
-              <div>
-                <h4 class="text-[15px] font-medium text-[#26343b]">名古屋住宿 確認信</h4>
-                <p class="text-[12px] text-[#849098] mt-0.5">訂房代號與入住明細</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="text-[14px] font-bold text-[#849098] mb-3 ml-1">📱 其他預約</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <a href="#" target="_blank" class="card !p-4 flex items-center gap-4 hover:shadow-md transition-shadow group">
-              <div class="text-3xl bg-[#f7f7f4] w-12 h-12 flex items-center justify-center rounded-xl group-hover:scale-105 transition-transform">📶</div>
-              <div>
-                <h4 class="text-[15px] font-medium text-[#26343b]">eSIM 開通條碼</h4>
-                <p class="text-[12px] text-[#849098] mt-0.5">安裝教學與 QR Code</p>
-              </div>
-            </a>
-            <a href="#" target="_blank" class="card !p-4 flex items-center gap-4 hover:shadow-md transition-shadow group">
-              <div class="text-3xl bg-[#fcf5f5] w-12 h-12 flex items-center justify-center rounded-xl group-hover:scale-105 transition-transform">🍣</div>
-              <div>
-                <h4 class="text-[15px] font-medium text-[#26343b]">炭燒富士鰻魚 訂位確認</h4>
-                <p class="text-[12px] text-[#849098] mt-0.5">1/12 13:30 名古屋太閤口店</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
     </section>
 
   </main>
@@ -559,20 +447,13 @@
     <button onclick="switchMainTab('shopping')" id="nav-mob-shopping">
       <span class="icon">￥</span><span>購物</span>
     </button>
-    <!-- 新增的分頁入口 -->
-    <button onclick="switchMainTab('ledger')" id="nav-mob-ledger">
-      <span class="icon">🧾</span><span>分帳</span>
-    </button>
-    <button onclick="switchMainTab('tickets')" id="nav-mob-tickets">
-      <span class="icon">🎟️</span><span>票券</span>
-    </button>
   </nav>
 
   <script>
-    // PWA Service Worker
+    // PWA Service Worker (Network-First 策略，確保能讀到最新代碼)
     if ('serviceWorker' in navigator) {
       const swCode = `
-        const CACHE_NAME = 'hokuriku-trip-v2';
+        const CACHE_NAME = 'hokuriku-trip-v1';
         self.addEventListener('install', e => { self.skipWaiting(); });
         self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
         self.addEventListener('fetch', e => {
@@ -622,7 +503,6 @@
         });
       }
     };
-
     /* ================= 計算機邏輯 ================= */
     function toggleTaxModal() {
       const modal = document.getElementById('tax-modal');
@@ -637,6 +517,7 @@
     function calcTax() {
       const rate = parseFloat(document.getElementById('tax-rate').value) || 0.215;
       const jpy = parseFloat(document.getElementById('tax-jpy').value) || 0;
+      
       document.getElementById('tax-twd').textContent = Math.round(jpy * rate).toLocaleString();
       
       const statusBox = document.getElementById('tax-status');
@@ -652,7 +533,7 @@
       }
     }
 
-    /* ================= 圖片燈箱與儲存邏輯 ================= */
+  /* ================= 圖片燈箱與儲存邏輯 ================= */
     let currentUploadTarget = { type: null, gId: null, iId: null, dayId: null, stopIdx: null };
     let itineraryPhotos = {};
     let shoppingData = [];
@@ -688,6 +569,7 @@
       }
     }
 
+    // 購物清單專屬：移除照片並恢復成空按鈕
     function removeShoppingImage(gId, iId) {
       if(confirm('確定移除這張商品相片嗎？')) {
         const g = shoppingData.find(x => x.id === gId);
@@ -701,6 +583,7 @@
       }
     }
 
+    // 圖片壓縮引擎 (統一提升至 600px)
     document.addEventListener('DOMContentLoaded', () => {
       const fileInput = document.getElementById('hidden-img-upload');
       if (fileInput) {
@@ -712,7 +595,8 @@
             const img = new Image();
             img.onload = function() {
               const canvas = document.createElement('canvas');
-              const MAX_SIZE = 600;
+              const MAX_SIZE = 600; // 雙邊統一 600px，畫質升級
+              
               let w = img.width, h = img.height;
               if (w > h) { if (w > MAX_SIZE) { h *= MAX_SIZE / w; w = MAX_SIZE; } } 
               else { if (h > MAX_SIZE) { w *= MAX_SIZE / h; h = MAX_SIZE; } }
@@ -721,14 +605,19 @@
               ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h);
               ctx.drawImage(img, 0, 0, w, h);
               
+              // 採用 0.7 壓縮品質
               const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
 
               if (currentUploadTarget.type === 'shopping' && currentUploadTarget.gId && currentUploadTarget.iId) {
-                updateItem(currentUploadTarget.gId, currentUploadTarget.iId, 'img', compressedBase64); 
+                updateItem(currentUploadTarget.gId, currentUploadTarget.iId, 'img', compressedBase64); // 內部會呼叫 saveShopping
               } else if (currentUploadTarget.type === 'itinerary' && currentUploadTarget.dayId) {
                 const key = `${currentUploadTarget.dayId}-${currentUploadTarget.stopIdx}`;
                 if (!itineraryPhotos[key]) itineraryPhotos[key] = [];
-                if (itineraryPhotos[key].length >= 3) { alert("每個景點最多只能上傳3張照片喔！"); return; }
+                
+                if (itineraryPhotos[key].length >= 3) {
+                    alert("每個景點最多只能上傳3張照片喔！");
+                    return;
+                }
                 itineraryPhotos[key].push(compressedBase64);
                 idb.set('itineraryPhotos', itineraryPhotos).then(() => renderDayTimeline());
               }
@@ -750,13 +639,26 @@
       ]}
     ];
 
-    function saveShopping() { idb.set('shoppingData', shoppingData).then(() => renderShopping()); }
+    function saveShopping() { 
+      idb.set('shoppingData', shoppingData).then(() => renderShopping()); 
+    }
+    
     function addShoppingGroup() { const t = prompt('請輸入群組名稱'); if (t) { shoppingData.push({ id: 'g_' + Date.now(), title: t, isOpen: true, items: [] }); saveShopping(); } }
     function removeGroup(gId) { if(confirm('確定刪除此群組？')) { shoppingData = shoppingData.filter(g => g.id !== gId); saveShopping(); } }
     function toggleGroup(gId) { const g = shoppingData.find(x => x.id === gId); if (g) { g.isOpen = !g.isOpen; saveShopping(); } }
     function addItem(gId) { const g = shoppingData.find(x => x.id === gId); if (g) { g.items.push({ id: 'i_' + Date.now(), name: '', spec: '', memo: '', price: 0, bought: false, img: '🛍️' }); g.isOpen = true; saveShopping(); } }
     function removeItem(gId, iId) { const g = shoppingData.find(x => x.id === gId); if (g) { g.items = g.items.filter(i => i.id !== iId); saveShopping(); } }
-    function updateItem(gId, iId, f, v) { const g = shoppingData.find(x => x.id === gId); if (g) { const i = g.items.find(x => x.id === iId); if (i) { i[f] = f === 'price' ? (parseFloat(v) || 0) : v; saveShopping(); if(f==='price'||f==='bought') renderTotal(); } } }
+    function updateItem(gId, iId, f, v) { 
+      const g = shoppingData.find(x => x.id === gId); 
+      if (g) { 
+        const i = g.items.find(x => x.id === iId); 
+        if (i) { 
+          i[f] = f === 'price' ? (parseFloat(v) || 0) : v; 
+          saveShopping(); 
+          if(f==='price'||f==='bought') renderTotal(); 
+        } 
+      } 
+    }
     function toggleBought(gId, iId) { const g = shoppingData.find(x => x.id === gId); if (g) { const i = g.items.find(x => x.id === iId); if (i) { i.bought = !i.bought; saveShopping(); } } }
     function renderTotal() {
       let t = 0; shoppingData.forEach(g => g.items.forEach(i => { if(!i.bought) t += i.price; }));
@@ -784,20 +686,29 @@
           html += `<div class="space-y-4 pt-1">`;
           g.items.forEach(i => {
             const isImg = i.img.startsWith('http') || i.img.startsWith('data:');
-            let imgHtml = isImg ? `
-              <div class="relative w-full h-full group">
-                <div class="inspiration-delete" title="移除相片" onclick="event.stopPropagation(); removeShoppingImage('${g.id}', '${i.id}')">✖</div>
-                <img src="${i.img}" class="w-full h-full object-cover cursor-zoom-in transition-transform duration-200 hover:scale-105" onclick="openLightbox('${i.img}')">
-              </div>
-            ` : `
-              <div class="w-full h-full flex items-center justify-center cursor-pointer hover:bg-[#e8eae8] transition-colors" onclick="triggerImageUpload('${g.id}', '${i.id}')">
-                <span class="text-4xl">${i.img}</span>
-              </div>
-            `;
+            let imgHtml = '';
+            
+            if (isImg) {
+              imgHtml = `
+                <div class="relative w-full h-full group">
+                  <div class="inspiration-delete" title="移除相片" onclick="event.stopPropagation(); removeShoppingImage('${g.id}', '${i.id}')">✖</div>
+                  <img src="${i.img}" class="w-full h-full object-cover cursor-zoom-in transition-transform duration-200 hover:scale-105" onclick="openLightbox('${i.img}')">
+                </div>
+              `;
+            } else {
+              imgHtml = `
+                <div class="w-full h-full flex items-center justify-center cursor-pointer hover:bg-[#e8eae8] transition-colors" onclick="triggerImageUpload('${g.id}', '${i.id}')">
+                  <span class="text-4xl">${i.img}</span>
+                </div>
+              `;
+            }
+
             html += `
               <div class="flex gap-3 relative ${i.bought ? 'opacity-60' : ''} transition-opacity">
                 <button onclick="removeItem('${g.id}','${i.id}')" class="absolute -top-1.5 -left-1.5 bg-white border border-[#e8eae8] text-[#8a837e] rounded-full w-5 h-5 text-[10px] flex items-center justify-center shadow-sm z-10 hover:text-[#2b2523]">&times;</button>
-                <div class="w-28 h-28 shrink-0 bg-[#f7f7f4] border border-[#e8eae8] rounded-xl flex items-center justify-center overflow-hidden">${imgHtml}</div>
+                <div class="w-28 h-28 shrink-0 bg-[#f7f7f4] border border-[#e8eae8] rounded-xl flex items-center justify-center overflow-hidden">
+                  ${imgHtml}
+                </div>
                 <div class="flex-1 flex flex-col justify-center gap-2.5 min-w-0">
                   <div class="flex items-center gap-2">
                     <button onclick="toggleBought('${g.id}','${i.id}')" class="checkbox-btn text-xl shrink-0">${i.bought ? '✅' : '⭕'}</button>
@@ -822,165 +733,8 @@
       renderTotal();
     }
 
-    /* ================= 帳務結算邏輯 (Ledger) ================= */
-    const ledgerMembers = ['柏子', '阿馳', '葉子', '猴子', '欣儀', '政衛', '阿鑫'];
-    const ledgerDefaultChecked = ['柏子', '阿馳', '葉子', '猴子', '欣儀', '政衛'];
-    let ledgerRecords = [];
-    let ledgerRate = 0.2150;
-
-    function initLedger() {
-        ledgerRate = parseFloat(localStorage.getItem('jp_trip_rate')) || 0.2150;
-        document.getElementById('ledger-rate').value = ledgerRate;
-        
-        const stored = localStorage.getItem('jp_trip_records');
-        if (stored) ledgerRecords = JSON.parse(stored);
-
-        const pContainer = document.getElementById('ledger-participants-container');
-        pContainer.innerHTML = '';
-        ledgerMembers.forEach(member => {
-            const isChecked = ledgerDefaultChecked.includes(member) ? 'checked' : '';
-            pContainer.innerHTML += `
-                <label class="flex items-center gap-2 bg-[#f7f7f4] px-3 py-1.5 rounded-full text-[13px] border border-[#e8eae8] cursor-pointer hover:bg-[#e8eae8] transition-colors">
-                    <input type="checkbox" name="ledger-participants" value="${member}" ${isChecked} class="w-4 h-4 text-[#526d7c] bg-white border-gray-300 rounded focus:ring-[#526d7c]">
-                    <span class="text-[#26343b] font-medium">${member}</span>
-                </label>
-            `;
-        });
-        renderLedgerRecords();
-    }
-
-    function saveLedgerRate() {
-        ledgerRate = parseFloat(document.getElementById('ledger-rate').value);
-        localStorage.setItem('jp_trip_rate', ledgerRate);
-    }
-
-    function addLedgerRecord() {
-        const item = document.getElementById('ledger-item').value;
-        const payer = document.getElementById('ledger-payer').value;
-        const currency = document.getElementById('ledger-currency').value;
-        const amount = parseFloat(document.getElementById('ledger-amount').value);
-        
-        const selectedBoxes = document.querySelectorAll('input[name="ledger-participants"]:checked');
-        const participants = Array.from(selectedBoxes).map(cb => cb.value);
-
-        if (!item || isNaN(amount) || amount <= 0 || participants.length === 0) {
-            alert("請填寫完整資訊，並至少選擇一位分攤成員！");
-            return;
-        }
-
-        let twdTotal = currency === 'JPY' ? Math.round(amount * ledgerRate) : Math.round(amount);
-        let perPerson = Math.round(twdTotal / participants.length);
-
-        const newRecord = {
-            id: Date.now(),
-            date: new Date().toLocaleDateString('zh-TW', {month: 'numeric', day: 'numeric'}),
-            item, payer, currency, amount, twdTotal, perPerson, participants
-        };
-
-        ledgerRecords.unshift(newRecord);
-        localStorage.setItem('jp_trip_records', JSON.stringify(ledgerRecords));
-        
-        document.getElementById('ledger-item').value = '';
-        document.getElementById('ledger-amount').value = '';
-        renderLedgerRecords();
-    }
-
-    function deleteLedgerRecord(id) {
-        if(confirm('確定要刪除這筆帳目嗎？資料將重新計算。')) {
-            ledgerRecords = ledgerRecords.filter(r => r.id !== id);
-            localStorage.setItem('jp_trip_records', JSON.stringify(ledgerRecords));
-            renderLedgerRecords();
-        }
-    }
-
-    function renderLedgerRecords() {
-        const list = document.getElementById('ledger-records-list');
-        list.innerHTML = '';
-        if (ledgerRecords.length === 0) {
-            list.innerHTML = '<div class="text-center text-[#849098] py-8 text-[13px]">尚無帳目，趕快記下第一筆吧！</div>';
-            return;
-        }
-
-        ledgerRecords.forEach(r => {
-            const currencySymbol = r.currency === 'JPY' ? '¥' : 'NT$';
-            list.innerHTML += `
-                <div class="flex justify-between items-center py-3">
-                    <div class="flex-1">
-                        <div class="font-medium text-[15px] text-[#26343b] mb-1">${r.item}</div>
-                        <div class="text-[12px] text-[#849098]">
-                            ${r.date} | <span class="text-[#b39b74] font-medium">${r.payer} 代墊</span>
-                        </div>
-                        <div class="text-[11px] text-[#526d7c] mt-0.5">
-                            分攤: ${r.participants.join(', ')}
-                        </div>
-                    </div>
-                    <div class="text-right ml-3">
-                        <div class="font-bold text-[15px] text-[#26343b] mb-1">
-                            ${currencySymbol} ${r.amount.toLocaleString()}
-                        </div>
-                        <div class="text-[11px] text-[#849098] mb-2">
-                            (折 NT$ ${r.twdTotal.toLocaleString()})
-                        </div>
-                        <button onclick="deleteLedgerRecord(${r.id})" class="text-[10px] text-[#a35e5e] bg-[#fcf5f5] px-2.5 py-1 rounded-md">刪除</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    function generateLineReport() {
-        if (ledgerRecords.length === 0) {
-            alert("目前沒有任何帳目可供結算喔！");
-            return;
-        }
-
-        let balance = {};
-        let details = {};
-        ledgerMembers.forEach(m => { balance[m] = { paid: 0, owed: 0 }; details[m] = []; });
-
-        ledgerRecords.forEach(r => {
-            if (balance[r.payer]) balance[r.payer].paid += r.twdTotal;
-            r.participants.forEach(p => {
-                if (balance[p]) {
-                    balance[p].owed += r.perPerson;
-                    details[p].push(`- ${r.item}：NT$ ${r.perPerson.toLocaleString()}`);
-                }
-            });
-        });
-
-        let now = new Date();
-        let timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-        
-        let report = `【日本北陸遊 - 帳務結算與明細】\n📅 結算時間：${timeStr}\n匯率計算：${ledgerRate}\n------------------------\n`;
-
-        ledgerMembers.forEach(m => {
-            let net = balance[m].paid - balance[m].owed;
-            let statusText = net > 0 ? `(可收回 NT$ ${net.toLocaleString()})` : 
-                             net < 0 ? `(需補交 NT$ ${Math.abs(net).toLocaleString()})` : `(已結清)`;
-            
-            if (balance[m].paid === 0 && balance[m].owed === 0) return;
-
-            report += `👤 **${m} ${statusText}**\n📍 分攤明細：\n`;
-            if (details[m].length > 0) {
-                report += details[m].join('\n') + '\n';
-            } else {
-                report += `- 無分攤項目\n`;
-            }
-            if (balance[m].paid > 0) report += `💳 已代墊總額：NT$ ${balance[m].paid.toLocaleString()}\n`;
-            report += `\n`;
-        });
-
-        report += `------------------------\n備註：請需補交的成員確認明細後，統一轉帳給代墊人！`;
-
-        navigator.clipboard.writeText(report).then(() => {
-            alert("✅ 結算明細已成功複製！請直接開啟 LINE 貼上即可。");
-        }).catch(() => {
-            alert("複製失敗，請手動複製以下內容：\n\n" + report);
-        });
-    }
-
     /* ================= 導航與分頁切換邏輯 ================= */
-    const TABS = ['itinerary', 'weather', 'flights', 'hotels', 'shopping', 'ledger', 'tickets'];
+    const TABS = ['itinerary', 'weather', 'flights', 'hotels', 'shopping'];
     function switchMainTab(tabId) {
       TABS.forEach(t => {
         const el = document.getElementById('tab-' + t);
@@ -993,13 +747,15 @@
       TABS.forEach(t => {
         const deskBtn = document.getElementById('nav-desk-' + t);
         if (deskBtn) deskBtn.className = (t === tabId) ? 'active' : '';
+      });
+
+      TABS.forEach(t => {
         const mobBtn = document.getElementById('nav-mob-' + t);
         if (mobBtn) mobBtn.className = (t === tabId) ? 'active' : '';
       });
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
       if(tabId === 'shopping') renderShopping();
-      // Ledger 無須特別重新呼叫渲染，因為狀態保留在 DOM 中，或可呼叫 renderLedgerRecords()
     }
 
     /* ================= 氣象與行程邏輯 ================= */
@@ -1072,7 +828,10 @@
       renderFourCitiesWeather(); renderDayTimeline();
       if (btn) { 
         btn.textContent = "✅ 已更新"; 
-        setTimeout(() => { btn.textContent = "🔄 更新氣溫"; if (refreshBtn) refreshBtn.disabled = false; }, 3000); 
+        setTimeout(() => {
+          btn.textContent = "🔄 更新氣溫";
+          if (refreshBtn) refreshBtn.disabled = false;
+        }, 3000); 
       }
     }
 
@@ -1159,15 +918,19 @@
           <h2 class="text-[22px] font-medium text-[#26343b] mb-1.5 leading-snug">${dayData.title}</h2>
           <div class="text-[13px] text-[#849098] leading-relaxed">${dayData.subtitle}</div>
         </div>
+        
         <div class="card mb-6 !p-4 sm:!p-5">
           <div class="flex items-start sm:items-center gap-3">
             <div class="text-[32px] leading-none">${getWeatherEmoji(cityObj ? cityObj.liveTemp !== null ? 0 : 71 : 71)}</div>
             <div class="min-w-0 flex-1">
               <div class="flex flex-wrap items-center gap-2">
-                <h4 class="font-medium text-[15px] text-[#26343b]">${dayData.dayWeatherTitle}</h4>${liveWeatherTag}
+                <h4 class="font-medium text-[15px] text-[#26343b]">${dayData.dayWeatherTitle}</h4>
+                ${liveWeatherTag}
               </div>
               <div class="flex flex-wrap gap-2 mt-1 text-[12px] text-[#849098]">
-                <span>🌡️ ${dayData.dayTempRange}</span><span>·</span><span>${dayData.dayWeatherDesc}</span>
+                <span>🌡️ ${dayData.dayTempRange}</span>
+                <span>·</span>
+                <span>${dayData.dayWeatherDesc}</span>
               </div>
             </div>
           </div>
@@ -1175,36 +938,66 @@
             <b class="text-[#26343b]">🧣 穿搭提醒：</b>${dayData.dayClothingTip}
           </div>
         </div>
+
         <div class="pl-2 sm:pl-4">
       `;
 
       filteredItems.forEach((item, idx) => {
         const isLast = idx === filteredItems.length - 1;
         const mainLinesHTML = item.main.map(line => `<div class="mb-1">・${line}</div>`).join("");
-        let backupBoxHTML = showBackups && item.backup && item.backup !== "N/A" ? `<div class="text-[12px] text-[#8a837e] border-l-2 border-[#e8eae8] pl-2.5 mb-2 leading-relaxed"><b class="text-[#8b3a3a]">🛡️ 備案：</b>${item.backup}</div>` : "";
-        let mapsButtonsHTML = item.maps && item.maps.length > 0 ? `<div class="flex flex-wrap gap-1.5 mt-2.5">${item.maps.map(m => `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(m.query)}" target="_blank" class="map-pill">📍 ${m.name}</a>`).join("")}</div>` : "";
+        
+        let backupBoxHTML = "";
+        if (showBackups && item.backup && item.backup !== "N/A") {
+          backupBoxHTML = `<div class="text-[12px] text-[#8a837e] border-l-2 border-[#e8eae8] pl-2.5 mb-2 leading-relaxed"><b class="text-[#8b3a3a]">🛡️ 備案：</b>${item.backup}</div>`;
+        }
+
+        let mapsButtonsHTML = "";
+        if (item.maps && item.maps.length > 0) {
+          mapsButtonsHTML = `<div class="flex flex-wrap gap-1.5 mt-2.5">${item.maps.map(m => `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(m.query)}" target="_blank" class="map-pill">📍 ${m.name}</a>`).join("")}</div>`;
+        }
         
         const photoKey = `${currentDay}-${idx}`;
         const photos = itineraryPhotos[photoKey] || [];
-        let addPhotoBtn = photos.length < 3 ? `<button onclick="triggerItineraryUpload(${currentDay}, ${idx})" class="pill !bg-[#fcf7f0] !text-[#b39b74] !border !border-[#b39b74]/30 mt-2 hover:!bg-[#f5eedf] transition-colors">📸 ＋ 新增參考圖</button>` : "";
+        
+        let addPhotoBtn = "";
+        if (photos.length < 3) {
+            addPhotoBtn = `<button onclick="triggerItineraryUpload(${currentDay}, ${idx})" class="pill !bg-[#fcf7f0] !text-[#b39b74] !border !border-[#b39b74]/30 mt-2 hover:!bg-[#f5eedf] transition-colors">📸 ＋ 新增參考圖</button>`;
+        }
         
         let photosHTML = "";
         photos.forEach((base64Str, pIdx) => {
-           photosHTML += `<div class="inspiration-item" onclick="openLightbox('${base64Str}')" title="點擊放大"><div class="inspiration-delete" title="移除圖片" onclick="event.stopPropagation(); removeItineraryPhoto(${currentDay}, ${idx}, ${pIdx})">✖</div><img src="${base64Str}" alt="靈感照"></div>`; 
+           photosHTML += `
+             <div class="inspiration-item" onclick="openLightbox('${base64Str}')" title="點擊放大">
+               <div class="inspiration-delete" title="移除圖片" onclick="event.stopPropagation(); removeItineraryPhoto(${currentDay}, ${idx}, ${pIdx})">✖</div>
+               <img src="${base64Str}" alt="靈感照">
+             </div>
+           `; 
         });
+
         const inspirationGalleryHTML = photos.length > 0 ? `<div class="inspiration-grid mt-2">${photosHTML}</div>` : "";
 
+        // 💡 修改處：幫 stop 加上動態 id，以便 autoFocusItinerary 可以錨定
         timelineHTML += `
           <div id="stop-${currentDay}-${idx}" class="stop relative ${isLast ? '!border-transparent' : ''}">
             <div class="absolute left-[-4.5px] top-[7px] w-2 h-2 rounded-full ${item.mustGo ? 'bg-[#b39b74] shadow-[0_0_0_2px_#fff]' : 'bg-[#e8eae8] border border-[#8a837e]'}"></div>
+            
             <div class="flex flex-wrap items-center gap-2 mb-1">
               <span class="text-[12.5px] font-bold tracking-wider text-[#8b3a3a]">${item.time}</span>
               <span class="pill">${item.transportText}</span>
               ${item.mustGo ? `<span class="pill !bg-transparent !text-[#b39b74] !border !border-[#b39b74]/50">⭐ 必去</span>` : ''}
             </div>
+            
             <h4 class="text-[15.5px] font-medium text-[#2b2523] mb-2 leading-snug">${item.route}</h4>
-            <div class="text-[13px] text-[#2b2523] leading-relaxed mb-2 opacity-90">${mainLinesHTML}</div>
-            ${backupBoxHTML}${mapsButtonsHTML}${addPhotoBtn}${inspirationGalleryHTML}
+            
+            <div class="text-[13px] text-[#2b2523] leading-relaxed mb-2 opacity-90">
+              ${mainLinesHTML}
+            </div>
+            
+            ${backupBoxHTML}
+            ${mapsButtonsHTML}
+            
+            ${addPhotoBtn}
+            ${inspirationGalleryHTML}
           </div>
         `;
       });
@@ -1214,10 +1007,11 @@
 
     function selectDay(day, shouldScroll = true) {
       currentDay = day;
-      for (let i = 1; i <= 5; i++) {
+      for (let i = 1; i <= 4; i++) {
         const btn = document.getElementById(`tab-day-${i}`);
         if (btn) {
-          if (i === day) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
+          if (i === day) { btn.classList.add("active"); } 
+          else { btn.classList.remove("active"); }
         }
       }
       renderDayTimeline();
@@ -1226,7 +1020,7 @@
           setTimeout(() => {
             const wrapper = document.getElementById("day-content-wrapper");
             const header = document.querySelector("header");
-            const nav = document.querySelector(".sticky-sub-nav");
+            const nav = document.querySelector(".sticky");
             if (wrapper && nav) {
               const offset = (header ? header.getBoundingClientRect().height : 60) + nav.getBoundingClientRect().height;
               window.scrollTo({ top: Math.max(0, wrapper.getBoundingClientRect().top + window.pageYOffset - offset - 10), behavior: "smooth" });
@@ -1266,13 +1060,19 @@
       
       let targetDay = 1;
       const y = jstTime.getFullYear(), m = jstTime.getMonth() + 1, d = jstTime.getDate();
+      
       const isDuringTrip = (y === 2027 && m === 1 && d >= 9 && d <= 13);
-      if (isDuringTrip) targetDay = d - 8;
+      if (isDuringTrip) {
+        targetDay = d - 8;
+      }
       
       selectDay(targetDay, false);
       if (!isDuringTrip) return;
 
-      const currentTimeNum = jstTime.getHours() * 60 + jstTime.getMinutes();
+      const currentHour = jstTime.getHours();
+      const currentMin = jstTime.getMinutes();
+      const currentTimeNum = currentHour * 60 + currentMin;
+      
       const dayData = ITINERARY_DATA[targetDay];
       const filteredItems = onlyMustGo ? dayData.items.filter(item => item.mustGo) : dayData.items;
       
@@ -1280,23 +1080,33 @@
       for (let i = 0; i < filteredItems.length; i++) {
         const timeParts = filteredItems[i].time.split(":");
         if(timeParts.length === 2) {
-          if (parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]) >= currentTimeNum) {
-            targetIdx = i; break;
+          const itemTimeNum = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
+          if (itemTimeNum >= currentTimeNum) {
+            targetIdx = i;
+            break;
           }
         }
       }
       
-      if (targetIdx === -1 && filteredItems.length > 0) targetIdx = filteredItems.length - 1;
+      if (targetIdx === -1 && filteredItems.length > 0) {
+        targetIdx = filteredItems.length - 1;
+      }
       
       if (targetIdx !== -1) {
         setTimeout(() => {
+          // 💡 此處依賴上面加入的 stop ID 定位
           const targetEl = document.getElementById(`stop-${targetDay}-${targetIdx}`);
           if (targetEl) {
             const headerHeight = document.querySelector("header") ? document.querySelector("header").getBoundingClientRect().height : 60;
-            const subNavHeight = document.querySelector(".sticky-sub-nav") ? document.querySelector(".sticky-sub-nav").getBoundingClientRect().height : 50;
+            const subNav = document.querySelector(".sticky-sub-nav");
+            const subNavHeight = subNav ? subNav.getBoundingClientRect().height : 50;
             const offset = headerHeight + subNavHeight + 10;
             
-            window.scrollTo({ top: targetEl.getBoundingClientRect().top + window.pageYOffset - offset, behavior: "smooth" });
+            window.scrollTo({
+              top: targetEl.getBoundingClientRect().top + window.pageYOffset - offset,
+              behavior: "smooth"
+            });
+            
             targetEl.style.backgroundColor = "rgba(197, 173, 133, 0.15)";
             targetEl.style.borderRadius = "8px";
             setTimeout(() => { targetEl.style.backgroundColor = "transparent"; }, 2000);
@@ -1307,31 +1117,38 @@
 
     /* ================= 啟動與整合邏輯 ================= */
     window.addEventListener("DOMContentLoaded", async () => {
-      // 1. 初始化資料庫與分帳
+      // 1. 初始化資料庫並讀取資料
       try {
         await idb.init();
         const savedShopping = await idb.get('shoppingData');
         const savedPhotos = await idb.get('itineraryPhotos');
         
+        // 舊 localStorage 資料轉移 (名稱已改為 hokuriku 防衝突)
         if (!savedPhotos && localStorage.getItem('hokuriku_itinerary_photos_v1')) {
             itineraryPhotos = JSON.parse(localStorage.getItem('hokuriku_itinerary_photos_v1')) || {};
             await idb.set('itineraryPhotos', itineraryPhotos);
-        } else { itineraryPhotos = savedPhotos || {}; }
+            console.log("已從舊版成功轉移行程相片！");
+        } else {
+            itineraryPhotos = savedPhotos ? savedPhotos : {};
+        }
 
         if (!savedShopping && localStorage.getItem('hokuriku_shopping_v1')) {
             shoppingData = JSON.parse(localStorage.getItem('hokuriku_shopping_v1')) || defaultShopping;
             await idb.set('shoppingData', shoppingData);
-        } else { shoppingData = savedShopping || defaultShopping; }
+            console.log("已從舊版成功轉移購物清單！");
+        } else {
+            shoppingData = savedShopping ? savedShopping : defaultShopping;
+        }
       } catch (e) {
-        shoppingData = defaultShopping; itineraryPhotos = {};
+        console.error("IndexedDB 初始化失敗，進入降級模式", e);
+        shoppingData = defaultShopping;
+        itineraryPhotos = {};
       }
-
-      // 初始化帳務分頁
-      initLedger();
 
       // 2. 啟動時鐘與 UI 渲染
       updateDualClocks(); 
       setInterval(updateDualClocks, 1000);
+      
       renderFourCitiesWeather(); 
       fetchAllJapanWeather();
       
