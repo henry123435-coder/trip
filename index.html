@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <meta name="theme-color" content="#f7f7f4">
   <title>Hokuriku Journey | 北陸雪國旅誌</title>
   
@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="雪國旅誌">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
@@ -516,13 +516,13 @@
                 <div class="flex-1 flex flex-col justify-center gap-2.5 min-w-0">
                   <div class="flex items-center gap-2">
                     <button onclick="toggleBought('${g.id}','${i.id}')" class="checkbox-btn text-xl shrink-0">${i.bought ? '✅' : '⭕'}</button>
-                    <input type="text" value="${i.name}" oninput="updateItem('${g.id}','${i.id}','name',this.value)" placeholder="品名與規格..." class="shop-input !py-1.5 !px-2 text-[13px] font-medium ${i.bought ? 'line-through-custom' : ''}">
+                    <input type="text" value="${i.name}" oninput="updateItem('${g.id}','${i.id}','name',this.value)" placeholder="品名與規格..." class="shop-input !py-1.5 !px-2 md:text-[13px] font-medium ${i.bought ? 'line-through-custom' : ''}">
                   </div>
                   <div class="flex flex-col gap-2 pl-8">
-                    <input type="text" value="${i.memo}" oninput="updateItem('${g.id}','${i.id}','memo',this.value)" placeholder="數量/顏色/備忘" class="shop-input !py-1 !px-2 text-[11px] text-[#8b3a3a]">
+                    <input type="text" value="${i.memo}" oninput="updateItem('${g.id}','${i.id}','memo',this.value)" placeholder="數量/顏色/備忘" class="shop-input !py-1 !px-2 md:text-[11px] text-[#8b3a3a]">
                     <div class="relative w-full">
-                      <span class="absolute left-2 top-1 text-[11px] text-[#8a837e]">¥</span>
-                      <input type="number" value="${i.price || ''}" oninput="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" inputmode="numeric" pattern="[0-9]*" class="shop-input !py-1 !pl-6 !pr-2 text-[12px] font-medium">
+                      <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-[#8a837e]">¥</span>
+                      <input type="number" value="${i.price || ''}" oninput="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" inputmode="numeric" pattern="[0-9]*" class="shop-input !py-1 !pl-6 !pr-2 md:text-[12px] font-medium">
                     </div>
                   </div>
                 </div>
@@ -867,7 +867,7 @@ function loadCachedWeather() {
 
     function updateDualClocks() {
       const now = new Date();
-      const format = (tz, isDate) => new Intl.DateTimeFormat("zh-TW", { timeZone: tz, hour12: false, ...isDate ? {year:"numeric", month:"2-digit", day:"2-digit", weekday:"short"} : {hour:"2-digit", minute:"2-digit", second:"2-digit"} }).format(now);
+      const format = (tz, isDate) => new Intl.DateTimeFormat("zh-TW", { timeZone: tz, hourCycle: "h23", ...isDate ? {year:"numeric", month:"2-digit", day:"2-digit", weekday:"short"} : {hour:"2-digit", minute:"2-digit", second:"2-digit"} }).format(now);
       const els = ["clock-tw-time", "clock-tw-date", "clock-jp-time", "clock-jp-date"];
       [format("Asia/Taipei"), format("Asia/Taipei", 1), format("Asia/Tokyo"), format("Asia/Tokyo", 1)].forEach((v, i) => { if(document.getElementById(els[i])) document.getElementById(els[i]).textContent = v; });
     }

@@ -1,0 +1,281 @@
+@import "tailwindcss";
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #f7f7f4;
+  color: #26343b;
+  padding-bottom: calc(84px + env(safe-area-inset-bottom));
+}
+
+button, a {
+  touch-action: manipulation;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background-color: rgba(247, 247, 244, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e8eae8;
+}
+
+.nav {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  color: #26343b;
+}
+
+.navlinks {
+  display: none;
+  gap: 18px;
+}
+
+@media (min-width: 768px) {
+  .navlinks {
+    display: flex;
+  }
+}
+
+.navlinks a {
+  font-size: 13px;
+  color: #849098;
+  font-weight: 500;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.navlinks a:hover,
+.navlinks a.active {
+  color: #26343b;
+  border-bottom-color: #c5ad85;
+}
+
+main {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* ================= 卡片、按鈕與輸入框元件 ================= */
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e8eae8;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background-color: #f7f7f4;
+  color: #526d7c;
+  border: 1px solid #e8eae8;
+}
+
+.map-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background-color: #f7f7f4;
+  color: #526d7c;
+  border: 1px solid #e8eae8;
+  transition: background-color 0.15s;
+}
+
+.map-pill:hover {
+  background-color: #e8eae8;
+}
+
+.shop-input {
+  width: 100%;
+  border: 1px solid #e8eae8;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: #f7f7f4;
+  outline: none;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+@media (min-width: 768px) {
+  .shop-input {
+    font-size: 13px;
+  }
+}
+
+.shop-input:focus {
+  border-color: #c5ad85;
+  background-color: #ffffff;
+}
+
+/* ================= 行程天數切換與時間軸 ================= */
+.day-tab-btn {
+  background-color: #ffffff;
+  border: 1px solid #e8eae8;
+  color: #849098;
+  transition: all 0.2s;
+}
+
+.day-tab-btn.active {
+  background-color: #26343b;
+  border-color: #26343b;
+  color: #ffffff;
+}
+
+.day-tab-btn.active .tab-date {
+  color: #c5ad85;
+}
+
+.stop {
+  border-left: 2px solid #e8eae8;
+  padding-left: 20px;
+  padding-bottom: 28px;
+}
+
+/* ================= 相片網格與購物清單細節 ================= */
+.inspiration-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.inspiration-item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e8eae8;
+  cursor: zoom-in;
+}
+
+.inspiration-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.inspiration-delete {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.line-through-custom {
+  text-decoration: line-through;
+  color: #8a837e;
+}
+
+/* ================= 手機版底部導航列 ================= */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid #e8eae8;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  .bottom-nav {
+    display: none;
+  }
+  body {
+    padding-bottom: 24px;
+  }
+}
+
+.bottom-nav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 10px;
+  color: #849098;
+  padding: 4px 0;
+}
+
+.bottom-nav button .icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.bottom-nav button.active {
+  color: #26343b;
+  font-weight: 700;
+}
+
+/* ================= 捲軸隱藏與動畫 ================= */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes modalEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-enter {
+  animation: modalEnter 0.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}

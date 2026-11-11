@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hokuriku-trip-v7';
+const CACHE_NAME = 'hokuriku-trip-v8';
 const ASSETS = [
   './',
   './index.html',
@@ -28,17 +28,29 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET' || e.request.url.includes('api.open-meteo.com')) {
     return;
   }
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        // 有網路時：抓取最新檔案並同步更新進快取
+
+  // Stale-While-Revalidate：秒開快取，同時於背景靜默檢查更新（山區弱訊號不卡白畫面）
+  const networkFetch = fetch(e.request)
+    .then(res => {
+      if (res && res.ok) {
         const resClone = res.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(e.request, resClone));
-        return res;
-      })
-      .catch(() => {
-        // 斷網或山區無訊號時：自動退回讀取快取檔案
-        return caches.match(e.request);
-      })
+      }
+      return res;
+    })
+    .catch(() => null);
+
+  e.respondWith(
+    caches.match(e.request).then(cachedRes => {
+      if (cachedRes) {
+        e.waitUntil(networkFetch);
+        return cachedRes;
+      }
+      return networkFetch.then(res => {
+        if (res) return res;
+        if (e.request.mode === 'navigate') return caches.match('./index.html');
+        return Response.error();
+      });
+    })
   );
 });
