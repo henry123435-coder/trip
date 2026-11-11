@@ -1,11 +1,10 @@
-JavaScript
-const CACHE_NAME = 'hokuriku-trip-v3';
+const CACHE_NAME = 'hokuriku-trip-v6';
 const ASSETS = [
   './',
   './index.html',
+  './style.css',
   './manifest.json',
   './apple-touch-icon.png'
-  // 若後續有獨立的 CSS 檔案 (例如 style.css)，也請加到這裡
 ];
 
 self.addEventListener('install', e => {
@@ -25,7 +24,21 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  // 排除非 GET 請求與外部氣象 API 請求（氣象由 localStorage 獨立快取）
+  if (e.request.method !== 'GET' || e.request.url.includes('api.open-meteo.com')) {
+    return;
+  }
   e.respondWith(
-    caches.match(e.request).then(res => res || fetch(e.request))
+    fetch(e.request)
+      .then(res => {
+        // 有網路時：抓取最新檔案並同步更新進快取
+        const resClone = res.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(e.request, resClone));
+        return res;
+      })
+      .catch(() => {
+        // 斷網或山區無訊號時：自動退回讀取快取檔案
+        return caches.match(e.request);
+      })
   );
 });

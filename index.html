@@ -6,158 +6,76 @@
   <meta name="theme-color" content="#f7f7f4">
   <title>Hokuriku Journey | 北陸雪國旅誌</title>
   
-  <!-- 動態 PWA Manifest -->
-  <link rel="manifest" href="./manifest.json">
+  <!-- PWA 實體設定與圖示 (請確認同目錄下有對應檔案) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="雪國旅誌">
-  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 外部獨立樣式表 (請依你的實際 CSS 檔名修改 href) -->
+  <link rel="stylesheet" href="style.css">
 
-  <style>
-    :root {
-      --bg: #f7f7f4;
-      --paper: #fff;
-      --ink: #26343b;
-      --muted: #849098;
-      --blue: #526d7c;
-      --line: #e8eae8;
-      --gold: #c5ad85;
-    }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0; background: var(--bg); color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", sans-serif;
-      line-height: 1.7; overflow-x: hidden;
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-    
-    /* 頂部導覽列 */
-    header {
-      position: sticky; top: 0; z-index: 40;
-      background: rgba(247, 247, 244, .91);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--line);
-    }
-    .nav {
-      max-width: 1100px; margin: auto; padding: 13px 22px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .brand { font-size: 13px; letter-spacing: 2px; font-weight: 700; color: var(--ink); }
-    
-    /* 桌面版導覽按鈕 */
-    .navlinks { display: flex; gap: 24px; align-items: center; }
-    .navlinks a { color: var(--muted); font-size: 13px; text-decoration: none; transition: color 0.2s; font-weight: 500; }
-    .navlinks a:hover { color: var(--blue); }
-    .navlinks a.active { color: var(--blue); font-weight: 700; }
 
-    main { max-width: 1100px; margin: auto; padding: 25px 22px 100px; }
-    
-    /* 極簡卡片與標籤樣式 */
-    .card { background: var(--paper); border: 1px solid var(--line); border-radius: 13px; padding: 21px; box-shadow: 0 2px 8px rgba(0,0,0,0.015); }
-    .pill { display: inline-block; background: #edf1f2; color: var(--blue); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
-    a.map-pill { 
-      display: inline-block; background: #fcfcfc; color: var(--blue); 
-      padding: 5px 12px; border-radius: 20px; font-size: 12px; 
-      border: 1px solid var(--line); text-decoration: none; transition: 0.2s;
-    }
-    a.map-pill:hover { background: #edf1f2; }
-
-    /* 行程時間軸垂直線設計 */
-    .stop { border-left: 1px solid #cbd7dc; padding: 0 0 25px 17px; margin-left: 5px; position: relative; transition: background-color 0.8s ease; }
-    .stop:last-child { border-left-color: transparent; }
-
-    /* 天數切換按鈕 */
-    .day-tab-btn {
-      border: 1px solid var(--line); background: var(--paper); color: var(--muted); transition: 0.2s ease;
-    }
-    .day-tab-btn.active {
-      background: var(--blue); color: #fff; border-color: var(--blue);
-    }
-    .day-tab-btn.active .tab-date { color: rgba(255,255,255,0.7); }
-    .day-tab-btn.active .tab-title { color: #fff; }
-
-    /* 手機版底部導航列 */
-    .bottom-nav {
-      display: none; position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(255, 255, 255, .94); backdrop-filter: blur(15px);
-      border-top: 1px solid var(--line); padding: 8px 5px calc(8px + env(safe-area-inset-bottom));
-      justify-content: space-around; z-index: 50; box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
-    }
-    .bottom-nav button {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      color: var(--muted); background: none; border: none; font-size: 10px; padding: 4px 12px;
-    }
-    .bottom-nav button .icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
-    .bottom-nav button.active { color: var(--blue); font-weight: 700; }
-
-    @media (max-width: 650px) {
-      .navlinks { display: none; }
-      .bottom-nav { display: flex; }
-      main { padding: 20px 16px 110px; }
-    }
-
-    /* 隱藏捲軸 */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    
-    /* 購物清單輸入框 */
-    .shop-input {
-      width: 100%; padding: 8px 12px; border: 1px solid var(--line);
-      border-radius: 8px; background: #fafafa; font: inherit; outline: none; transition: 0.2s;
-    }
-    .shop-input:focus { border-color: var(--blue); background: #fff; }
-    .checkbox-btn { transition: transform 0.1s; }
-    .checkbox-btn:active { transform: scale(0.9); }
-    .line-through-custom { text-decoration: line-through; opacity: 0.5; }
-    
-    /* 彈跳動畫 (用於 Modal) */
-    @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
-    .modal-enter { animation: bounceIn 0.2s ease-out forwards; }
-
-    /* ================= 靈感圖集與燈箱樣式 ================= */
-    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-    .fade-in { animation: fadeIn 0.2s ease-out forwards; }
-    
-    .inspiration-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 10px; }
-    .inspiration-item {
-      position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden;
-      border: 1px solid var(--line); background: #fafafa; cursor: zoom-in;
-    }
-    .inspiration-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s; }
-    .inspiration-item:hover img { transform: scale(1.05); }
-    .inspiration-delete {
-      position: absolute; top: 4px; right: 4px; background: rgba(255, 255, 255, 0.9);
-      border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center;
-      justify-content: center; font-size: 11px; color: #8b3a3a;
-      border: 1px solid rgba(0,0,0,0.1); cursor: pointer; z-index: 10;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .inspiration-delete:hover { background: #fff; transform: scale(1.1); }  
-  </style>
 </head>
 
 <body>
-  <!-- 隱藏的圖片上傳元件 (相機/相簿選取用) -->
+  <!-- 隱藏的圖片上傳元件 -->
   <input type="file" id="hidden-img-upload" accept="image/*" class="hidden">
 
+  <!-- 燈箱 Modal -->
   <div id="lightbox-modal" class="hidden fixed inset-0 z-[70] bg-black/90 flex items-center justify-center p-4 fade-in" onclick="closeLightbox()">
     <button class="absolute top-4 right-4 text-white/70 hover:text-white text-4xl leading-none px-4 py-2" onclick="closeLightbox()">&times;</button>
     <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain rounded-md" onclick="event.stopPropagation()">
   </div>
 
-  <!-- 計算機 Modal 對話框 -->
-  <div id="tax-modal" class="hidden fixed inset-0 z-[60] bg-[#26343b]/40 backdrop-blur-sm flex items-center justify-center p-4">
+  <!-- 票券新增 Modal -->
+  <div id="ticket-modal" onclick="if(event.target===this) closeTicketModal()" class="hidden fixed inset-0 z-[60] bg-[#26343b]/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="card w-full max-w-sm modal-enter relative !p-6">
+      <button onclick="closeTicketModal()" class="absolute top-4 right-4 text-[#849098] hover:text-[#26343b] text-xl leading-none">&times;</button>
+      <h3 class="text-lg font-medium mb-5 text-[#26343b] flex items-center gap-2">
+        <span class="text-xl">➕</span> 新增票券檔案
+      </h3>
+      <div class="space-y-4">
+        <div>
+          <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">分類</label>
+          <select id="t-cat" class="shop-input bg-white">
+            <option value="transport">🚆 交通運輸</option>
+            <option value="hotel">🏨 住宿憑證</option>
+            <option value="other">📱 其他預約</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">顯示名稱 (必填)</label>
+          <input type="text" id="t-name" placeholder="例：高山櫻庵 確認信" class="shop-input font-medium text-[#26343b]">
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">補充說明</label>
+          <input type="text" id="t-desc" placeholder="例：訂房代號 12345" class="shop-input text-[#26343b]">
+        </div>
+        <div class="flex gap-3">
+          <div class="w-1/3">
+            <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">圖示</label>
+            <input type="text" id="t-icon" value="🎫" class="shop-input text-center text-lg">
+          </div>
+          <div class="flex-1">
+            <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">檔案連結</label>
+            <input type="url" id="t-link" placeholder="貼上 Drive 連結..." class="shop-input text-[#26343b]">
+          </div>
+        </div>
+        <button onclick="addTicket()" class="w-full bg-[#526d7c] text-white font-medium py-2.5 rounded-lg mt-2 hover:bg-[#3e5663] transition-colors">儲存票券</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 計算機 Modal -->
+  <div id="tax-modal" onclick="if(event.target===this) toggleTaxModal()" class="hidden fixed inset-0 z-[60] bg-[#26343b]/40 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="card w-full max-w-xs modal-enter relative !p-6">
       <button onclick="toggleTaxModal()" class="absolute top-4 right-4 text-[#849098] hover:text-[#26343b] text-xl leading-none">&times;</button>
-      
       <h3 class="text-lg font-medium mb-5 text-[#26343b] flex items-center gap-2">
         <span class="text-xl">🧮</span> 日圓計算機
       </h3>
-      
       <div class="space-y-4">
         <div>
           <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">匯率 RATE</label>
@@ -182,17 +100,14 @@
   <header>
     <nav class="nav">
       <div class="brand">❄ HOKURIKU JOURNEY</div>
-      
-      <!-- 桌面版導覽按鈕 -->
       <div class="navlinks">
         <a href="javascript:void(0)" onclick="switchMainTab('itinerary')" id="nav-desk-itinerary" class="active">每日行程</a>
         <a href="javascript:void(0)" onclick="switchMainTab('weather')" id="nav-desk-weather">時間天氣</a>
         <a href="javascript:void(0)" onclick="switchMainTab('flights')" id="nav-desk-flights">航班交通</a>
         <a href="javascript:void(0)" onclick="switchMainTab('hotels')" id="nav-desk-hotels">住宿指南</a>
         <a href="javascript:void(0)" onclick="switchMainTab('shopping')" id="nav-desk-shopping">購物清單</a>
+        <a href="javascript:void(0)" onclick="switchMainTab('tickets')" id="nav-desk-tickets">憑證票券</a>
       </div>
-
-      <!-- 右側工具 (桌機與手機共用) -->
       <div>
         <button onclick="toggleTaxModal()" class="pill !bg-white !border !border-[#e8eae8] shadow-sm hover:!bg-[#f7f7f4] transition-colors">
           🧮 匯率計算
@@ -202,8 +117,8 @@
   </header>
 
   <main>
-    <!-- 分頁：每日行程 -->
-    <section id="tab-itinerary" class="tab-pane block">
+    <!-- 分頁 1：每日行程 -->
+    <section id="tab-itinerary" class="tab-pane block modal-enter">
       <div class="mb-6 flex flex-wrap justify-between items-end gap-3 border-b border-[#e8eae8] pb-4">
         <div>
           <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">01 / ITINERARY</small>
@@ -214,36 +129,28 @@
           <button id="btn-toggle-backup" onclick="toggleAllBackups()" class="pill !bg-white !border !border-[#e8eae8] hover:!bg-[#f7f7f4]"><span id="backup-btn-text">🛡️ 隱藏備案</span></button>
         </div>
       </div>
-
       <!-- 天數切換 Sub Nav -->
       <div class="sticky-sub-nav flex overflow-x-auto gap-2.5 mb-6 pb-2 no-scrollbar sticky top-[62px] z-30 bg-[#f7f7f4]/95 backdrop-blur py-2">
         <button id="tab-day-1" class="day-tab-btn active flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(1)">
-          <div class="tab-date text-[10px] mb-0.5">1/9</div>
-          <div class="tab-title text-[13px] font-medium">金澤</div>
+          <div class="tab-date text-[10px] mb-0.5">1/9</div><div class="tab-title text-[13px] font-medium">金澤</div>
         </button>
         <button id="tab-day-2" class="day-tab-btn flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(2)">
-          <div class="tab-date text-[10px] mb-0.5">1/10</div>
-          <div class="tab-title text-[13px] font-medium">高山</div>
+          <div class="tab-date text-[10px] mb-0.5">1/10</div><div class="tab-title text-[13px] font-medium">高山</div>
         </button>
         <button id="tab-day-3" class="day-tab-btn flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(3)">
-          <div class="tab-date text-[10px] mb-0.5">1/11</div>
-          <div class="tab-title text-[13px] font-medium">白川鄉</div>
+          <div class="tab-date text-[10px] mb-0.5">1/11</div><div class="tab-title text-[13px] font-medium">白川鄉</div>
         </button>
         <button id="tab-day-4" class="day-tab-btn flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(4)">
-          <div class="tab-date text-[10px] mb-0.5">1/12</div>
-          <div class="tab-title text-[13px] font-medium">名古屋</div>
+          <div class="tab-date text-[10px] mb-0.5">1/12</div><div class="tab-title text-[13px] font-medium">名古屋</div>
         </button>
         <button id="tab-day-5" class="day-tab-btn flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(5)">
-          <div class="tab-date text-[10px] mb-0.5">1/13</div>
-          <div class="tab-title text-[13px] font-medium">返台</div>
+          <div class="tab-date text-[10px] mb-0.5">1/13</div><div class="tab-title text-[13px] font-medium">返台</div>
         </button>
       </div>
-
-      <!-- 時間軸內容容器 -->
-      <div id="day-content-wrapper" class="modal-enter"></div>
+      <div id="day-content-wrapper"></div>
     </section>
 
-    <!-- 分頁：時間天氣 -->
+    <!-- 分頁 2：時間天氣 -->
     <section id="tab-weather" class="tab-pane hidden">
       <div class="mb-6 flex flex-wrap justify-between items-end gap-3 border-b border-[#e8eae8] pb-4">
         <div>
@@ -254,7 +161,6 @@
           <span id="weather-refresh-text">🔄 更新氣溫</span>
         </button>
       </div>
-
       <div class="grid grid-cols-2 gap-4 mb-6">
         <div class="card flex flex-col items-center justify-center text-center !p-4 sm:!p-6">
           <small class="text-[10px] font-bold tracking-wider mb-2 text-[#849098]">TAIWAN (TPE)</small>
@@ -270,15 +176,13 @@
       <div id="four-cities-weather-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
     </section>
 
-    <!-- 分頁：航班交通 -->
+    <!-- 分頁 3：航班交通 -->
     <section id="tab-flights" class="tab-pane hidden">
       <div class="mb-6 border-b border-[#e8eae8] pb-4">
         <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">03 / FLIGHTS</small>
         <h2 class="text-2xl font-medium text-[#26343b] mt-1">航班與跨城交通</h2>
       </div>
-
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- 去程航班卡 -->
         <div class="card">
           <div class="flex justify-between items-center mb-4">
             <span class="pill !bg-[#f7f7f4] !text-[#26343b]">🛫 DAY 1 (1/9 六)</span>
@@ -291,8 +195,7 @@
               <div class="text-[10px] mt-1 text-[#526d7c]">06:35 起飛</div>
             </div>
             <div class="text-center text-[#849098] text-xs px-2 flex flex-col items-center">
-              <span class="text-lg">✈️</span>
-              <span class="mt-1">長榮 BR158</span>
+              <span class="text-lg">✈️</span><span class="mt-1">長榮 BR158</span>
             </div>
             <div class="text-center">
               <div class="text-[11px] text-[#849098]">石川小松</div>
@@ -301,17 +204,13 @@
             </div>
           </div>
           <div class="text-[13px] text-[#26343b] leading-relaxed">
-            <b class="text-[#526d7c]">🚌 機場接駁 (約40分)：</b><br>
-            出關直接搭乘機場巴士直達金澤車站西口。<br>
-            <span class="text-[#849098] text-[12px]">備案：若班機延誤或人潮眾多，改搭下班巴士或轉 JR。</span>
+            <b class="text-[#526d7c]">🚌 機場接駁 (約40分)：</b><br>出關直接搭乘機場巴士直達金澤車站西口。<br>
             <div class="flex gap-2 mt-2">
-              <a href="https://www.google.com/maps/search/?api=1&query=小松空港" target="_blank" class="map-pill">📍 小松機場</a>
-              <a href="https://www.google.com/maps/search/?api=1&query=金沢駅" target="_blank" class="map-pill">📍 金澤車站</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=小松空港" target="_blank" rel="noopener noreferrer" class="map-pill">📍 小松機場</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=金沢駅" target="_blank" rel="noopener noreferrer" class="map-pill">📍 金澤車站</a>
             </div>
           </div>
         </div>
-
-        <!-- 回程航班卡 -->
         <div class="card">
           <div class="flex justify-between items-center mb-4">
             <span class="pill !bg-[#f7f7f4] !text-[#26343b]">🛬 DAY 5 (1/13 三)</span>
@@ -324,8 +223,7 @@
               <div class="text-[10px] mt-1 text-[#526d7c]">19:40 起飛</div>
             </div>
             <div class="text-center text-[#849098] text-xs px-2 flex flex-col items-center">
-              <span class="text-lg text-[#c5ad85]">✈️</span>
-              <span class="mt-1">星宇 JX839</span>
+              <span class="text-lg text-[#c5ad85]">✈️</span><span class="mt-1">星宇 JX839</span>
             </div>
             <div class="text-center">
               <div class="text-[11px] text-[#849098]">台北桃園</div>
@@ -334,81 +232,66 @@
             </div>
           </div>
           <div class="text-[13px] text-[#26343b] leading-relaxed">
-            <b class="text-[#526d7c]">🚄 機場快線 (28~36分)：</b><br>
-            ・全車指定席 μ-SKY：<b>16:19</b> 發或 <b>16:49</b> 發。<br>
-            ・一部特別車 特急：<b>16:30</b> 發。<br>
-            <span class="text-[#849098] text-[12px]">提早至4F提燈橫丁買蝦仙貝之里。</span>
+            <b class="text-[#526d7c]">🚄 機場快線 (28~36分)：</b><br>全車指定席 μ-SKY：16:19 發或 16:49 發。<br>一部特別車 特急：16:30 發。<br>
             <div class="flex gap-2 mt-2">
-              <a href="https://www.google.com/maps/search/?api=1&query=名鉄名古屋駅" target="_blank" class="map-pill">📍 名鐵名古屋</a>
-              <a href="https://www.google.com/maps/search/?api=1&query=中部国際空港" target="_blank" class="map-pill">📍 機場 NGO</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=名鉄名古屋駅" target="_blank" rel="noopener noreferrer" class="map-pill">📍 名鐵名古屋</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=中部国際空港" target="_blank" rel="noopener noreferrer" class="map-pill">📍 機場 NGO</a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 分頁：住宿指南 -->
+    <!-- 分頁 4：住宿指南 -->
     <section id="tab-hotels" class="tab-pane hidden">
       <div class="mb-6 border-b border-[#e8eae8] pb-4">
         <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">04 / ACCOMMODATION</small>
         <h2 class="text-2xl font-medium text-[#26343b] mt-1">住宿指南</h2>
       </div>
-
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- 飯店 1 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3">DAY 1 (1 晚)</span>
             <h3 class="text-[16px] font-medium text-[#26343b] leading-snug">大和 Roynet 飯店</h3>
             <p class="text-[12px] text-[#26343b] font-medium mt-1">ダイワロイネットホテル金沢駅西口</p>
-            <p class="text-[11px] text-[#849098] mb-1">〒920-0031 石川県金沢市広岡1-12-17</p>
             <p class="text-[11px] text-[#849098] mb-4">金澤站西口步行 4 分鐘</p>
             <div class="text-[13px] text-[#26343b] space-y-1.5 pl-3 border-l-2 border-[#e8eae8] mb-4">
               <p>・出小松機場巴士直達西口，寄放行李超順路。</p>
               <p>・館內設有大浴場，吃完燒肉回來泡湯驅寒。</p>
-              <p>・Day 2 領行李去 4 號月台搭高山巴士零距離。</p>
             </div>
           </div>
-          <a href="https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Kanazawa-Eki+Nishiguchi" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Kanazawa-Eki+Nishiguchi" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8]">📍 導航至飯店</a>
         </div>
-
-        <!-- 飯店 2 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3 !bg-[#fcf7f0] !text-[#c5ad85] !border !border-[#c5ad85]/30">DAY 2 & 3 (連泊 2 晚)</span>
             <h3 class="text-[16px] font-medium text-[#26343b] leading-snug">飛驒花里之湯 高山櫻庵</h3>
             <p class="text-[12px] text-[#26343b] font-medium mt-1">飛騨花里の湯 高山桜庵</p>
-            <p class="text-[11px] text-[#849098] mb-1">〒506-0026 岐阜県高山市花里町4-313</p>
             <p class="text-[11px] text-[#849098] mb-4">高山站步行 5 分鐘 / 全館榻榻米</p>
             <div class="text-[13px] text-[#26343b] space-y-1.5 pl-3 border-l-2 border-[#e8eae8] mb-4">
               <p>・頂樓天然溫泉與 <b>3間免費私人湯屋</b>。</p>
               <p>・大廳附設足湯，22:00 免費提供夜鳴拉麵。</p>
-              <p>・Day 3 中午可輕鬆走回飯店午睡充電、換揹巾。</p>
             </div>
           </div>
-          <a href="https://www.google.com/maps/search/?api=1&query=飛騨花里の湯+高山桜庵" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=飛騨花里の湯+高山桜庵" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8]">📍 導航至飯店</a>
         </div>
-
-        <!-- 飯店 3 -->
         <div class="card flex flex-col justify-between">
           <div>
             <span class="pill mb-3">DAY 4 (1 晚)</span>
             <h3 class="text-[16px] font-medium text-[#26343b] leading-snug">名鐵格蘭飯店</h3>
             <p class="text-[12px] text-[#26343b] font-medium mt-1">名鉄グランドホテル</p>
-            <p class="text-[11px] text-[#849098] mb-1">〒450-0002 愛知県名古屋市中村区名駅1-2-4</p>
             <p class="text-[11px] text-[#849098] mb-4">名古屋車站步行 4 分鐘 (車站共構)</p>
             <div class="text-[13px] text-[#26343b] space-y-1.5 pl-3 border-l-2 border-[#e8eae8] mb-4">
               <p>・配備乾濕分離寬敞浴室，逛完大須回來超舒適。</p>
               <p>・鄰近千里馬藥局、Bic Camera 與 ESCA 地下街。</p>
-              <p>・Day 5 大廳打包戰利品，下樓 5 分鐘直上機場快線。</p>
             </div>
           </div>
-          <a href="https://www.google.com/maps/search/?api=1&query=名鉄グランドホテル" target="_blank" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8] transition-colors">📍 導航至飯店</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=名鉄グランドホテル" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-[#f7f7f4] text-[#526d7c] py-2 rounded-lg text-xs font-medium hover:bg-[#e8eae8]">📍 導航至飯店</a>
         </div>
       </div>
     </section>
 
-    <!-- 分頁：購物清單 -->
+    <!-- 分頁 5：購物清單 -->
     <section id="tab-shopping" class="tab-pane hidden pb-12">
       <div class="mb-6 flex flex-wrap justify-between items-end gap-3 border-b border-[#e8eae8] pb-4">
         <div>
@@ -419,13 +302,32 @@
           ➕ 新增群組
         </button>
       </div>
-      
       <div class="card flex justify-between items-center mb-6 !py-4">
         <span class="font-medium text-[13px] text-[#849098]">💰 總預估花費</span>
         <span class="text-xl font-bold text-[#526d7c]" id="shopping-total">¥0</span>
       </div>
-
       <div id="shopping-groups-container" class="space-y-4"></div>
+    </section>
+
+    <!-- 分頁 6：動態票券 -->
+    <section id="tab-tickets" class="tab-pane hidden pb-12">
+      <div class="mb-6 flex flex-wrap justify-between items-end gap-3 border-b border-[#e8eae8] pb-4">
+        <div>
+          <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">06 / TICKETS</small>
+          <h2 class="text-2xl font-medium text-[#26343b] mt-1">憑證與電子票券</h2>
+        </div>
+        <button onclick="openTicketModal()" class="pill !bg-[#fcf7f0] !text-[#b39b74] !border !border-[#b39b74]/30 hover:!bg-[#f5eedf]">
+          ➕ 新增票券檔案
+        </button>
+      </div>
+
+      <div class="bg-[#fcf7f0] border border-[#c5ad85]/30 rounded-xl p-3 mb-6 text-center text-[12px] text-[#b39b74] font-medium">
+        💡 建議將 Google Drive 檔案設為「離線存取」以防山區無訊號
+      </div>
+
+      <div id="tickets-container" class="space-y-6">
+        <!-- 動態渲染票券列表 -->
+      </div>
     </section>
 
   </main>
@@ -439,7 +341,7 @@
       <span class="icon">☼</span><span>天氣</span>
     </button>
     <button onclick="switchMainTab('flights')" id="nav-mob-flights">
-      <span class="icon">⌁</span><span>交通</span>
+      <span class="icon">✈︎</span><span>交通</span>
     </button>
     <button onclick="switchMainTab('hotels')" id="nav-mob-hotels">
       <span class="icon">⌂</span><span>住宿</span>
@@ -447,16 +349,16 @@
     <button onclick="switchMainTab('shopping')" id="nav-mob-shopping">
       <span class="icon">￥</span><span>購物</span>
     </button>
+    <button onclick="switchMainTab('tickets')" id="nav-mob-tickets">
+      <span class="icon">🎟︎</span><span>票券</span>
+    </button>
   </nav>
 
   <script>
-    // PWA Service Worker (Network-First 策略，確保能讀到最新代碼)
-    if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .catch(err => console.error('SW 註冊失敗:', err));
-  });
-}
+    // PWA Service Worker (檢查 http/https 協議，避免本地開啟或 Blob 報錯)
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.protocol === 'http:')) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
 
     /* ================= IndexedDB 本機資料庫引擎 ================= */
     const idb = {
@@ -491,21 +393,24 @@
         });
       }
     };
-    /* ================= 計算機邏輯 ================= */
+
+    /* ================= 計算機邏輯 (含匯率記憶) ================= */
     function toggleTaxModal() {
       const modal = document.getElementById('tax-modal');
       if (modal.classList.contains('hidden')) {
         modal.classList.remove('hidden');
         setTimeout(() => document.getElementById('tax-jpy').focus(), 50);
-      } else {
-        modal.classList.add('hidden');
-      }
+      } else { modal.classList.add('hidden'); }
     }
 
     function calcTax() {
-      const rate = parseFloat(document.getElementById('tax-rate').value) || 0.215;
+      const rateInput = document.getElementById('tax-rate').value;
+      const rate = parseFloat(rateInput) || 0.215;
+      if (rateInput && !isNaN(parseFloat(rateInput))) {
+        localStorage.setItem('hokuriku_tax_rate', rateInput);
+      }
+
       const jpy = parseFloat(document.getElementById('tax-jpy').value) || 0;
-      
       document.getElementById('tax-twd').textContent = Math.round(jpy * rate).toLocaleString();
       
       const statusBox = document.getElementById('tax-status');
@@ -514,64 +419,55 @@
         statusBox.innerHTML = "✅ 已達標免稅門檻 (未稅 ¥5,000)";
       } else if (jpy > 0) {
         statusBox.className = "mt-2 bg-[#fcf5f5] border border-[#f2dada] rounded-lg p-2.5 text-center text-[11px] text-[#a35e5e] font-medium";
-        statusBox.innerHTML = `❌ 未達免稅門檻 (還差 ¥${5000 - jpy})`;
+        statusBox.innerHTML = `❌ 未達免稅門檻 (還差 ¥${(5000 - jpy).toLocaleString()})`;
       } else {
         statusBox.className = "mt-2 bg-[#f7f7f4] rounded-lg p-2.5 text-center text-[11px] text-[#849098]";
         statusBox.innerHTML = "請輸入金額計算免稅門檻";
       }
     }
 
-  /* ================= 圖片燈箱與儲存邏輯 ================= */
+    /* ================= 圖片燈箱與上傳邏輯 ================= */
     let currentUploadTarget = { type: null, gId: null, iId: null, dayId: null, stopIdx: null };
     let itineraryPhotos = {};
     let shoppingData = [];
 
     function openLightbox(base64Str) {
-        document.getElementById('lightbox-img').src = base64Str;
-        document.getElementById('lightbox-modal').classList.remove('hidden');
+      document.getElementById('lightbox-img').src = base64Str;
+      document.getElementById('lightbox-modal').classList.remove('hidden');
     }
     function closeLightbox() {
-        document.getElementById('lightbox-modal').classList.add('hidden');
-        document.getElementById('lightbox-img').src = '';
+      document.getElementById('lightbox-modal').classList.add('hidden');
+      document.getElementById('lightbox-img').src = '';
     }
-
     function triggerImageUpload(gId, iId) {
-      currentUploadTarget = { type: 'shopping', gId, iId };
+      currentUploadTarget = { type: 'shopping', gId, iId, dayId: null, stopIdx: null };
       const fileInput = document.getElementById('hidden-img-upload');
       fileInput.value = ''; fileInput.click();
     }
-    
     function triggerItineraryUpload(dayId, stopIdx) {
-      currentUploadTarget = { type: 'itinerary', dayId, stopIdx };
+      currentUploadTarget = { type: 'itinerary', gId: null, iId: null, dayId, stopIdx };
       const fileInput = document.getElementById('hidden-img-upload');
       fileInput.value = ''; fileInput.click();
     }
-    
     function removeItineraryPhoto(dayId, stopIdx, photoIdx) {
       if(confirm('確定移除這張靈感照片嗎？')) {
         const key = `${dayId}-${stopIdx}`;
         if (itineraryPhotos[key]) {
-            itineraryPhotos[key].splice(photoIdx, 1);
-            idb.set('itineraryPhotos', itineraryPhotos).then(() => renderDayTimeline());
+          itineraryPhotos[key].splice(photoIdx, 1);
+          idb.set('itineraryPhotos', itineraryPhotos).then(() => renderDayTimeline());
         }
       }
     }
-
-    // 購物清單專屬：移除照片並恢復成空按鈕
     function removeShoppingImage(gId, iId) {
       if(confirm('確定移除這張商品相片嗎？')) {
         const g = shoppingData.find(x => x.id === gId);
         if (g) {
           const i = g.items.find(x => x.id === iId);
-          if (i) {
-            i.img = '🛍️';
-            saveShopping();
-          }
+          if (i) { i.img = '🛍️'; saveShopping(); }
         }
       }
     }
 
-    // 圖片壓縮引擎 (統一提升至 600px)
     document.addEventListener('DOMContentLoaded', () => {
       const fileInput = document.getElementById('hidden-img-upload');
       if (fileInput) {
@@ -583,8 +479,7 @@
             const img = new Image();
             img.onload = function() {
               const canvas = document.createElement('canvas');
-              const MAX_SIZE = 600; // 雙邊統一 600px，畫質升級
-              
+              const MAX_SIZE = 600;
               let w = img.width, h = img.height;
               if (w > h) { if (w > MAX_SIZE) { h *= MAX_SIZE / w; w = MAX_SIZE; } } 
               else { if (h > MAX_SIZE) { w *= MAX_SIZE / h; h = MAX_SIZE; } }
@@ -592,20 +487,14 @@
               const ctx = canvas.getContext('2d');
               ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h);
               ctx.drawImage(img, 0, 0, w, h);
-              
-              // 採用 0.7 壓縮品質
               const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
 
               if (currentUploadTarget.type === 'shopping' && currentUploadTarget.gId && currentUploadTarget.iId) {
-                updateItem(currentUploadTarget.gId, currentUploadTarget.iId, 'img', compressedBase64); // 內部會呼叫 saveShopping
-              } else if (currentUploadTarget.type === 'itinerary' && currentUploadTarget.dayId) {
+                updateItem(currentUploadTarget.gId, currentUploadTarget.iId, 'img', compressedBase64); 
+              } else if (currentUploadTarget.type === 'itinerary' && currentUploadTarget.dayId !== null && currentUploadTarget.stopIdx !== null) {
                 const key = `${currentUploadTarget.dayId}-${currentUploadTarget.stopIdx}`;
                 if (!itineraryPhotos[key]) itineraryPhotos[key] = [];
-                
-                if (itineraryPhotos[key].length >= 3) {
-                    alert("每個景點最多只能上傳3張照片喔！");
-                    return;
-                }
+                if (itineraryPhotos[key].length >= 3) { alert("每個景點最多只能上傳3張照片喔！"); return; }
                 itineraryPhotos[key].push(compressedBase64);
                 idb.set('itineraryPhotos', itineraryPhotos).then(() => renderDayTimeline());
               }
@@ -617,42 +506,42 @@
       }
     });
 
-    /* ================= 購物清單邏輯 ================= */
+    /* ================= 購物清單邏輯 (防失焦優化) ================= */
     const defaultShopping = [
       { id: 'g1', title: '💊 藥妝店 (松本清/大國)', isOpen: true, items: [
         { id: 'i1', name: '合利他命 EX Plus', spec: '270錠', memo: '代買 x2', price: 5000, bought: false, img: '💊' }
-      ]},
-      { id: 'g2', title: '🎟️ 折價券與票券', isOpen: true, items: [
-        { id: 'i2', name: 'Bic Camera 優惠券', spec: '手機出示', memo: '結帳前使用', price: 0, bought: false, img: '🎫' }
       ]}
     ];
 
-    function saveShopping() { 
-      idb.set('shoppingData', shoppingData).then(() => renderShopping()); 
-    }
-    
+    function saveShopping() { idb.set('shoppingData', shoppingData).then(() => renderShopping()); }
     function addShoppingGroup() { const t = prompt('請輸入群組名稱'); if (t) { shoppingData.push({ id: 'g_' + Date.now(), title: t, isOpen: true, items: [] }); saveShopping(); } }
     function removeGroup(gId) { if(confirm('確定刪除此群組？')) { shoppingData = shoppingData.filter(g => g.id !== gId); saveShopping(); } }
     function toggleGroup(gId) { const g = shoppingData.find(x => x.id === gId); if (g) { g.isOpen = !g.isOpen; saveShopping(); } }
     function addItem(gId) { const g = shoppingData.find(x => x.id === gId); if (g) { g.items.push({ id: 'i_' + Date.now(), name: '', spec: '', memo: '', price: 0, bought: false, img: '🛍️' }); g.isOpen = true; saveShopping(); } }
     function removeItem(gId, iId) { const g = shoppingData.find(x => x.id === gId); if (g) { g.items = g.items.filter(i => i.id !== iId); saveShopping(); } }
-    function updateItem(gId, iId, f, v) { 
-      const g = shoppingData.find(x => x.id === gId); 
-      if (g) { 
-        const i = g.items.find(x => x.id === iId); 
-        if (i) { 
-          i[f] = f === 'price' ? (parseFloat(v) || 0) : v; 
-          saveShopping(); 
-          if(f==='price'||f==='bought') renderTotal(); 
-        } 
-      } 
+    
+    // 優化：修改文字或金額時僅在背景存檔與更新總計，不重繪整個 DOM 避免輸入框失焦
+    function updateItem(gId, iId, f, v) {
+      const g = shoppingData.find(x => x.id === gId);
+      if (g) {
+        const i = g.items.find(x => x.id === iId);
+        if (i) {
+          i[f] = f === 'price' ? (parseFloat(v) || 0) : v;
+          if (f === 'img') {
+            saveShopping();
+          } else {
+            idb.set('shoppingData', shoppingData);
+            if (f === 'price') renderTotal();
+          }
+        }
+      }
     }
+
     function toggleBought(gId, iId) { const g = shoppingData.find(x => x.id === gId); if (g) { const i = g.items.find(x => x.id === iId); if (i) { i.bought = !i.bought; saveShopping(); } } }
     function renderTotal() {
       let t = 0; shoppingData.forEach(g => g.items.forEach(i => { if(!i.bought) t += i.price; }));
       document.getElementById('shopping-total').textContent = '¥ ' + t.toLocaleString();
     }
-
     function renderShopping() {
       const container = document.getElementById('shopping-groups-container');
       let html = '';
@@ -674,39 +563,30 @@
           html += `<div class="space-y-4 pt-1">`;
           g.items.forEach(i => {
             const isImg = i.img.startsWith('http') || i.img.startsWith('data:');
-            let imgHtml = '';
-            
-            if (isImg) {
-              imgHtml = `
-                <div class="relative w-full h-full group">
-                  <div class="inspiration-delete" title="移除相片" onclick="event.stopPropagation(); removeShoppingImage('${g.id}', '${i.id}')">✖</div>
-                  <img src="${i.img}" class="w-full h-full object-cover cursor-zoom-in transition-transform duration-200 hover:scale-105" onclick="openLightbox('${i.img}')">
-                </div>
-              `;
-            } else {
-              imgHtml = `
-                <div class="w-full h-full flex items-center justify-center cursor-pointer hover:bg-[#e8eae8] transition-colors" onclick="triggerImageUpload('${g.id}', '${i.id}')">
-                  <span class="text-4xl">${i.img}</span>
-                </div>
-              `;
-            }
-
+            let imgHtml = isImg ? `
+              <div class="relative w-full h-full group">
+                <div class="inspiration-delete" title="移除相片" onclick="event.stopPropagation(); removeShoppingImage('${g.id}', '${i.id}')">✖</div>
+                <img src="${i.img}" class="w-full h-full object-cover cursor-zoom-in transition-transform duration-200 hover:scale-105" onclick="openLightbox('${i.img}')">
+              </div>
+            ` : `
+              <div class="w-full h-full flex items-center justify-center cursor-pointer hover:bg-[#e8eae8] transition-colors" onclick="triggerImageUpload('${g.id}', '${i.id}')">
+                <span class="text-4xl">${i.img}</span>
+              </div>
+            `;
             html += `
               <div class="flex gap-3 relative ${i.bought ? 'opacity-60' : ''} transition-opacity">
                 <button onclick="removeItem('${g.id}','${i.id}')" class="absolute -top-1.5 -left-1.5 bg-white border border-[#e8eae8] text-[#8a837e] rounded-full w-5 h-5 text-[10px] flex items-center justify-center shadow-sm z-10 hover:text-[#2b2523]">&times;</button>
-                <div class="w-28 h-28 shrink-0 bg-[#f7f7f4] border border-[#e8eae8] rounded-xl flex items-center justify-center overflow-hidden">
-                  ${imgHtml}
-                </div>
+                <div class="w-28 h-28 shrink-0 bg-[#f7f7f4] border border-[#e8eae8] rounded-xl flex items-center justify-center overflow-hidden">${imgHtml}</div>
                 <div class="flex-1 flex flex-col justify-center gap-2.5 min-w-0">
                   <div class="flex items-center gap-2">
                     <button onclick="toggleBought('${g.id}','${i.id}')" class="checkbox-btn text-xl shrink-0">${i.bought ? '✅' : '⭕'}</button>
-                    <input type="text" value="${i.name}" onchange="updateItem('${g.id}','${i.id}','name',this.value)" placeholder="品名與規格..." class="shop-input !py-1.5 !px-2 text-[13px] font-medium ${i.bought ? 'line-through-custom' : ''}">
+                    <input type="text" value="${i.name}" oninput="updateItem('${g.id}','${i.id}','name',this.value)" placeholder="品名與規格..." class="shop-input !py-1.5 !px-2 text-[13px] font-medium ${i.bought ? 'line-through-custom' : ''}">
                   </div>
                   <div class="flex flex-col gap-2 pl-8">
-                    <input type="text" value="${i.memo}" onchange="updateItem('${g.id}','${i.id}','memo',this.value)" placeholder="數量/顏色/備忘" class="shop-input !py-1 !px-2 text-[11px] text-[#8b3a3a]">
+                    <input type="text" value="${i.memo}" oninput="updateItem('${g.id}','${i.id}','memo',this.value)" placeholder="數量/顏色/備忘" class="shop-input !py-1 !px-2 text-[11px] text-[#8b3a3a]">
                     <div class="relative w-full">
                       <span class="absolute left-2 top-1 text-[11px] text-[#8a837e]">¥</span>
-                      <input type="number" value="${i.price}" onchange="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" inputmode="numeric" pattern="[0-9]*" class="shop-input !py-1 !pl-6 !pr-2 text-[12px] font-medium">
+                      <input type="number" value="${i.price || ''}" oninput="updateItem('${g.id}','${i.id}','price',this.value)" placeholder="金額" inputmode="numeric" pattern="[0-9]*" class="shop-input !py-1 !pl-6 !pr-2 text-[12px] font-medium">
                     </div>
                   </div>
                 </div>
@@ -721,8 +601,93 @@
       renderTotal();
     }
 
+    /* ================= 動態票券管理邏輯 (含空連結防呆) ================= */
+    const defaultTickets = [
+      { id: 't_demo1', cat: 'transport', name: '去程機票 (長榮 BR158)', desc: 'TPE 06:35 ➔ KMQ 10:25', icon: '✈️', link: '#' },
+      { id: 't_demo2', cat: 'hotel', name: '高山櫻庵 確認信', desc: '訂房代號與入住明細', icon: '🛏️', link: '#' }
+    ];
+    let ticketsData = [];
+
+    function saveTickets() {
+      idb.set('ticketsData', ticketsData).then(() => renderTickets());
+    }
+
+    function openTicketModal() {
+      document.getElementById('t-name').value = '';
+      document.getElementById('t-desc').value = '';
+      document.getElementById('t-link').value = '';
+      document.getElementById('t-icon').value = '🎫';
+      document.getElementById('ticket-modal').classList.remove('hidden');
+    }
+
+    function closeTicketModal() {
+      document.getElementById('ticket-modal').classList.add('hidden');
+    }
+
+    function addTicket() {
+      const cat = document.getElementById('t-cat').value;
+      const name = document.getElementById('t-name').value.trim();
+      const desc = document.getElementById('t-desc').value.trim();
+      const icon = document.getElementById('t-icon').value.trim() || '🎫';
+      const link = document.getElementById('t-link').value.trim() || '#';
+
+      if (!name) { alert("請輸入顯示名稱！"); return; }
+
+      ticketsData.push({ id: 't_' + Date.now(), cat, name, desc, icon, link });
+      saveTickets();
+      closeTicketModal();
+    }
+
+    function deleteTicket(id) {
+      if(confirm("確定要刪除這個票券連結嗎？")) {
+        ticketsData = ticketsData.filter(t => t.id !== id);
+        saveTickets();
+      }
+    }
+
+    function renderTickets() {
+      const container = document.getElementById('tickets-container');
+      const cats = [
+        { id: 'transport', title: '🚆 交通運輸' },
+        { id: 'hotel', title: '🏨 住宿憑證' },
+        { id: 'other', title: '📱 其他預約' }
+      ];
+
+      let html = '';
+      cats.forEach(c => {
+        const groupTickets = ticketsData.filter(t => t.cat === c.id);
+        if (groupTickets.length > 0) {
+          html += `<div><h3 class="text-[14px] font-bold text-[#849098] mb-3 ml-1">${c.title}</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">`;
+          groupTickets.forEach(t => {
+            const hasValidLink = t.link && t.link !== '#';
+            const linkAttr = hasValidLink 
+              ? `href="${t.link}" target="_blank" rel="noopener noreferrer"` 
+              : `href="javascript:void(0)" onclick="alert('此票券尚未設定檔案連結喔！')"`;
+            html += `
+              <div class="card !p-4 flex items-center justify-between gap-3 group relative hover:shadow-md transition-shadow">
+                <button onclick="deleteTicket('${t.id}')" class="absolute -top-1.5 -right-1.5 bg-white border border-[#e8eae8] text-[#8a837e] rounded-full w-6 h-6 text-[12px] flex items-center justify-center shadow-sm z-10 hover:text-[#a35e5e]">&times;</button>
+                <a ${linkAttr} class="flex items-center gap-4 flex-1 min-w-0">
+                  <div class="text-3xl bg-[#f7f7f4] w-12 h-12 flex items-center justify-center rounded-xl group-hover:scale-105 transition-transform shrink-0">${t.icon}</div>
+                  <div class="min-w-0 flex-1">
+                    <h4 class="text-[15px] font-medium text-[#26343b] truncate">${t.name}</h4>
+                    <p class="text-[12px] text-[#849098] mt-0.5 truncate">${t.desc || (hasValidLink ? '點擊開啟憑證' : '尚未設定連結')}</p>
+                  </div>
+                </a>
+              </div>
+            `;
+          });
+          html += `</div></div>`;
+        }
+      });
+
+      if (ticketsData.length === 0) {
+        html = `<div class="text-center text-[#849098] py-12 text-[13px] border-2 border-dashed border-[#e8eae8] rounded-2xl">目前沒有任何票券檔案，點擊上方新增吧！</div>`;
+      }
+      container.innerHTML = html;
+    }
+
     /* ================= 導航與分頁切換邏輯 ================= */
-    const TABS = ['itinerary', 'weather', 'flights', 'hotels', 'shopping'];
+    const TABS = ['itinerary', 'weather', 'flights', 'hotels', 'shopping', 'tickets'];
     function switchMainTab(tabId) {
       TABS.forEach(t => {
         const el = document.getElementById('tab-' + t);
@@ -735,23 +700,18 @@
       TABS.forEach(t => {
         const deskBtn = document.getElementById('nav-desk-' + t);
         if (deskBtn) deskBtn.className = (t === tabId) ? 'active' : '';
-      });
-
-      TABS.forEach(t => {
         const mobBtn = document.getElementById('nav-mob-' + t);
         if (mobBtn) mobBtn.className = (t === tabId) ? 'active' : '';
       });
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      if(tabId === 'shopping') renderShopping();
     }
 
     /* ================= 氣象與行程邏輯 ================= */
     const CITIES_WEATHER = {
-      kanazawa: { id: "kanazawa", name: "金澤市 (Kanazawa)", dayLabel: "DAY 1 - DAY 2 上午", lat: 36.5613, lon: 136.6562, janAvg: "1°C ~ 7°C", snowProb: "降雪/雨夾雪 75%", advice: "穿著防風防水外套與防滑防水靴，隨身備摺疊傘。", liveTemp: null, liveDesc: "冬" },
-      takayama: { id: "takayama", name: "飛驒高山 (Takayama)", dayLabel: "DAY 2 下午 - DAY 4 上午", lat: 36.1461, lon: 137.2522, janAvg: "-4°C ~ 4°C", snowProb: "降雪機率 80%", advice: "宮川朝市清晨極冷，必備發熱衣、毛帽、手套。", liveTemp: null, liveDesc: "冬" },
-      shirakawago: { id: "shirakawago", name: "白川鄉合掌村", dayLabel: "DAY 3 點燈專車", lat: 36.2578, lon: 136.9062, janAvg: "-6°C ~ 2°C", snowProb: "豪雪地帶 90%", advice: "點燈體感達 -6°C 以下！必穿厚雪靴與暖暖包。", liveTemp: null, liveDesc: "冬" },
-      nagoya: { id: "nagoya", name: "名古屋 (Nagoya)", dayLabel: "DAY 4 下午 - DAY 5", lat: 35.1815, lon: 136.9066, janAvg: "2°C ~ 9°C", snowProb: "晴時多雲 15%", advice: "室內暖氣強，採洋蔥式穿法（好穿脫大衣＋薄長袖）。", liveTemp: null, liveDesc: "冬" }
+      kanazawa: { id: "kanazawa", name: "金澤市 (Kanazawa)", dayLabel: "DAY 1 - DAY 2 上午", lat: 36.5613, lon: 136.6562, janAvg: "1°C ~ 7°C", snowProb: "降雪/雨夾雪 75%", advice: "穿著防風防水外套與防滑防水靴，隨身備摺疊傘。", liveTemp: null, liveCode: null, liveDesc: "冬" },
+      takayama: { id: "takayama", name: "飛驒高山 (Takayama)", dayLabel: "DAY 2 下午 - DAY 4 上午", lat: 36.1461, lon: 137.2522, janAvg: "-4°C ~ 4°C", snowProb: "降雪機率 80%", advice: "宮川朝市清晨極冷，必備發熱衣、毛帽、手套。", liveTemp: null, liveCode: null, liveDesc: "冬" },
+      shirakawago: { id: "shirakawago", name: "白川鄉合掌村", dayLabel: "DAY 3 點燈專車", lat: 36.2578, lon: 136.9062, janAvg: "-6°C ~ 2°C", snowProb: "豪雪地帶 90%", advice: "點燈體感達 -6°C 以下！必穿厚雪靴與暖暖包。", liveTemp: null, liveCode: null, liveDesc: "冬" },
+      nagoya: { id: "nagoya", name: "名古屋 (Nagoya)", dayLabel: "DAY 4 下午 - DAY 5", lat: 35.1815, lon: 136.9066, janAvg: "2°C ~ 9°C", snowProb: "晴時多雲 15%", advice: "室內暖氣強，採洋蔥式穿法（好穿脫大衣＋薄長袖）。", liveTemp: null, liveCode: null, liveDesc: "冬" }
     };
 
     function getWeatherEmoji(code) {
@@ -759,7 +719,6 @@
       if (code <= 48) return "🌫️"; if (code <= 67) return "🌧️";
       if (code <= 77) return "❄️"; return "🌨️";
     }
-    
     function getWeatherDescText(code) {
       if (code === 0) return "晴朗無雲"; if (code <= 3) return "晴時多雲";
       if (code <= 48) return "冬季霧氣"; if (code <= 67) return "冬季冷雨";
@@ -792,11 +751,35 @@
       grid.innerHTML = html;
     }
 
+function loadCachedWeather() {
+      try {
+        const cached = localStorage.getItem('hokuriku_weather_cache');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed.data) {
+            Object.keys(parsed.data).forEach(k => {
+              if (CITIES_WEATHER[k]) {
+                CITIES_WEATHER[k].liveTemp = parsed.data[k].liveTemp;
+                CITIES_WEATHER[k].liveCode = parsed.data[k].liveCode;
+                CITIES_WEATHER[k].liveDesc = parsed.data[k].liveDesc;
+              }
+            });
+          }
+          if (parsed.time) {
+            const btn = document.getElementById("weather-refresh-text");
+            if (btn) btn.textContent = `🔄 更新氣溫 (${parsed.time})`;
+          }
+        }
+      } catch (e) {}
+    }
+
     async function fetchAllJapanWeather() {
       const btn = document.getElementById("weather-refresh-text");
       const refreshBtn = document.getElementById("btn-weather-refresh");
       if (btn) btn.textContent = "⏳ 更新中...";
       if (refreshBtn) refreshBtn.disabled = true;
+
+      let updatedCount = 0;
       await Promise.allSettled(
         Object.values(CITIES_WEATHER).map(async (c) => {
           try {
@@ -807,19 +790,40 @@
               const data = await res.json();
               if (data.current_weather) {
                 c.liveTemp = Math.round(data.current_weather.temperature);
+                c.liveCode = data.current_weather.weathercode;
                 c.liveDesc = getWeatherDescText(data.current_weather.weathercode);
+                updatedCount++;
               }
             }
           } catch (e) {}
         })
       );
-      renderFourCitiesWeather(); renderDayTimeline();
+
+      if (updatedCount > 0) {
+        const now = new Date();
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const cacheObj = { time: timeStr, data: {} };
+        Object.keys(CITIES_WEATHER).forEach(k => {
+          cacheObj.data[k] = {
+            liveTemp: CITIES_WEATHER[k].liveTemp,
+            liveCode: CITIES_WEATHER[k].liveCode,
+            liveDesc: CITIES_WEATHER[k].liveDesc
+          };
+        });
+        localStorage.setItem('hokuriku_weather_cache', JSON.stringify(cacheObj));
+      }
+
+      renderFourCitiesWeather(); 
+      renderDayTimeline();
+
+      const savedCache = JSON.parse(localStorage.getItem('hokuriku_weather_cache') || '{}');
+      const timeLabel = savedCache.time ? ` (${savedCache.time})` : '';
       if (btn) { 
-        btn.textContent = "✅ 已更新"; 
-        setTimeout(() => {
-          btn.textContent = "🔄 更新氣溫";
-          if (refreshBtn) refreshBtn.disabled = false;
-        }, 3000); 
+        btn.textContent = updatedCount > 0 ? "✅ 已更新" : "⚠️ 離線快取"; 
+        setTimeout(() => { 
+          btn.textContent = `🔄 更新氣溫${timeLabel}`; 
+          if (refreshBtn) refreshBtn.disabled = false; 
+        }, 2500); 
       }
     }
 
@@ -898,27 +902,27 @@
       wrapper.classList.remove("modal-enter"); void wrapper.offsetWidth; wrapper.classList.add("modal-enter");
 
       const cityObj = CITIES_WEATHER[dayData.weatherCityKey];
-      const liveWeatherTag = cityObj && cityObj.liveTemp !== null ? `<span class="pill !bg-[#fcf7f0] !text-[#c5ad85] !border !border-[#c5ad85]/30 ml-2">即時：${cityObj.liveTemp}°C</span>` : ``;
-      const filteredItems = onlyMustGo ? dayData.items.filter(item => item.mustGo) : dayData.items;
+      const liveWeatherTag = cityObj && cityObj.liveTemp !== null ? `<span class="pill !bg-[#fcf7f0] !text-[#c5ad85] !border !border-[#c5ad85]/30 ml-2">即時：${cityObj.liveTemp}°C ${cityObj.liveDesc}</span>` : ``;
+      const weatherEmoji = getWeatherEmoji(cityObj && cityObj.liveCode !== null ? cityObj.liveCode : 71);
+      
+      // 保留原始陣列索引 origIdx，防止篩選「僅看必去」時照片錯位
+      const mappedItems = dayData.items.map((item, origIdx) => ({ ...item, origIdx }));
+      const filteredItems = onlyMustGo ? mappedItems.filter(item => item.mustGo) : mappedItems;
 
       let timelineHTML = `
         <div class="mb-5">
           <h2 class="text-[22px] font-medium text-[#26343b] mb-1.5 leading-snug">${dayData.title}</h2>
           <div class="text-[13px] text-[#849098] leading-relaxed">${dayData.subtitle}</div>
         </div>
-        
         <div class="card mb-6 !p-4 sm:!p-5">
           <div class="flex items-start sm:items-center gap-3">
-            <div class="text-[32px] leading-none">${getWeatherEmoji(cityObj ? cityObj.liveTemp !== null ? 0 : 71 : 71)}</div>
+            <div class="text-[32px] leading-none">${weatherEmoji}</div>
             <div class="min-w-0 flex-1">
               <div class="flex flex-wrap items-center gap-2">
-                <h4 class="font-medium text-[15px] text-[#26343b]">${dayData.dayWeatherTitle}</h4>
-                ${liveWeatherTag}
+                <h4 class="font-medium text-[15px] text-[#26343b]">${dayData.dayWeatherTitle}</h4>${liveWeatherTag}
               </div>
               <div class="flex flex-wrap gap-2 mt-1 text-[12px] text-[#849098]">
-                <span>🌡️ ${dayData.dayTempRange}</span>
-                <span>·</span>
-                <span>${dayData.dayWeatherDesc}</span>
+                <span>🌡️ ${dayData.dayTempRange}</span><span>·</span><span>${dayData.dayWeatherDesc}</span>
               </div>
             </div>
           </div>
@@ -926,66 +930,43 @@
             <b class="text-[#26343b]">🧣 穿搭提醒：</b>${dayData.dayClothingTip}
           </div>
         </div>
-
         <div class="pl-2 sm:pl-4">
       `;
 
       filteredItems.forEach((item, idx) => {
         const isLast = idx === filteredItems.length - 1;
+        const origIdx = item.origIdx;
         const mainLinesHTML = item.main.map(line => `<div class="mb-1">・${line}</div>`).join("");
         
-        let backupBoxHTML = "";
-        if (showBackups && item.backup && item.backup !== "N/A") {
-          backupBoxHTML = `<div class="text-[12px] text-[#8a837e] border-l-2 border-[#e8eae8] pl-2.5 mb-2 leading-relaxed"><b class="text-[#8b3a3a]">🛡️ 備案：</b>${item.backup}</div>`;
-        }
+        // 渲染乘車月台與下車站名提示 (transitNote)
+        let transitNoteHTML = item.transitNote && item.transitNote.length > 0 
+          ? `<div class="bg-[#edf1f2]/60 text-[#526d7c] text-[12px] px-3 py-2 rounded-lg mb-2 space-y-0.5">${item.transitNote.map(n => `<div>🚏 ${n}</div>`).join("")}</div>` 
+          : "";
 
-        let mapsButtonsHTML = "";
-        if (item.maps && item.maps.length > 0) {
-          mapsButtonsHTML = `<div class="flex flex-wrap gap-1.5 mt-2.5">${item.maps.map(m => `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(m.query)}" target="_blank" class="map-pill">📍 ${m.name}</a>`).join("")}</div>`;
-        }
+        let backupBoxHTML = showBackups && item.backup && item.backup !== "N/A" ? `<div class="text-[12px] text-[#8a837e] border-l-2 border-[#e8eae8] pl-2.5 mb-2 leading-relaxed"><b class="text-[#8b3a3a]">🛡️ 備案：</b>${item.backup}</div>` : "";
+        let mapsButtonsHTML = item.maps && item.maps.length > 0 ? `<div class="flex flex-wrap gap-1.5 mt-2.5">${item.maps.map(m => `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(m.query)}" target="_blank" rel="noopener noreferrer" class="map-pill">📍 ${m.name}</a>`).join("")}</div>` : "";
         
-        const photoKey = `${currentDay}-${idx}`;
+        const photoKey = `${currentDay}-${origIdx}`;
         const photos = itineraryPhotos[photoKey] || [];
-        
-        let addPhotoBtn = "";
-        if (photos.length < 3) {
-            addPhotoBtn = `<button onclick="triggerItineraryUpload(${currentDay}, ${idx})" class="pill !bg-[#fcf7f0] !text-[#b39b74] !border !border-[#b39b74]/30 mt-2 hover:!bg-[#f5eedf] transition-colors">📸 ＋ 新增參考圖</button>`;
-        }
+        let addPhotoBtn = photos.length < 3 ? `<button onclick="triggerItineraryUpload(${currentDay}, ${origIdx})" class="pill !bg-[#fcf7f0] !text-[#b39b74] !border !border-[#b39b74]/30 mt-2 hover:!bg-[#f5eedf] transition-colors">📸 ＋ 新增參考圖</button>` : "";
         
         let photosHTML = "";
         photos.forEach((base64Str, pIdx) => {
-           photosHTML += `
-             <div class="inspiration-item" onclick="openLightbox('${base64Str}')" title="點擊放大">
-               <div class="inspiration-delete" title="移除圖片" onclick="event.stopPropagation(); removeItineraryPhoto(${currentDay}, ${idx}, ${pIdx})">✖</div>
-               <img src="${base64Str}" alt="靈感照">
-             </div>
-           `; 
+           photosHTML += `<div class="inspiration-item" onclick="openLightbox('${base64Str}')" title="點擊放大"><div class="inspiration-delete" title="移除圖片" onclick="event.stopPropagation(); removeItineraryPhoto(${currentDay}, ${origIdx}, ${pIdx})">✖</div><img src="${base64Str}" alt="靈感照"></div>`; 
         });
-
         const inspirationGalleryHTML = photos.length > 0 ? `<div class="inspiration-grid mt-2">${photosHTML}</div>` : "";
 
-        // 💡 修改處：幫 stop 加上動態 id，以便 autoFocusItinerary 可以錨定
         timelineHTML += `
-          <div id="stop-${currentDay}-${idx}" class="stop relative ${isLast ? '!border-transparent' : ''}">
+          <div id="stop-${currentDay}-${origIdx}" class="stop relative ${isLast ? '!border-transparent' : ''}">
             <div class="absolute left-[-4.5px] top-[7px] w-2 h-2 rounded-full ${item.mustGo ? 'bg-[#b39b74] shadow-[0_0_0_2px_#fff]' : 'bg-[#e8eae8] border border-[#8a837e]'}"></div>
-            
             <div class="flex flex-wrap items-center gap-2 mb-1">
               <span class="text-[12.5px] font-bold tracking-wider text-[#8b3a3a]">${item.time}</span>
               <span class="pill">${item.transportText}</span>
               ${item.mustGo ? `<span class="pill !bg-transparent !text-[#b39b74] !border !border-[#b39b74]/50">⭐ 必去</span>` : ''}
             </div>
-            
             <h4 class="text-[15.5px] font-medium text-[#2b2523] mb-2 leading-snug">${item.route}</h4>
-            
-            <div class="text-[13px] text-[#2b2523] leading-relaxed mb-2 opacity-90">
-              ${mainLinesHTML}
-            </div>
-            
-            ${backupBoxHTML}
-            ${mapsButtonsHTML}
-            
-            ${addPhotoBtn}
-            ${inspirationGalleryHTML}
+            <div class="text-[13px] text-[#2b2523] leading-relaxed mb-2 opacity-90">${mainLinesHTML}</div>
+            ${transitNoteHTML}${backupBoxHTML}${mapsButtonsHTML}${addPhotoBtn}${inspirationGalleryHTML}
           </div>
         `;
       });
@@ -995,11 +976,10 @@
 
     function selectDay(day, shouldScroll = true) {
       currentDay = day;
-      for (let i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 5; i++) {
         const btn = document.getElementById(`tab-day-${i}`);
         if (btn) {
-          if (i === day) { btn.classList.add("active"); } 
-          else { btn.classList.remove("active"); }
+          if (i === day) { btn.classList.add("active"); } else { btn.classList.remove("active"); }
         }
       }
       renderDayTimeline();
@@ -1008,7 +988,7 @@
           setTimeout(() => {
             const wrapper = document.getElementById("day-content-wrapper");
             const header = document.querySelector("header");
-            const nav = document.querySelector(".sticky");
+            const nav = document.querySelector(".sticky-sub-nav");
             if (wrapper && nav) {
               const offset = (header ? header.getBoundingClientRect().height : 60) + nav.getBoundingClientRect().height;
               window.scrollTo({ top: Math.max(0, wrapper.getBoundingClientRect().top + window.pageYOffset - offset - 10), behavior: "smooth" });
@@ -1041,60 +1021,44 @@
       [format("Asia/Taipei"), format("Asia/Taipei", 1), format("Asia/Tokyo"), format("Asia/Tokyo", 1)].forEach((v, i) => { if(document.getElementById(els[i])) document.getElementById(els[i]).textContent = v; });
     }
 
-    /* ================= 智慧定位行程 (Auto-Focus) ================= */
     function autoFocusItinerary() {
       const jstDateString = new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"});
       const jstTime = new Date(jstDateString);
       
       let targetDay = 1;
       const y = jstTime.getFullYear(), m = jstTime.getMonth() + 1, d = jstTime.getDate();
-      
       const isDuringTrip = (y === 2027 && m === 1 && d >= 9 && d <= 13);
-      if (isDuringTrip) {
-        targetDay = d - 8;
-      }
+      if (isDuringTrip) targetDay = d - 8;
       
       selectDay(targetDay, false);
       if (!isDuringTrip) return;
 
-      const currentHour = jstTime.getHours();
-      const currentMin = jstTime.getMinutes();
-      const currentTimeNum = currentHour * 60 + currentMin;
-      
+      const currentTimeNum = jstTime.getHours() * 60 + jstTime.getMinutes();
       const dayData = ITINERARY_DATA[targetDay];
-      const filteredItems = onlyMustGo ? dayData.items.filter(item => item.mustGo) : dayData.items;
+      const mappedItems = dayData.items.map((item, origIdx) => ({ ...item, origIdx }));
+      const filteredItems = onlyMustGo ? mappedItems.filter(item => item.mustGo) : mappedItems;
       
-      let targetIdx = -1;
+      let targetOrigIdx = -1;
       for (let i = 0; i < filteredItems.length; i++) {
         const timeParts = filteredItems[i].time.split(":");
         if(timeParts.length === 2) {
-          const itemTimeNum = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
-          if (itemTimeNum >= currentTimeNum) {
-            targetIdx = i;
-            break;
+          if (parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]) >= currentTimeNum) {
+            targetOrigIdx = filteredItems[i].origIdx; break;
           }
         }
       }
       
-      if (targetIdx === -1 && filteredItems.length > 0) {
-        targetIdx = filteredItems.length - 1;
-      }
+      if (targetOrigIdx === -1 && filteredItems.length > 0) targetOrigIdx = filteredItems[filteredItems.length - 1].origIdx;
       
-      if (targetIdx !== -1) {
+      if (targetOrigIdx !== -1) {
         setTimeout(() => {
-          // 💡 此處依賴上面加入的 stop ID 定位
-          const targetEl = document.getElementById(`stop-${targetDay}-${targetIdx}`);
+          const targetEl = document.getElementById(`stop-${targetDay}-${targetOrigIdx}`);
           if (targetEl) {
             const headerHeight = document.querySelector("header") ? document.querySelector("header").getBoundingClientRect().height : 60;
-            const subNav = document.querySelector(".sticky-sub-nav");
-            const subNavHeight = subNav ? subNav.getBoundingClientRect().height : 50;
+            const subNavHeight = document.querySelector(".sticky-sub-nav") ? document.querySelector(".sticky-sub-nav").getBoundingClientRect().height : 50;
             const offset = headerHeight + subNavHeight + 10;
             
-            window.scrollTo({
-              top: targetEl.getBoundingClientRect().top + window.pageYOffset - offset,
-              behavior: "smooth"
-            });
-            
+            window.scrollTo({ top: targetEl.getBoundingClientRect().top + window.pageYOffset - offset, behavior: "smooth" });
             targetEl.style.backgroundColor = "rgba(197, 173, 133, 0.15)";
             targetEl.style.borderRadius = "8px";
             setTimeout(() => { targetEl.style.backgroundColor = "transparent"; }, 2000);
@@ -1105,42 +1069,46 @@
 
     /* ================= 啟動與整合邏輯 ================= */
     window.addEventListener("DOMContentLoaded", async () => {
-      // 1. 初始化資料庫並讀取資料
+      // 載入記憶的匯率設定
+      const savedRate = localStorage.getItem('hokuriku_tax_rate');
+      if (savedRate && document.getElementById('tax-rate')) {
+        document.getElementById('tax-rate').value = savedRate;
+      }
+
       try {
         await idb.init();
         const savedShopping = await idb.get('shoppingData');
         const savedPhotos = await idb.get('itineraryPhotos');
+        const savedTickets = await idb.get('ticketsData');
         
-        // 舊 localStorage 資料轉移 (名稱已改為 hokuriku 防衝突)
         if (!savedPhotos && localStorage.getItem('hokuriku_itinerary_photos_v1')) {
             itineraryPhotos = JSON.parse(localStorage.getItem('hokuriku_itinerary_photos_v1')) || {};
             await idb.set('itineraryPhotos', itineraryPhotos);
-            console.log("已從舊版成功轉移行程相片！");
-        } else {
-            itineraryPhotos = savedPhotos ? savedPhotos : {};
-        }
+        } else { itineraryPhotos = savedPhotos || {}; }
 
         if (!savedShopping && localStorage.getItem('hokuriku_shopping_v1')) {
             shoppingData = JSON.parse(localStorage.getItem('hokuriku_shopping_v1')) || defaultShopping;
             await idb.set('shoppingData', shoppingData);
-            console.log("已從舊版成功轉移購物清單！");
+        } else { shoppingData = savedShopping || defaultShopping; }
+
+        if (savedTickets) {
+            ticketsData = savedTickets;
         } else {
-            shoppingData = savedShopping ? savedShopping : defaultShopping;
+            ticketsData = defaultTickets;
+            await idb.set('ticketsData', ticketsData);
         }
       } catch (e) {
-        console.error("IndexedDB 初始化失敗，進入降級模式", e);
-        shoppingData = defaultShopping;
-        itineraryPhotos = {};
+        shoppingData = defaultShopping; itineraryPhotos = {}; ticketsData = defaultTickets;
       }
 
-      // 2. 啟動時鐘與 UI 渲染
       updateDualClocks(); 
       setInterval(updateDualClocks, 1000);
-      
+      loadCachedWeather();
       renderFourCitiesWeather(); 
       fetchAllJapanWeather();
       
-      // 3. 初始化畫面與智慧定位
+      renderShopping();
+      renderTickets();
       switchMainTab('itinerary'); 
       autoFocusItinerary(); 
     });
