@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hokuriku-trip-v8';
+const CACHE_NAME = 'hokuriku-trip-v12';
 const ASSETS = [
   './',
   './index.html',
@@ -24,12 +24,35 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // 排除非 GET 請求與外部氣象 API 請求（氣象由 localStorage 獨立快取）
-  if (e.request.method !== 'GET' || e.request.url.includes('api.open-meteo.com')) {
+  if (e.request.method !== 'GET') return;
+  const reqUrl = new URL(e.request.url);
+  // 僅快取同源應用資源，排除氣象 API、擴充套件等外部請求
+  if (reqUrl.origin !== self.location.origin) return;
+
+  // 頁面導覽改用網路優先（短逾時降級快取），確保推版後一次載入即為最新 HTML
+  if (e.request.mode === 'navigate') {
+    e.respondWith((async () => {
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), 2000);
+      try {
+        const res = await fetch(e.request, { signal: ctl.signal });
+        clearTimeout(timer);
+        if (res && res.ok) {
+          const cache = await caches.open(CACHE_NAME);
+          cache.put('./index.html', res.clone());
+        }
+        return res;
+      } catch (err) {
+        clearTimeout(timer);
+        return (await caches.match(e.request, { ignoreSearch: true }))
+          || (await caches.match('./index.html'))
+          || Response.error();
+      }
+    })());
     return;
   }
 
-  // Stale-While-Revalidate：秒開快取，同時於背景靜默檢查更新（山區弱訊號不卡白畫面）
+  // 其餘靜態資源採 Stale-While-Revalidate：秒開快取並於背景更新
   const networkFetch = fetch(e.request)
     .then(res => {
       if (res && res.ok) {
@@ -41,16 +64,12 @@ self.addEventListener('fetch', e => {
     .catch(() => null);
 
   e.respondWith(
-    caches.match(e.request).then(cachedRes => {
+    caches.match(e.request, { ignoreSearch: true }).then(cachedRes => {
       if (cachedRes) {
         e.waitUntil(networkFetch);
         return cachedRes;
       }
-      return networkFetch.then(res => {
-        if (res) return res;
-        if (e.request.mode === 'navigate') return caches.match('./index.html');
-        return Response.error();
-      });
+      return networkFetch.then(res => res || Response.error());
     })
   );
 });
