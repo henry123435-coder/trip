@@ -59,7 +59,7 @@
       <div class="space-y-4">
         <div>
           <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">匯率 RATE</label>
-          <input type="text" id="tax-rate" value="0.215" inputmode="decimal" pattern="[0-9]*\.?[0-9]*" oninput="calcTax()" class="shop-input font-medium text-[#26343b]">
+          <input type="text" id="tax-rate" value="0.215" inputmode="decimal" oninput="calcTax()" class="shop-input font-medium text-[#26343b]">
         </div>
         <div>
           <label class="text-[11px] font-bold text-[#849098] mb-1.5 block tracking-wider">日圓 JPY ¥</label>
@@ -98,7 +98,7 @@
 
   <main>
     <!-- 分頁 1：每日行程 -->
-    <section id="tab-itinerary" class="tab-pane block modal-enter">
+    <section id="tab-itinerary" class="tab-pane block">
       <div class="mb-6 flex flex-wrap justify-between items-end gap-3 border-b border-[#e8eae8] pb-4">
         <div>
           <small class="text-[#c5ad85] tracking-[2px] text-[11px] font-bold">01 / ITINERARY</small>
@@ -110,7 +110,7 @@
         </div>
       </div>
       <!-- 天數切換 Sub Nav（外層專職置頂、內層專職橫向捲動） -->
-      <div class="sticky-sub-nav sticky top-[63px] z-30 -mx-4 px-4 py-2 mb-6 bg-[#f7f7f4]/95 backdrop-blur border-b border-[#e8eae8]/70">
+      <div class="sticky-sub-nav sticky top-[calc(63px+env(safe-area-inset-top))] z-30 -mx-4 px-4 py-2 mb-6 bg-[#f7f7f4]/95 backdrop-blur border-b border-[#e8eae8]/70">
         <div class="flex overflow-x-auto gap-2.5 no-scrollbar">
           <button id="tab-day-1" class="day-tab-btn active flex-1 min-w-[65px] sm:min-w-[80px] py-2 px-1 rounded-xl text-center" onclick="selectDay(1)">
             <div class="tab-date text-[10px] mb-0.5">1/9</div><div class="tab-title text-[13px] font-medium">金澤</div>
@@ -339,7 +339,13 @@
               db.createObjectStore('TripStore');
             }
           };
-          req.onsuccess = e => { this.db = e.target.result; resolve(); };
+          req.onsuccess = e => {
+            this.db = e.target.result;
+            if (navigator.storage && navigator.storage.persist) {
+              navigator.storage.persist().catch(() => {});
+            }
+            resolve();
+          };
           req.onerror = e => reject(e.target.error);
         });
       },
@@ -477,10 +483,17 @@
     }
 
     function calcTax() {
-      const rateInput = document.getElementById('tax-rate').value;
-      const rate = parseFloat(rateInput) || 0.215;
-      if (rateInput && !isNaN(parseFloat(rateInput))) {
-        localStorage.setItem('hokuriku_tax_rate', rateInput);
+      const rateEl = document.getElementById('tax-rate');
+      const raw = rateEl.value;
+      const cleaned = raw.replace(/[。．,]/g, '.').replace(/[^0-9.]/g, '');
+      const dotIdx = cleaned.indexOf('.');
+      const sanitized = dotIdx === -1 ? cleaned : cleaned.slice(0, dotIdx + 1) + cleaned.slice(dotIdx + 1).replace(/\./g, '');
+      if (sanitized !== raw) rateEl.value = sanitized;
+
+      const parsedRate = parseFloat(sanitized);
+      const rate = parsedRate > 0 ? parsedRate : 0.215;
+      if (sanitized && parsedRate > 0) {
+        localStorage.setItem('hokuriku_tax_rate', sanitized);
       }
 
       const jpy = parseFloat(document.getElementById('tax-jpy').value) || 0;
@@ -749,12 +762,19 @@
 
     /* ================= 導航與分頁切換邏輯 ================= */
     const TABS = ['itinerary', 'weather', 'flights', 'hotels', 'shopping'];
-    function switchMainTab(tabId) {
+    function switchMainTab(tabId, animate = true) {
       TABS.forEach(t => {
         const el = document.getElementById('tab-' + t);
         if (el) {
-          if (t === tabId) { el.classList.remove('hidden'); el.classList.add('block', 'modal-enter'); }
-          else { el.classList.add('hidden'); el.classList.remove('block', 'modal-enter'); }
+          if (t === tabId) {
+            el.classList.remove('hidden');
+            el.classList.add('block');
+            if (animate) el.classList.add('modal-enter');
+            else el.classList.remove('modal-enter');
+          } else {
+            el.classList.add('hidden');
+            el.classList.remove('block', 'modal-enter');
+          }
         }
       });
 
@@ -764,7 +784,7 @@
         const mobBtn = document.getElementById('nav-mob-' + t);
         if (mobBtn) mobBtn.className = (t === tabId) ? 'active' : '';
       });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (animate) window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     /* ================= 氣象與行程邏輯 ================= */
@@ -876,7 +896,7 @@ function loadCachedWeather() {
         }
 
         renderFourCitiesWeather(); 
-        renderDayTimeline();
+        renderDayTimeline(false);
       } finally {
         let timeLabel = '';
         try {
@@ -964,11 +984,12 @@ function loadCachedWeather() {
     let currentDay = 1; let onlyMustGo = false; let showBackups = true;
     function getTransportEmoji(type) { switch (type) { case "walk": return "🚶"; case "bus": return "🚌"; case "taxi": return "🚕"; case "train": return "🚄"; case "subway": return "🚇"; case "flight": return "✈️"; default: return "📍"; } }
 
-    function renderDayTimeline() {
+    function renderDayTimeline(animate = true) {
       const dayData = ITINERARY_DATA[currentDay];
       const wrapper = document.getElementById("day-content-wrapper");
       if (!wrapper) return;
-      wrapper.classList.remove("modal-enter"); void wrapper.offsetWidth; wrapper.classList.add("modal-enter");
+      wrapper.classList.remove("modal-enter");
+      if (animate) { void wrapper.offsetWidth; wrapper.classList.add("modal-enter"); }
 
       const cityObj = CITIES_WEATHER[dayData.weatherCityKey];
       const liveWeatherTag = cityObj && cityObj.liveTemp !== null ? `<span class="pill !bg-[#fcf7f0] !text-[#c5ad85] !border !border-[#c5ad85]/30 ml-2">即時：${cityObj.liveTemp}°C ${cityObj.liveDesc}</span>` : ``;
@@ -1045,7 +1066,7 @@ function loadCachedWeather() {
       wrapper.innerHTML = timelineHTML;
     }
 
-    function selectDay(day, shouldScroll = true) {
+    function selectDay(day, shouldScroll = true, animate = true) {
       currentDay = day;
       for (let i = 1; i <= 5; i++) {
         const btn = document.getElementById(`tab-day-${i}`);
@@ -1064,7 +1085,7 @@ function loadCachedWeather() {
       const needScroll = shouldScroll && wrapper && nav && (preRenderTop < offset - 2);
       const targetScrollY = needScroll ? Math.max(0, preRenderTop + window.pageYOffset - offset - 8) : 0;
 
-      renderDayTimeline();
+      renderDayTimeline(animate);
       if (needScroll) {
         requestAnimationFrame(() => {
           window.scrollTo({ top: targetScrollY, behavior: "smooth" });
@@ -1112,7 +1133,7 @@ function loadCachedWeather() {
       const isDuringTrip = (y === 2027 && m === 1 && d >= 9 && d <= 13);
       if (isDuringTrip) targetDay = d - 8;
       
-      selectDay(targetDay, false);
+      selectDay(targetDay, false, false);
       if (!isDuringTrip) return;
 
       const currentTimeNum = val("hour") * 60 + val("minute");
@@ -1182,7 +1203,7 @@ function loadCachedWeather() {
       fetchAllJapanWeather();
       
       renderShopping();
-      switchMainTab('itinerary'); 
+      switchMainTab('itinerary', false); 
       autoFocusItinerary(); 
     });
   </script>
